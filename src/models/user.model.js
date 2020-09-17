@@ -5,10 +5,13 @@ const { toJSON, paginate } = require('./plugins');
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    firstName: {
       type: String,
       required: true,
       trim: true
+    },
+    lastName: {
+      type: String
     },
     email: {
       type: String,
@@ -33,6 +36,12 @@ const userSchema = mongoose.Schema(
         }
       },
       private: true // used by the toJSON plugin
+    },
+    schoolName: String,
+    role: {
+      type: String,
+      enum: ['teacher', 'student'],
+      required: true
     }
   },
   {

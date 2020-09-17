@@ -26,7 +26,7 @@ module.exports = router;
  * path:
  *  /auth/register:
  *    post:
- *      summary: Register as user
+ *      summary: Register as user with role teacher
  *      tags: [Auth]
  *      requestBody:
  *        required: true
@@ -35,11 +35,17 @@ module.exports = router;
  *            schema:
  *              type: object
  *              required:
- *                - name
+ *                - firstName
+ *                - lastName
+ *                - schoolName
  *                - email
  *                - password
  *              properties:
- *                name:
+ *                firstName:
+ *                  type: string
+ *                lastName:
+ *                  type: string
+ *                schoolName:
  *                  type: string
  *                email:
  *                  type: string
@@ -51,7 +57,9 @@ module.exports = router;
  *                  minLength: 8
  *                  description: At least one number and one letter
  *              example:
- *                name: fake name
+ *                firstName: Max
+ *                lastName: Mark
+ *                schoolName: Test School
  *                email: fake@example.com
  *                password: password1
  *      responses:
