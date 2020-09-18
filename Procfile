@@ -1,1 +1,1 @@
-web: node --optimize_for_size --max_old_space_size=460 src/app.js
+web: pm2 start ecosystem.config.json --no-daemon
