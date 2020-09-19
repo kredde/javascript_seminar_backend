@@ -22,7 +22,15 @@ components:
         lastName: Test
         schoolName: Test School
         role: teacher
-
+    Class:
+      type: object
+      properties:
+        name:
+          type: string
+        language:
+          type: string
+        subject:
+          type: string
     Token:
       type: object
       properties:

@@ -18,18 +18,20 @@ const classSchema = mongoose.Schema(
       type: Subject,
       required: true
     },
-    student: {
-      type: String,
-      trim: true,
-      unique: true
-    }
+    students: [{
+      student: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User'
+      }
+    }]
   }
 )
 
+classSchema.plugin(toJSON);
 /**
- * @typedef User
+ * @typedef Class
  */
 
 const Class = mongoose.model('Class', classSchema);
 
-module.export = Class;
+module.exports = Class;
