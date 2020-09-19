@@ -18,4 +18,10 @@ router.get(
   })
 );
 
+// serves the swaggger specification
+router.get('/swagger.json', (req, res) => {
+  res.header('Content-Type', 'application/json');
+  res.send(JSON.stringify(specs, null, 2));
+});
+
 module.exports = router;
