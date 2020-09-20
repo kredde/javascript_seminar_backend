@@ -11,8 +11,9 @@ yarn-error.log
 .env*
 !.env*.example
 
-# idea
+# IDE
 .idea
+javascript_seminar_backend.*
 
 # Code coverage
 coverage
