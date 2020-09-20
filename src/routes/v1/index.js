@@ -9,6 +9,6 @@ const router = express.Router();
 router.use('/auth', authRoute);
 router.use('/docs', docsRoute);
 router.use('/me', userRoute);
-router.use('/class', classRoute);
+router.use('/classes', classRoute);
 
 module.exports = router;

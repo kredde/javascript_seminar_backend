@@ -43,12 +43,6 @@ const userSchema = mongoose.Schema(
       enum: ['teacher', 'student'],
       required: true
     },
-    classes: [{
-      class: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Class'
-      }
-    }]
   },
   {
     timestamps: true

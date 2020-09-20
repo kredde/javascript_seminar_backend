@@ -4,8 +4,8 @@ const catchAsync = require('../utils/catchAsync');
 const { classService } = require('../services');
 
 const createClass = catchAsync(async (req, res) => {
-  const _class = await classService.createClass({...req.body});
-  res.send({_class});
+  const _class = await classService.createClass({...req.body, teacher: req.user._id});
+  res.send(_class);
 });
 
 const getClass = catchAsync(async (req, res) => {

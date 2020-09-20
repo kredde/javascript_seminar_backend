@@ -18,6 +18,10 @@ const classSchema = mongoose.Schema(
       type: Subject,
       required: true
     },
+    teacher: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User'
+    },
     students: [{
       student: {
         type: mongoose.SchemaTypes.ObjectId,

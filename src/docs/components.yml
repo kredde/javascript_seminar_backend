@@ -31,6 +31,11 @@ components:
           type: string
         subject:
           type: string
+          enum: [sub1,sub2,su3]
+      example:
+        name: Hello World!
+        language: English
+        subject: sub1
     Token:
       type: object
       properties:
