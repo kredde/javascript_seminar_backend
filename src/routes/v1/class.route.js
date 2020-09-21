@@ -6,7 +6,7 @@ const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 
-router.post('/create', auth(), validate(classValidation.createClass), classController.createClass);
+router.post('/', auth(), validate(classValidation.createClass), classController.createClass);
 router.route('/:classId').get(auth(), validate(classValidation.getClass), classController.getClass);
 module.exports = router;
 
@@ -20,9 +20,9 @@ module.exports = router;
 /**
  * @swagger
  * path:
- *  /classes/create:
+ *  /classes:
  *    post:
- *      summary: CreateClass
+ *      summary: Create a new class
  *      tags: [Classes]
  *      security:
  *        - bearerAuth: []

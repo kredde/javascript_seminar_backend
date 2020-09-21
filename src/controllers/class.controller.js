@@ -13,7 +13,7 @@ const createClass = catchAsync(async (req, res) => {
 });
 
 const getClass = catchAsync(async (req, res) => {
-  const _class = await classService.getClassById(req.param.classId);
+  const _class = await classService.getClassById(req.params.classId);
   if (!_class) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Class not found');
   }
@@ -21,12 +21,12 @@ const getClass = catchAsync(async (req, res) => {
 });
 
 const updateClass = catchAsync(async (req, res) => {
-  const _class = await classService.updateUserById(req.param.classId, req.body);
+  const _class = await classService.updateUserById(req.params.classId, req.body);
   res.send(_class);
 });
 
 const deleteClass = catchAsync(async (req, res) => {
-  const _class = await classService.deleteClassById(req.param.classId);
+  const _class = await classService.deleteClassById(req.params.classId);
   res.send(_class);
 });
 
