@@ -15,7 +15,6 @@ const createUser = async (userBody) => {
   return user;
 };
 
-
 /**
  * Query for users
  * @param {Object} filter - Mongo filter

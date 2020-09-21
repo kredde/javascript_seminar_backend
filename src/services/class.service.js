@@ -1,5 +1,7 @@
 const httpStatus = require('http-status');
 const { Class } = require('../models');
+const ApiError = require('../utils/ApiError');
+
 /**
  * Create a class
  * @param classBody
@@ -17,7 +19,7 @@ const createClass = async (classBody) => {
  * @returns {Promise<Class>}
  */
 const getClassById = async (id) => {
-  return Class.findById(id);
+  return Class.findOne({ _id: id });
 };
 
 /**
@@ -27,7 +29,7 @@ const getClassById = async (id) => {
  * @returns {Promise<Class>}
  */
 const updateUserById = async (classId, updateBody) => {
-  const _class = await getClassById(userId);
+  const _class = await getClassById(classId);
   if (!_class) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Class not found');
   }
@@ -36,8 +38,8 @@ const updateUserById = async (classId, updateBody) => {
   return _class;
 };
 
-const deleteClassById = async (classid) => {
-  const _class = await getUserById(userId);
+const deleteClassById = async (classId) => {
+  const _class = await getClassById(classId);
   if (!_class) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }

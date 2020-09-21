@@ -6,24 +6,24 @@ const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 
-router.post('/', auth(), validate(classValidation.createClass), classController.createClass)
-
+router.post('/create', auth(), validate(classValidation.createClass), classController.createClass);
+router.route('/:classId').get(auth(), validate(classValidation.getClass), classController.getClass);
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Class
+ *   name: Classes
  *   description: Classes
  */
 
 /**
  * @swagger
  * path:
- *  /classes:
+ *  /classes/create:
  *    post:
  *      summary: CreateClass
- *      tags: [Class]
+ *      tags: [Classes]
  *      security:
  *        - bearerAuth: []
  *      requestBody:
@@ -47,7 +47,7 @@ module.exports = router;
  *                  type: string
  *                  format: subject
  *              example:
- *                name: Hallo World!
+ *                name: Hello World!
  *                language: English
  *                subject: sub1
  *      responses:
@@ -61,12 +61,41 @@ module.exports = router;
  *                  class:
  *                    $ref: '#/components/schemas/Class'
  *        "401":
- *          description: Invalid email or password
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * path:
+ *  /classes/{classId}:
+ *    get:
+ *      summary: Get a class
+ *      description: get the class
+ *      tags: [Classes]
+ *      security:
+ *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: classId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Class id
+ *      responses:
+ *        "200":
+ *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                $ref: '#/components/schemas/Error'
- *              example:
- *                code: 401
- *                message: Invalid email or password
+ *                 $ref: '#/components/schemas/Class'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
  */
