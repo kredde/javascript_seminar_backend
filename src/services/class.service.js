@@ -28,7 +28,7 @@ const getClassById = async (id) => {
  * @param {Object} updateBody
  * @returns {Promise<Class>}
  */
-const updateUserById = async (classId, updateBody) => {
+const updateClassById = async (classId, updateBody) => {
   const _class = await getClassById(classId);
   if (!_class) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Class not found');
@@ -47,9 +47,14 @@ const deleteClassById = async (classId) => {
   return _class;
 };
 
+const getAllClasses = async (userId) => {
+  return Class.find({});
+}
+
 module.exports = {
   createClass,
   getClassById,
-  updateUserById,
-  deleteClassById
+  updateClassById,
+  deleteClassById,
+  getAllClasses
 };

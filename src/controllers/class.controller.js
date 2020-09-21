@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
@@ -21,7 +22,7 @@ const getClass = catchAsync(async (req, res) => {
 });
 
 const updateClass = catchAsync(async (req, res) => {
-  const _class = await classService.updateUserById(req.params.classId, req.body);
+  const _class = await classService.updateClassById(req.params.classId, req.body);
   res.send(_class);
 });
 
@@ -30,9 +31,15 @@ const deleteClass = catchAsync(async (req, res) => {
   res.send(_class);
 });
 
+const getAllClasses = catchAsync(async (req, res) => {
+  const _classes = await classService.getAllClasses(req.user._id);
+  res.send(_classes);
+});
+
 module.exports = {
   createClass,
   getClass,
   updateClass,
-  deleteClass
+  deleteClass,
+  getAllClasses
 };

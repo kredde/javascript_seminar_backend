@@ -16,7 +16,33 @@ const getClass = {
   })
 };
 
+const updateClass = {
+  params: Joi.object().keys({
+    classId: Joi.string().custom(objectId)
+  }),
+  body: Joi.object().keys({
+    name: Joi.string(),
+    language: Joi.string(),
+    subject: Joi.string().valid(...Object.values(Subject))
+  })
+};
+
+const deleteClass = {
+  params: Joi.object().keys({
+    classId: Joi.string().custom(objectId)
+  })
+};
+
+const getAllClasses = {
+  params: Joi.object().keys({
+    userId: Joi.string().custom(objectId)
+  })
+};
+
 module.exports = {
   createClass,
-  getClass
+  getClass,
+  updateClass,
+  deleteClass,
+  getAllClasses
 };
