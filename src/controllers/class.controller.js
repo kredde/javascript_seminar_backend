@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
@@ -36,10 +35,16 @@ const getAllClasses = catchAsync(async (req, res) => {
   res.send(_classes);
 });
 
+const getStudents = catchAsync(async (req, res) => {
+  const students = await classService.getStudents(req.params.classId);
+  res.send(students);
+});
+
 module.exports = {
   createClass,
   getClass,
   updateClass,
   deleteClass,
-  getAllClasses
+  getAllClasses,
+  getStudents
 };

@@ -48,13 +48,28 @@ const deleteClassById = async (classId) => {
 };
 
 const getAllClasses = async (userId) => {
-  return Class.find({});
-}
+  return Class.find({ teacher: userId });
+};
+
+const getStudents = async (classId) => {
+  return Class.find({ _id: classId }).student;
+};
+
+const addStudent = async (classId, userId) => {
+  return Class.update({ _id: classId }, { $push: { students: userId } });
+};
+
+const removeStudent = async (classId, userId) => {
+  return Class.update({ _id: classId }, { $pull: { students: userId } });
+};
 
 module.exports = {
   createClass,
   getClassById,
   updateClassById,
   deleteClassById,
-  getAllClasses
+  getAllClasses,
+  getStudents,
+  addStudent,
+  removeStudent
 };
