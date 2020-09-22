@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Subject = require('./enumerations/subject.model.js');
 const { toJSON, paginate } = require('./plugins');
 
 const classSchema = mongoose.Schema({
@@ -8,14 +7,17 @@ const classSchema = mongoose.Schema({
     required: true,
     trim: true
   },
+  // TODO: create an enumeration
   language: {
     type: String,
-    required: true,
-    trim: true
-  },
-  subject: {
-    type: Subject,
     required: true
+    // enum: [list, of language]
+  },
+  // TODO: create an enumeration
+  subject: {
+    type: String,
+    required: true
+    // enum: [list, of, subjects]
   },
   teacher: {
     type: mongoose.SchemaTypes.ObjectId,

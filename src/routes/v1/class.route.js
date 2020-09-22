@@ -18,7 +18,7 @@ module.exports = router;
  * @swagger
  * tags:
  *   name: Classes
- *   description: Classes
+ *   description: CRUD for classes, only accessible by teachers
  */
 
 /**
@@ -51,9 +51,9 @@ module.exports = router;
  *                  type: string
  *                  format: subject
  *              example:
- *                name: Hello World!
- *                language: English
- *                subject: sub1
+ *                name: Classname
+ *                language: en
+ *                subject: Physics
  *      responses:
  *        "200":
  *          description: OK
@@ -109,7 +109,7 @@ module.exports = router;
  * path:
  *  /classes/{classId}:
  *    patch:
- *      summery: update classes
+ *      summary: update classes
  *      tags: [Classes]
  *      security:
  *        - bearerAuth: []
@@ -139,7 +139,7 @@ module.exports = router;
  *                  type: string
  *              example:
  *                name: Interstellar
- *                language: German
+ *                language: de
  *                subject: sub2
  *      responses:
  *        "204":
