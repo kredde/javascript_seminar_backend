@@ -6,11 +6,11 @@ const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 
-router.post('/', auth(), validate(classValidation.createClass), classController.createClass);
-router.route('/').get(auth(), validate(classValidation.getAllClasses), classController.getAllClasses);
-router.route('/:classId').get(auth(), validate(classValidation.getClass), classController.getClass);
-router.route('/:classId').patch(auth(), validate(classValidation.updateClass), classController.updateClass);
-router.route('/:classId').delete(auth(), validate(classValidation.deleteClass), classController.deleteClass);
+router.post('/', auth('teacher'), validate(classValidation.createClass), classController.createClass);
+router.route('/').get(auth('teacher'), validate(classValidation.getAllClasses), classController.getAllClasses);
+router.route('/:classId').get(auth('teacher'), validate(classValidation.getClass), classController.getClass);
+router.route('/:classId').patch(auth('teacher'), validate(classValidation.updateClass), classController.updateClass);
+router.route('/:classId').delete(auth('teacher'), validate(classValidation.deleteClass), classController.deleteClass);
 
 module.exports = router;
 
