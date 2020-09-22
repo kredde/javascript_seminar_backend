@@ -10,8 +10,6 @@ components:
           format: email
         firstName:
           type: string
-        schoolName:
-          type: string
         role:
           type: string
           enum: [teacher, student]
@@ -20,7 +18,6 @@ components:
         email: fake@example.com
         firstName: Max
         lastName: Test
-        schoolName: Test School
         role: teacher
     Class:
       type: object
@@ -31,10 +28,10 @@ components:
           type: string
         subject:
           type: string
-          enum: [sub1,sub2,su3]
+          # enum: [sub1, sub2, su3]
       example:
         name: Hello World!
-        language: English
+        language: en
         subject: sub1
     Token:
       type: object

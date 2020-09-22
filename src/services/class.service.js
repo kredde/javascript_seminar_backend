@@ -18,8 +18,8 @@ const createClass = async (classBody) => {
  * @param {ObjectId} id
  * @returns {Promise<Class>}
  */
-const getClassById = async (id) => {
-  return Class.findOne({ _id: id });
+const getClassById = async (id, teacher) => {
+  return Class.findOne({ _id: id, teacher });
 };
 
 /**
@@ -28,8 +28,8 @@ const getClassById = async (id) => {
  * @param {Object} updateBody
  * @returns {Promise<Class>}
  */
-const updateClassById = async (classId, updateBody) => {
-  const _class = await getClassById(classId);
+const updateClassById = async (classId, teacher, updateBody) => {
+  const _class = await getClassById(classId, teacher);
   if (!_class) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Class not found');
   }
@@ -38,18 +38,19 @@ const updateClassById = async (classId, updateBody) => {
   return _class;
 };
 
-const deleteClassById = async (classId) => {
-  const _class = await getClassById(classId);
+const deleteClassById = async (classId, teacher) => {
+  const _class = await getClassById(classId, teacher);
   if (!_class) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
+
   await _class.remove();
   return _class;
 };
 
-const getAllClasses = async (userId) => {
-  return Class.find({});
-}
+const getAllClasses = async (teacher) => {
+  return Class.find({ teacher });
+};
 
 module.exports = {
   createClass,
