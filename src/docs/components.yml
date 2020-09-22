@@ -22,7 +22,20 @@ components:
         lastName: Test
         schoolName: Test School
         role: teacher
-
+    Class:
+      type: object
+      properties:
+        name:
+          type: string
+        language:
+          type: string
+        subject:
+          type: string
+          enum: [sub1,sub2,su3]
+      example:
+        name: Hello World!
+        language: English
+        subject: sub1
     Token:
       type: object
       properties:

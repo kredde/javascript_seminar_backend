@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ['teacher', 'student'],
       required: true
-    }
+    },
   },
   {
     timestamps: true
