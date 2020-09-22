@@ -19,6 +19,10 @@ const classSchema = mongoose.Schema({
     required: true
     // enum: [list, of, subjects]
   },
+  school: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'School'
+  },
   teacher: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'User'

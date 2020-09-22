@@ -32,16 +32,9 @@ const deleteClass = {
   })
 };
 
-const getAllClasses = {
-  params: Joi.object().keys({
-    userId: Joi.string().custom(objectId)
-  })
-};
-
 module.exports = {
   createClass,
   getClass,
   updateClass,
-  deleteClass,
-  getAllClasses
+  deleteClass
 };
