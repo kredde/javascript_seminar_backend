@@ -12,8 +12,8 @@ const updateUser = {
     .keys({
       email: Joi.string().email(),
       password: Joi.string().custom(password),
-      firstName: Joi.string(),
-      lastName: Joi.string(),
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
       schoolName: Joi.string()
     })
     .min(1)
