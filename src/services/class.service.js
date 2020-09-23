@@ -52,15 +52,17 @@ const getAllClasses = async (userId) => {
 };
 
 const getStudents = async (classId) => {
-  return Class.find({ _id: classId }).student;
+  return Class.find({ _id: classId }).students;
 };
 
 const addStudent = async (classId, userId) => {
-  return Class.update({ _id: classId }, { $push: { students: userId } });
+  Class.update({ _id: classId }, { $push: { students: userId } });
+  return Class.find({ _id: classId });
 };
 
 const removeStudent = async (classId, userId) => {
-  return Class.update({ _id: classId }, { $pull: { students: userId } });
+  Class.update({ _id: classId }, { $pull: { students: userId } });
+  return Class.find({ _id: classId });
 };
 
 module.exports = {

@@ -11,6 +11,11 @@ router.route('/').get(auth(), validate(classValidation.getAllClasses), classCont
 router.route('/:classId').get(auth(), validate(classValidation.getClass), classController.getClass);
 router.route('/:classId').patch(auth(), validate(classValidation.updateClass), classController.updateClass);
 router.route('/:classId').delete(auth(), validate(classValidation.deleteClass), classController.deleteClass);
+router.route('/:classId/students').get(auth(), validate(classValidation.getStudents), classController.getStudents);
+router.route('/:classId/students').put(auth(), validate(classValidation.addStudent), classController.addStudent);
+router
+  .route('/:classId/:id/students')
+  .put(auth(), validate(classValidation.removeStudent), classController.removeStudent);
 
 module.exports = router;
 
@@ -193,7 +198,7 @@ module.exports = router;
  *  /classes:
  *    get:
  *      summary: Get all classes
- *      description: Logged in users can fetch only their own user information
+ *      description: get a list of classes(only the clsses of this specific teacher)
  *      tags: [Classes]
  *      security:
  *        - bearerAuth: []
@@ -204,4 +209,36 @@ module.exports = router;
  *          $ref: '#/components/responses/Forbidden'
  *        "404":
  *          $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * path:
+ *   /classes/{classId}/students:
+ *     get:
+ *       summary: getStudents
+ *       description: get all students in one class
+ *       tags: [Classes]
+ *       security:
+ *         - bearerAuth: []
+ *       parameters:
+ *        - in: path
+ *          name: classId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Class id
+ *       responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/Students'
+ *         "401":
+ *           $ref: '#/components/responses/Unauthorized'
+ *         "403":
+ *           $ref: '#/components/responses/Forbidden'
+ *         "404":
+ *           $ref: '#/components/responses/NotFound'
  */

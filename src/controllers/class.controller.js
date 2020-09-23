@@ -31,8 +31,8 @@ const deleteClass = catchAsync(async (req, res) => {
 });
 
 const getAllClasses = catchAsync(async (req, res) => {
-  const _classes = await classService.getAllClasses(req.user._id);
-  res.send(_classes);
+  const _class = await classService.getAllClasses(req.user._id);
+  res.send(_class);
 });
 
 const getStudents = catchAsync(async (req, res) => {
@@ -40,11 +40,23 @@ const getStudents = catchAsync(async (req, res) => {
   res.send(students);
 });
 
+const addStudent = catchAsync(async (req, res) => {
+  const _class = await classService.addStudent(req.params.classId, req.user._id);
+  res.send(_class);
+});
+
+const removeStudent = catchAsync(async (req, res) => {
+  const _class = await classService.removeStudent(req.params.classId, req.user._id);
+  res.send(_class);
+})
+
 module.exports = {
   createClass,
   getClass,
   updateClass,
   deleteClass,
   getAllClasses,
-  getStudents
+  getStudents,
+  addStudent,
+  removeStudent
 };
