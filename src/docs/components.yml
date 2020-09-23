@@ -29,10 +29,16 @@ components:
         subject:
           type: string
           # enum: [sub1, sub2, su3]
+        level:
+          type: number
+          min: 1
+          max: 10
       example:
-        name: Hello World!
+        name: Class Name
         language: en
-        subject: sub1
+        subject: mathematics
+        topics: [addition, subtraction]
+        level: beginner
     Token:
       type: object
       properties:
