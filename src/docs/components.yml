@@ -47,7 +47,7 @@ components:
         language: en
         subject: mathematics
         topics: [addition, subtraction]
-        level: beginner
+        level: 2
     Token:
       type: object
       properties:
