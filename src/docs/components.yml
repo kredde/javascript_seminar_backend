@@ -22,6 +22,8 @@ components:
     Class:
       type: object
       properties:
+        id:
+          type: string
         name:
           type: string
         language:
@@ -33,8 +35,15 @@ components:
           type: number
           min: 1
           max: 10
+        teacher:
+          $ref: '#/components/schemas/User'
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
       example:
-        name: Class Name
+        id: 5ebac534954b54139806c112
+        name: Class 1
         language: en
         subject: mathematics
         topics: [addition, subtraction]
