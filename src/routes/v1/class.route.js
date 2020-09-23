@@ -35,7 +35,7 @@ module.exports = router;
  *        content:
  *          application/json:
  *            schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/Class'
  *      responses:
  *        "200":
  *          description: OK
