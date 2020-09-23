@@ -24,7 +24,5 @@ jobs:
         run: npm i
       - name: Lint
         run: npm run lint
-      - name: Prettier
-        run: npm run prettier
       - name: Test
         run: npm run test
