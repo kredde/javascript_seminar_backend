@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/', auth('teacher'), validate(classValidation.createClass), classController.createClass);
 router.route('/').get(auth('teacher'), classController.getAllClasses);
 router.route('/:classId').get(auth('teacher'), validate(classValidation.getClass), classController.getClass);
-router.route('/:classId').patch(auth('teacher'), validate(classValidation.updateClass), classController.updateClass);
+router.route('/:classId').put(auth('teacher'), validate(classValidation.updateClass), classController.updateClass);
 router.route('/:classId').delete(auth('teacher'), validate(classValidation.deleteClass), classController.deleteClass);
 router.route('/:classId/students').get(auth(), validate(classValidation.getStudents), classController.getStudents);
 router.route('/:classId/students').put(auth(), validate(classValidation.addStudent), classController.addStudent);
@@ -40,25 +40,7 @@ module.exports = router;
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              required:
- *                - name
- *                - language
- *                - subject
- *              properties:
- *                name:
- *                  type: string
- *                  format: name
- *                language:
- *                  type: string
- *                  format: language
- *                subject:
- *                  type: string
- *                  format: subject
- *              example:
- *                name: Classname
- *                language: en
- *                subject: Physics
+ *               $ref: '#/components/schemas/Class'
  *      responses:
  *        "200":
  *          description: OK
@@ -113,7 +95,7 @@ module.exports = router;
  * @swagger
  * path:
  *  /classes/{classId}:
- *    patch:
+ *    put:
  *      summary: update classes
  *      tags: [Classes]
  *      security:
@@ -130,22 +112,7 @@ module.exports = router;
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              required:
- *                - name
- *                - language
- *                - subject
- *              properties:
- *                name:
- *                  type: string
- *                language:
- *                  type: string
- *                subject:
- *                  type: string
- *              example:
- *                name: Interstellar
- *                language: de
- *                subject: sub2
+ *              $ref: '#/components/schemas/Class'
  *      responses:
  *        "204":
  *          description: No content
@@ -203,6 +170,14 @@ module.exports = router;
  *      security:
  *        - bearerAuth: []
  *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                   $ref: '#/components/schemas/Class'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":

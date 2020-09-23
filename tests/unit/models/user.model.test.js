@@ -6,10 +6,11 @@ describe('User model', () => {
     let newUser;
     beforeEach(() => {
       newUser = {
-        name: faker.name.findName(),
+        firstName: faker.name.findName(),
+        lastName: faker.name.findName(),
         email: faker.internet.email().toLowerCase(),
         password: 'password1',
-        role: 'user'
+        role: 'teacher'
       };
     });
 

@@ -22,6 +22,8 @@ components:
     Class:
       type: object
       properties:
+        id:
+          type: string
         name:
           type: string
         language:
@@ -29,10 +31,23 @@ components:
         subject:
           type: string
           # enum: [sub1, sub2, su3]
+        level:
+          type: number
+          min: 1
+          max: 10
+        teacher:
+          $ref: '#/components/schemas/User'
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
       example:
-        name: Hello World!
+        id: 5ebac534954b54139806c112
+        name: Class 1
         language: en
-        subject: sub1
+        subject: mathematics
+        topics: [addition, subtraction]
+        level: 2
     Token:
       type: object
       properties:

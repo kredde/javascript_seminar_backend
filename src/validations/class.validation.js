@@ -1,11 +1,16 @@
 const Joi = require('@hapi/joi');
 const { objectId } = require('./custom.validation');
+const { ISO_LANGUAGES } = require('../utils/constants');
 
 const createClass = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    language: Joi.string().required().length(2),
-    subject: Joi.string()
+    language: Joi.any()
+      .allow(...Object.keys(ISO_LANGUAGES))
+      .required(),
+    subject: Joi.string().required(),
+    level: Joi.number().max(10).min(1),
+    topics: Joi.array().items(Joi.string())
   })
 };
 
@@ -20,9 +25,14 @@ const updateClass = {
     classId: Joi.string().custom(objectId)
   }),
   body: Joi.object().keys({
-    name: Joi.string(),
-    language: Joi.string().length(2),
-    subject: Joi.string()
+    id: Joi.string(),
+    name: Joi.string().required(),
+    language: Joi.string().required().length(2),
+    subject: Joi.string().required(),
+    level: Joi.number().max(10).min(1),
+    teacher: Joi.string(),
+    students: Joi.array(),
+    topics: Joi.array().items(Joi.string())
   })
 };
 
