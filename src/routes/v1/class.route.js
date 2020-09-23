@@ -209,11 +209,11 @@ module.exports = router;
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Students'
- *         "401":
+ *                 $ref: '#/components/schemas/Users'
+ *        "401":
  *           $ref: '#/components/responses/Unauthorized'
- *         "403":
+ *        "403":
  *           $ref: '#/components/responses/Forbidden'
- *         "404":
+ *        "404":
  *           $ref: '#/components/responses/NotFound'
  */

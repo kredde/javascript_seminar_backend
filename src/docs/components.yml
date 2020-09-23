@@ -14,11 +14,15 @@ components:
           type: string
           enum: [teacher, student]
       example:
-        id: 5ebac534954b54139806c112
         email: fake@example.com
         firstName: Max
         lastName: Test
         role: teacher
+    Users:
+      type: array
+      items:
+        type: object
+        $ref: #/components/schemas/User'
     Class:
       type: object
       properties:
@@ -42,12 +46,25 @@ components:
           items:
             $ref: '#/components/schemas/User'
       example:
-        id: 5ebac534954b54139806c112
         name: Class 1
         language: en
         subject: mathematics
         topics: [addition, subtraction]
         level: 2
+    School:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      example:
+        name: School 1
+    Schools:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/School'
     Token:
       type: object
       properties:
