@@ -27,7 +27,7 @@ const deleteClass = catchAsync(async (req, res) => {
 });
 
 const getAllClasses = catchAsync(async (req, res) => {
-  const _classes = await classService.getAllClasses(req.user._id, req.user._id);
+  const _classes = await classService.getAllClasses(req.user._id);
   res.send(_classes);
 });
 
