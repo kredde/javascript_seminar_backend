@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
+const { ISO_LANGUAGES } = require('../utils/constants');
+
+const languageCodes = Object.keys(ISO_LANGUAGES);
 
 const classSchema = mongoose.Schema({
   name: {
@@ -7,11 +10,10 @@ const classSchema = mongoose.Schema({
     required: true,
     trim: true
   },
-  // TODO: create an enumeration
   language: {
     type: String,
-    required: true
-    // enum: [list, of language]
+    required: true,
+    enum: languageCodes
   },
   // TODO: create an enumeration
   subject: {
@@ -19,6 +21,12 @@ const classSchema = mongoose.Schema({
     required: true
     // enum: [list, of, subjects]
   },
+  level: {
+    type: Number,
+    min: 1,
+    max: 10
+  },
+  topics: [String],
   school: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'School'
