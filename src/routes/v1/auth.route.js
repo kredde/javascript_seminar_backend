@@ -37,15 +37,12 @@ module.exports = router;
  *              required:
  *                - firstName
  *                - lastName
- *                - schoolName
  *                - email
  *                - password
  *              properties:
  *                firstName:
  *                  type: string
  *                lastName:
- *                  type: string
- *                schoolName:
  *                  type: string
  *                email:
  *                  type: string
@@ -59,7 +56,6 @@ module.exports = router;
  *              example:
  *                firstName: Max
  *                lastName: Mark
- *                schoolName: Test School
  *                email: fake@example.com
  *                password: password1
  *      responses:

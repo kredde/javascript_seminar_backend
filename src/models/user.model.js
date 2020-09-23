@@ -37,12 +37,11 @@ const userSchema = mongoose.Schema(
       },
       private: true // used by the toJSON plugin
     },
-    schoolName: String,
     role: {
       type: String,
       enum: ['teacher', 'student'],
       required: true
-    },
+    }
   },
   {
     timestamps: true

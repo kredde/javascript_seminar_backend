@@ -1,12 +1,11 @@
 const Joi = require('@hapi/joi');
-const Subject = require('../models/enumerations/subject.model');
 const { objectId } = require('./custom.validation');
 
 const createClass = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    language: Joi.string().required(),
-    subject: Joi.string().valid(...Object.values(Subject))
+    language: Joi.string().required().length(2),
+    subject: Joi.string()
   })
 };
 
@@ -22,8 +21,8 @@ const updateClass = {
   }),
   body: Joi.object().keys({
     name: Joi.string(),
-    language: Joi.string(),
-    subject: Joi.string().valid(...Object.values(Subject))
+    language: Joi.string().length(2),
+    subject: Joi.string()
   })
 };
 
@@ -33,39 +32,9 @@ const deleteClass = {
   })
 };
 
-const getAllClasses = {
-  params: Joi.object().keys({
-    userId: Joi.string().custom(objectId)
-  })
-};
-
-const getStudents = {
-  params: Joi.object().keys({
-    classId: Joi.string().custom(objectId)
-  })
-};
-
-const addStudent = {
-  params: Joi.object().keys({
-    classId: Joi.string().custom(objectId),
-    userId: Joi.string().custom(objectId)
-  })
-};
-
-const removeStudent = {
-  params: Joi.object().keys({
-    classId: Joi.string().custom(objectId),
-    userId: Joi.string().custom(objectId)
-  })
-};
-
 module.exports = {
   createClass,
   getClass,
   updateClass,
-  deleteClass,
-  getAllClasses,
-  getStudents,
-  addStudent,
-  removeStudent
+  deleteClass
 };
