@@ -17,7 +17,7 @@ const getSchool = catchAsync(async (req, res) => {
 });
 
 const getSchools = catchAsync(async (req, res) => {
-  const schools = await schoolService.getSchools(req.query.subs);
+  const schools = await schoolService.getSchools(req.query.name);
   res.send(schools);
 });
 

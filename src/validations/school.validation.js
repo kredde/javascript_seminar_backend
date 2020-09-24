@@ -15,7 +15,7 @@ const getSchool = {
 
 const getSchools = {
   params: Joi.object().keys({
-    subs: Joi.string()
+    name: Joi.string()
   })
 };
 

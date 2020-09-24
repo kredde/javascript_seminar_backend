@@ -54,7 +54,7 @@ module.exports = router;
 /**
  * @swagger
  * path:
- *   /schools?name={subs}:
+ *   /schools:
  *     get:
  *       summary: get schools
  *       description: get schools by keyword
@@ -63,7 +63,7 @@ module.exports = router;
  *         - bearerAuth: []
  *       parameters:
  *        - in: query
- *          name: subs
+ *          name: name
  *          required: true
  *          schema:
  *            type: string

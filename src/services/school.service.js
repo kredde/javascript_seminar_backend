@@ -5,8 +5,10 @@ const createSchool = async (schoolBody) => {
   return school;
 };
 
-const getSchools = async (subs) => {
-  return School.find({ name: { $regex: subs } });
+const getSchools = async (name) => {
+  if (!name || name.length === 0) {
+    return School.find({ name: { $regex: name } });
+  }
 };
 
 const getSchoolById = async (schoolId) => {
