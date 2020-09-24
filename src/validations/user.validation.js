@@ -19,7 +19,14 @@ const updateUser = {
     .min(1)
 };
 
+const getNotification = {
+  params: Joi.object().keys({
+    notificationId: Joi.string().custom(objectId)
+  })
+};
+
 module.exports = {
   getUser,
-  updateUser
+  updateUser,
+  getNotification
 };
