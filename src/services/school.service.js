@@ -7,8 +7,9 @@ const createSchool = async (schoolBody) => {
 
 const getSchools = async (name) => {
   if (!name || name.length === 0) {
-    return School.find({ name: { $regex: name } });
+    return School.find({});
   }
+  return School.find({ name: { $regex: name } });
 };
 
 const getSchoolById = async (schoolId) => {

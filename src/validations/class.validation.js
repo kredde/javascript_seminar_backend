@@ -1,6 +1,7 @@
 const Joi = require('@hapi/joi');
 const { objectId } = require('./custom.validation');
 const { ISO_LANGUAGES } = require('../utils/constants');
+const { password } = require('./custom.validation');
 
 const createClass = {
   body: Joi.object().keys({
@@ -42,9 +43,32 @@ const deleteClass = {
   })
 };
 
+const getStudents = {
+  params: Joi.object().keys({
+    classId: Joi.string().custom(objectId)
+  })
+};
+
+const addStudent = {
+  params: Joi.object().keys({
+    classId: Joi.string().custom(objectId),
+    studentId: Joi.string().custom(objectId)
+  })
+};
+
+const removeStudent = {
+  params: Joi.object().keys({
+    classId: Joi.string().custom(objectId),
+    studentId: Joi.string().custom(objectId)
+  })
+};
+
 module.exports = {
   createClass,
   getClass,
   updateClass,
-  deleteClass
+  deleteClass,
+  getStudents,
+  addStudent,
+  removeStudent
 };

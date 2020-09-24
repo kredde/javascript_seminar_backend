@@ -37,10 +37,8 @@ const classSchema = mongoose.Schema({
   },
   students: [
     {
-      student: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'User'
-      }
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User'
     }
   ]
 });

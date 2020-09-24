@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const { Class } = require('../models');
+const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -49,21 +50,25 @@ const deleteClassById = async (classId, teacher) => {
 };
 
 const getStudents = async (classId) => {
-  return Class.find({ _id: classId }).students;
+  const _class = await Class.findOne({ _id: classId }).populate('students');
+  return _class.students;
 };
 
 const addStudent = async (classId, userId) => {
-  Class.update({ _id: classId }, { $push: { students: userId } });
-  return Class.find({ _id: classId });
+  await Class.update({ _id: classId }, { $push: { students: userId } });
+  const _class = await Class.find({ _id: classId });
+  return _class;
 };
 
 const removeStudent = async (classId, userId) => {
-  Class.update({ _id: classId }, { $pull: { students: userId } });
-  return Class.find({ _id: classId });
+  await Class.update({ _id: classId }, { $pull: { students: userId } });
+  const _class = await Class.find({ _id: classId });
+  return _class;
 };
 
 const getAllClasses = async (teacher) => {
-  return Class.find({ teacher });
+  const _classes = await Class.find({ teacher });
+  return _classes;
 };
 
 module.exports = {
