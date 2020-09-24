@@ -1,10 +1,15 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService } = require('../services');
+const { authService, userService, tokenService, notificationService } = require('../services');
+const notifications = require('../utils/notifications');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser({ ...req.body, role: 'teacher' });
   const tokens = await tokenService.generateAuthTokens(user);
+
+  const notification = notifications().register;
+  await notificationService.sendNotification(user._id, notification);
+
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
@@ -27,7 +32,13 @@ const refreshTokens = catchAsync(async (req, res) => {
 
 const forgotPassword = catchAsync(async (req, res) => {
   const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
-  await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken);
+  const user = await userService.getUserByEmail(req.body.email);
+
+  if (user) {
+    const notification = notifications(resetPasswordToken).forgotPassword;
+    await notificationService.sendNotification(user._id, notification);
+  }
+
   res.status(httpStatus.NO_CONTENT).send();
 });
 
