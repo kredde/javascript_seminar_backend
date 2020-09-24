@@ -1,7 +1,6 @@
 const Joi = require('@hapi/joi');
 const { objectId } = require('./custom.validation');
 const { ISO_LANGUAGES } = require('../utils/constants');
-const { password } = require('./custom.validation');
 
 const createClass = {
   body: Joi.object().keys({

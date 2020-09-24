@@ -1,6 +1,5 @@
 const httpStatus = require('http-status');
 const { Class } = require('../models');
-const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
