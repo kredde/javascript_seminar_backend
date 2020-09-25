@@ -48,6 +48,29 @@ components:
         subject: mathematics
         topics: [addition, subtraction]
         level: 2
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        text:
+          type: string
+        opened:
+          type: boolean
+        type:
+          type: string
+          enum: [notification, email, all]
+        cta:
+          type: object
+          properties:
+            text:
+              type: string
+            url:
+              type: string
+        user:
+          $ref: '#/components/schemas/User'
     Token:
       type: object
       properties:
