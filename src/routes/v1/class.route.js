@@ -12,6 +12,10 @@ router.route('/:classId').get(auth('teacher'), validate(classValidation.getClass
 router.route('/:classId').put(auth('teacher'), validate(classValidation.updateClass), classController.updateClass);
 router.route('/:classId').delete(auth('teacher'), validate(classValidation.deleteClass), classController.deleteClass);
 
+router
+  .route('/:classId/find')
+  .get(auth('teacher'), validate(classValidation.getClass), classController.findSimilarClasses);
+
 module.exports = router;
 
 /**
@@ -164,6 +168,40 @@ module.exports = router;
  *      tags: [Classes]
  *      security:
  *        - bearerAuth: []
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                   $ref: '#/components/schemas/Class'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * path:
+ *  /classes/{classId}/find:
+ *    get:
+ *      summary: Find similar classes
+ *      description: Find similar classes to match with
+ *      tags: [Classes]
+ *      security:
+ *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: classId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Class id
  *      responses:
  *        "200":
  *          description: OK

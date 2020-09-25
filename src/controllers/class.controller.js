@@ -31,10 +31,22 @@ const getAllClasses = catchAsync(async (req, res) => {
   res.send(_classes);
 });
 
+const findSimilarClasses = catchAsync(async (req, res) => {
+  const currentClass = await classService.getClassById(req.params.classId, req.user._id);
+
+  if (!currentClass) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Class was not found');
+  }
+
+  const similarClasses = await classService.findSimilarClasses(currentClass, req.user._id);
+  res.send(similarClasses);
+});
+
 module.exports = {
   createClass,
   getClass,
   updateClass,
   deleteClass,
-  getAllClasses
+  getAllClasses,
+  findSimilarClasses
 };
