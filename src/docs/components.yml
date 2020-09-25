@@ -22,7 +22,7 @@ components:
       type: array
       items:
         type: object
-        $ref: 'git #/components/schemas/User'
+        $ref: '#/components/schemas/User'
     Class:
       type: object
       properties:
