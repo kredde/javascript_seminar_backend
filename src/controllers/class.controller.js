@@ -44,6 +44,7 @@ const addStudent = catchAsync(async (req, res) => {
 const removeStudent = catchAsync(async (req, res) => {
   const _class = await classService.removeStudent(req.params.classId, req.params.studentId);
   res.send(_class);
+});
 
 const findSimilarClasses = catchAsync(async (req, res) => {
   const currentClass = await classService.getClassById(req.params.classId, req.user._id);
@@ -64,6 +65,6 @@ module.exports = {
   getAllClasses,
   getStudents,
   addStudent,
-  removeStudent
+  removeStudent,
   findSimilarClasses
 };
