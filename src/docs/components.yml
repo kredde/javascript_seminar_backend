@@ -1,3 +1,4 @@
+
 components:
   schemas:
     User:
@@ -14,15 +15,11 @@ components:
           type: string
           enum: [teacher, student]
       example:
+        id: 5ebac534954b54139806c112
         email: fake@example.com
         firstName: Max
         lastName: Test
         role: teacher
-    Users:
-      type: array
-      items:
-        type: object
-        $ref: '#/components/schemas/User'
     Class:
       type: object
       properties:
@@ -46,25 +43,35 @@ components:
           items:
             $ref: '#/components/schemas/User'
       example:
+        id: 5ebac534954b54139806c112
         name: Class 1
         language: en
         subject: mathematics
         topics: [addition, subtraction]
         level: 2
-    School:
+    Notification:
       type: object
       properties:
         id:
           type: string
-        name:
+        title:
           type: string
-      example:
-        name: School 1
-    Schools:
-      type: array
-      items:
-        type: object
-        $ref: '#/components/schemas/School'
+        text:
+          type: string
+        opened:
+          type: boolean
+        type:
+          type: string
+          enum: [notification, email, all]
+        cta:
+          type: object
+          properties:
+            text:
+              type: string
+            url:
+              type: string
+        user:
+          $ref: '#/components/schemas/User'
     Token:
       type: object
       properties:

@@ -1,8 +1,12 @@
 const nodemailer = require('nodemailer');
+const Email = require('email-templates');
+const path = require('path');
+
 const config = require('../config/config');
 const logger = require('../config/logger');
 
 const transport = nodemailer.createTransport(config.email.smtp);
+
 /* istanbul ignore next */
 if (config.env !== 'test') {
   transport
@@ -13,36 +17,34 @@ if (config.env !== 'test') {
     );
 }
 
-/**
- * Send an email
- * @param {string} to
- * @param {string} subject
- * @param {string} text
- * @returns {Promise}
- */
-const sendEmail = async (to, subject, text) => {
-  const msg = { from: config.email.from, to, subject, text };
-  await transport.sendMail(msg);
-};
+// "send: true" for sending in dev env
+const email = new Email({ message: { from: config.email.from }, transport });
 
 /**
- * Send reset password email
- * @param {string} to
- * @param {string} token
+ * Send an email
+ *
+ * @param {String} to
+ * @param {Notification} subject
  * @returns {Promise}
  */
-const sendResetPasswordEmail = async (to, token) => {
-  const subject = 'Reset password';
-  // replace this url with the link to the reset password page of your front-end app
-  const resetPasswordUrl = `http://link-to-app/reset-password?token=${token}`;
-  const text = `Dear user,
-  To reset your password, click on this link: ${resetPasswordUrl}
-  If you did not request any password resets, then ignore this email.`;
-  await sendEmail(to, subject, text);
+const sendEmail = async (to, notification) => {
+  return email.send({
+    template: path.join(__dirname, '..', 'templates', 'action'),
+    message: {
+      to
+    },
+    locals: {
+      subject: notification.title,
+      title: notification.title,
+      body: notification.text,
+      buttonText: notification.cta && notification.cta.text,
+      link: notification.cta && notification.cta.url,
+      frontendHost: config.frontendHost
+    }
+  });
 };
 
 module.exports = {
   transport,
-  sendEmail,
-  sendResetPasswordEmail
+  sendEmail
 };
