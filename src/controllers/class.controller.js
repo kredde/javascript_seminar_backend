@@ -44,6 +44,16 @@ const addStudent = catchAsync(async (req, res) => {
 const removeStudent = catchAsync(async (req, res) => {
   const _class = await classService.removeStudent(req.params.classId, req.params.studentId);
   res.send(_class);
+
+const findSimilarClasses = catchAsync(async (req, res) => {
+  const currentClass = await classService.getClassById(req.params.classId, req.user._id);
+
+  if (!currentClass) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Class was not found');
+  }
+
+  const similarClasses = await classService.findSimilarClasses(currentClass, req.user._id);
+  res.send(similarClasses);
 });
 
 module.exports = {
@@ -55,4 +65,5 @@ module.exports = {
   getStudents,
   addStudent,
   removeStudent
+  findSimilarClasses
 };

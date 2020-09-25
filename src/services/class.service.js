@@ -15,6 +15,7 @@ const createClass = async (classBody) => {
 
 /**
  * Get class by id
+ *
  * @param {ObjectId} id
  * @returns {Promise<Class>}
  */
@@ -24,6 +25,7 @@ const getClassById = async (id, teacher) => {
 
 /**
  * Update class by id
+ *
  * @param {ObjectId} classId
  * @param {Object} updateBody
  * @returns {Promise<Class>}
@@ -70,6 +72,26 @@ const getAllClasses = async (teacher) => {
   return _classes;
 };
 
+/**
+ * find a set of similar classes using the current class
+ *
+ *
+ * @param {Class} currentClass
+ * @param {ObjectId} teacher
+ * @returns {Promise<[Class]>}
+ */
+const findSimilarClasses = async (currentClass, teacher) => {
+  const similarClasses = await Class.find({
+    teacher: { $ne: teacher },
+    subject: currentClass.subject,
+    language: currentClass.language,
+    level: { $gte: Math.min(1, currentClass.level - 3), $lte: Math.max(currentClass.level + 3, 10) }
+  });
+
+  // TODO sort classes
+  return similarClasses;
+};
+
 module.exports = {
   createClass,
   getClassById,
@@ -78,5 +100,6 @@ module.exports = {
   getAllClasses,
   getStudents,
   addStudent,
-  removeStudent
+  removeStudent,
+  findSimilarClasses
 };

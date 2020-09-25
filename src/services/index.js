@@ -5,3 +5,4 @@ module.exports.userService = require('./user.service');
 module.exports.classService = require('./class.service');
 module.exports.schoolService = require('./school.service');
 module.exports.notificationService = require('./notification.service');
+module.exports.projectService = require('./project.service');

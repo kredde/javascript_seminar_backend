@@ -2,19 +2,22 @@ const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
 const projectSchema = mongoose.Schema({
-  firstClass: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Class'
-  },
-  secondClass: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Class'
-  },
+  classes: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Class'
+    }
+  ],
   state: {
     type: String,
-    enum: ['pending', 'accepted']
+    enum: ['pending', 'ongoing', 'done']
   },
-  messages: [],
+  messages: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Message'
+    }
+  ],
   meetings: []
 });
 

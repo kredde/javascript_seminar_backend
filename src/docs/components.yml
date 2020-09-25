@@ -49,6 +49,26 @@ components:
         subject: mathematics
         topics: [addition, subtraction]
         level: 2
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        classes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Class'
+        state:
+          type: string
+          enum: [pending, ongoing, done]
+        messages:
+          type: array
+          items:
+            type: WIP
+        meetings:
+          type: array
+          items:
+            type: WIP
     Notification:
       type: object
       properties:
