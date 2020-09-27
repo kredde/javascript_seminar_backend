@@ -54,7 +54,7 @@ module.exports = router;
 /**
  * @swagger
  * path:
- *   /schools?name={name}:
+ *   /schools:
  *     get:
  *       summary: get schools
  *       description: get schools by keyword
@@ -64,7 +64,7 @@ module.exports = router;
  *       parameters:
  *        - in: query
  *          name: name
- *          required: true
+ *          required: false
  *          schema:
  *            type: string
  *          description: keyword

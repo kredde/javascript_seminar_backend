@@ -310,6 +310,12 @@ module.exports = router;
  *      security:
  *        - bearerAuth: []
  *      parameters:
+ *        - in: path
+ *          name: classId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Class id
  *      responses:
  *        "200":
  *          description: OK

@@ -74,7 +74,7 @@ router
  *          required: true
  *          schema:
  *            type: string
- *          description: The id of the class
+ *            description: The id of the class
  *      responses:
  *        "200":
  *          description: OK
@@ -115,7 +115,7 @@ router.route('/:classId/projects').get(auth('teacher'), projectController.getPro
  *          required: true
  *          schema:
  *            type: string
- *          description: the projectId id
+ *            description: the projectId id
  *      responses:
  *        "200":
  *          description: OK
