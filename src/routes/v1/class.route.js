@@ -21,6 +21,10 @@ router
   .route('/:classId/students/:studentId')
   .delete(auth('teacher'), validate(classValidation.removeStudent), classController.removeStudent);
 
+router
+  .route('/:classId/find')
+  .get(auth('teacher'), validate(classValidation.getClass), classController.findSimilarClasses);
+
 module.exports = router;
 /**
  * @swagger
@@ -294,4 +298,37 @@ module.exports = router;
  *            $ref: '#/components/responses/Forbidden'
  *         "404":
  *            $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ *  /classes/{classId}/find:
+ *    get:
+ *      summary: Find similar classes
+ *      description: Find similar classes to match with
+ *      tags: [Classes]
+ *      security:
+ *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: classId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Class id
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                   $ref: '#/components/schemas/Class'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
  */

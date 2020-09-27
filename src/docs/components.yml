@@ -1,4 +1,3 @@
-
 components:
   schemas:
     User:
@@ -34,8 +33,6 @@ components:
           # enum: [sub1, sub2, su3]
         level:
           type: number
-          min: 1
-          max: 10
         teacher:
           $ref: '#/components/schemas/User'
         students:
@@ -49,6 +46,26 @@ components:
         subject: mathematics
         topics: [addition, subtraction]
         level: 2
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        classes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Class'
+        state:
+          type: string
+          enum: [pending, ongoing, done]
+        messages:
+          type: array
+          items:
+            type: object
+        meetings:
+          type: array
+          items:
+            type: object
     Notification:
       type: object
       properties:
@@ -72,6 +89,20 @@ components:
               type: string
         user:
           $ref: '#/components/schemas/User'
+    School:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      example:
+        name: School 1
+    Schools:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/School'
     Token:
       type: object
       properties:
