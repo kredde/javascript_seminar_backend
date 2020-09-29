@@ -46,7 +46,7 @@ const addMessage = {
     to: Joi.string().custom(objectId),
     classId: Joi.string().custom(objectId)
   })
-}
+};
 
 module.exports = {
   createProject,
