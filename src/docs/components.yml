@@ -14,7 +14,6 @@ components:
           type: string
           enum: [teacher, student]
       example:
-        id: 5ebac534954b54139806c112
         email: fake@example.com
         firstName: Max
         lastName: Test
@@ -40,7 +39,6 @@ components:
           items:
             $ref: '#/components/schemas/User'
       example:
-        id: 5ebac534954b54139806c112
         name: Class 1
         language: en
         subject: mathematics
@@ -59,9 +57,7 @@ components:
           type: string
           enum: [pending, ongoing, done]
         messages:
-          type: array
-          items:
-            type: object
+          $ref: '#/components/schemas/Messages'
         meetings:
           type: array
           items:
@@ -103,6 +99,24 @@ components:
       items:
         type: object
         $ref: '#/components/schemas/School'
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+        from:
+          type: '#/components/schemas/User'
+        to:
+          type: '#/components/schemas/User'
+        timestamp:
+          type: string
+    Messages:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/Message'
     Token:
       type: object
       properties:

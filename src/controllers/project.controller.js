@@ -39,10 +39,22 @@ const updateProject = catchAsync(async (req, res) => {
   res.send(project);
 });
 
+const getAllMessages = catchAsync(async (req, res) => {
+  const messages = await projectService.getAllMessages(req.params.projectId, req.user._id);
+  res.send(messages);
+});
+
+const addMessage = catchAsync(async (req, res) => {
+  const messages = await projectService.addMessage(req.params.projectId, req.body, req.user._id);
+  res.send(messages);
+});
+
 module.exports = {
   createProject,
   getProject,
   getProjects,
   acceptInvitation,
-  updateProject
+  updateProject,
+  getAllMessages,
+  addMessage
 };

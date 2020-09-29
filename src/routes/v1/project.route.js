@@ -171,4 +171,105 @@ router
   .route('/:classId/projects/:projectId/accept-invitation')
   .post(auth('teacher'), validate(projectValidation.getProject), projectController.acceptInvitation);
 
+/**
+ * @swagger
+ * path:
+ *   /classes/{classId}/projects/{projectId}/messages:
+ *     get:
+ *       summary: get all messages belong to the project
+ *       description: get all messages belong to the project
+ *       tags: [Projects]
+ *       security:
+ *         - bearerAuth: []
+ *       parameters:
+ *         - in: path
+ *           name: classId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: the class id
+ *         - in: path
+ *           name: projectId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: the projectId id
+ *       responses:
+ *         "200":
+ *           description: OK
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Messages'
+ *         "204":
+ *           description: No Content
+ *         "401":
+ *           $ref: '#/components/responses/Unauthorized'
+ *         "403":
+ *           $ref: '#/components/responses/Forbidden'
+ *         "404":
+ *           $ref: '#/components/responses/NotFound'
+ */
+
+router
+  .route('/:classId/projects/:projectId/messages')
+  .get(auth('teacher'), validate(projectValidation.getAllMessages), projectController.getAllMessages);
+
+/**
+ * @swagger
+ * path:
+ *   /classes/{classId}/projects/{projectId}/messages:
+ *     post:
+ *       summary: add a message
+ *       description: add a message
+ *       tags: [Projects]
+ *       security:
+ *         - bearerAuth: []
+ *       parameters:
+ *         - in: path
+ *           name: classId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: the class id
+ *         - in: path
+ *           name: projectId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: the projectId id
+ *       requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                from:
+ *                  type: string
+ *                to:
+ *                  type: string
+ *       responses:
+ *         "200":
+ *           description: OK
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Messages'
+ *         "204":
+ *           description: No Content
+ *         "401":
+ *           $ref: '#/components/responses/Unauthorized'
+ *         "403":
+ *           $ref: '#/components/responses/Forbidden'
+ *         "404":
+ *           $ref: '#/components/responses/NotFound'
+ */
+
+router
+  .route('/:classId/projects/:projectId/messages')
+  .post(auth('teacher'), validate(projectValidation.addMessage), projectController.addMessage);
+
 module.exports = router;

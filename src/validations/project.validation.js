@@ -28,8 +28,30 @@ const getProject = {
   })
 };
 
+const getAllMessages = {
+  params: Joi.object().keys({
+    projectId: Joi.string().custom(objectId),
+    classId: Joi.string().custom(objectId)
+  })
+};
+
+const addMessage = {
+  params: Joi.object().keys({
+    projectId: Joi.string().custom(objectId),
+    classId: Joi.string().custom(objectId)
+  }),
+  body: Joi.object().keys({
+    message: Joi.string().required(),
+    from: Joi.string().custom(objectId),
+    to: Joi.string().custom(objectId),
+    classId: Joi.string().custom(objectId)
+  })
+}
+
 module.exports = {
   createProject,
   updateProject,
-  getProject
+  getProject,
+  getAllMessages,
+  addMessage
 };
