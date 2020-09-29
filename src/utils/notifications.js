@@ -31,8 +31,30 @@ const createProject = ({ teacher, teacherClass, otherClass }) => ({
   type: 'all'
 });
 
+const sendMessage = (user, messageBody) => ({
+  title: `You have sent message to ${user.firstName} ${user.lastName}`,
+  text: `${messageBody}`,
+  cta: {
+    text: 'Back',
+    url: `${config.frontendHost}`
+  },
+  type: 'all'
+});
+
+const receiveMessage = (user, messageBody) => ({
+  title: `You have received message from ${user.firstName} ${user.lastName}`,
+  text: `${messageBody}`,
+  cta: {
+    text: 'Back',
+    url: `${config.frontendHost}`
+  },
+  type: 'all'
+});
+
 module.exports = {
   register,
   forgotPassword,
-  createProject
+  createProject,
+  sendMessage,
+  receiveMessage
 };

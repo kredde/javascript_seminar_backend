@@ -1,9 +1,10 @@
 const httpStatus = require('http-status');
 const { Project, Class } = require('../models');
-const { classService, userService, notificationService, messageService } = require('.');
+const { classService, userService, notificationService } = require('.');
+const { messageService } = require('.');
 const createProjectNotification = require('../utils/notifications').createProject;
+const { receiveMessage, sendMessage } = require('../utils/notifications');
 const ApiError = require('../utils/ApiError');
-const logger = require('../config/logger');
 
 const createProject = async (classId, body, teacher) => {
   const teacherClass = await classService.getClassById(classId, teacher);
@@ -35,7 +36,6 @@ const getProjectById = async (id, teacher) => {
 
 const getProjects = async (classId) => {
   const projects = await Project.find({ classes: { $elemMatch: { $in: [classId] } } });
-
   return projects;
 };
 
@@ -53,24 +53,29 @@ const updateProjectById = async (id, teacher, body) => {
 };
 
 const getAllMessages = async (id, teacher) => {
-  const project = await getProjectById(id, teacher);
-  await project.populate('messages');
+  const project = await Project.findOne({ _id: id }).populate('classes messages');
+
+  const teacherIds = project && project.classes.map((c) => String(c.teacher));
+  if (project && teacherIds.indexOf(teacher) < 0) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'No class belongs to the teacher');
+  }
   return project.messages;
 };
 
 const addMessage = async (id, messageBody, teacher) => {
   const project = await getProjectById(id, teacher);
   const teacherIds = project && project.classes.map((c) => String(c.teacher));
-  logger.info(teacher);
-  logger.info(messageBody.from);
-  logger.info(messageBody.to);
-  logger.info(teacherIds);
   if (teacherIds.indexOf(teacher) < 0 || teacherIds.indexOf(messageBody.to) < 0) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Message authority error');
+    throw new ApiError(httpStatus.FORBIDDEN, 'message invalid');
   }
-  await messageService.getMessage();
-  const message = await messageService.createMessage(messageBody);
-  await Project.update({ _id: id }, { $push: { messages: message._id } });
+  const message = messageService.createMessage(messageBody);
+  await Project.updateOne({ _id: id }, { $push: { messages: message._id } });
+  const senderNotification = sendMessage(await userService.getUserById(messageBody.to), messageBody.message);
+  const receiverNotification = receiveMessage(await userService.getUserById(messageBody.from), messageBody.message);
+  await notificationService.sendNotification(messageBody.from, senderNotification);
+  await notificationService.sendNotification(messageBody.to, receiverNotification);
+
+  return message;
 };
 
 module.exports = {

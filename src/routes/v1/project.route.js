@@ -251,13 +251,17 @@ router
  *                  type: string
  *                to:
  *                  type: string
+ *              example:
+ *                message: hello!
+ *                from: 5f66029b068c46189aa22000
+ *                to: 5f73134201242460fa942772
  *       responses:
  *         "200":
  *           description: OK
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: '#/components/schemas/Messages'
+ *                 $ref: '#/components/schemas/Message'
  *         "204":
  *           description: No Content
  *         "401":
