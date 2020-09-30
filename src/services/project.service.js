@@ -3,8 +3,9 @@ const { Project, Class } = require('../models');
 const { classService, userService, notificationService } = require('.');
 const { messageService } = require('.');
 const createProjectNotification = require('../utils/notifications').createProject;
-const { receiveMessage, sendMessage } = require('../utils/notifications');
+const { receiveMessage } = require('../utils/notifications');
 const ApiError = require('../utils/ApiError');
+const logger = require('../config/logger');
 
 const createProject = async (classId, body, teacher) => {
   const teacherClass = await classService.getClassById(classId, teacher);
@@ -68,11 +69,9 @@ const addMessage = async (id, messageBody, teacher) => {
   if (teacherIds.indexOf(teacher) < 0 || teacherIds.indexOf(messageBody.to) < 0) {
     throw new ApiError(httpStatus.FORBIDDEN, 'message invalid');
   }
-  const message = messageService.createMessage(messageBody);
+  const message = await messageService.createMessage(messageBody);
   await Project.updateOne({ _id: id }, { $push: { messages: message._id } });
-  const senderNotification = sendMessage(await userService.getUserById(messageBody.to), messageBody.message);
   const receiverNotification = receiveMessage(await userService.getUserById(messageBody.from), messageBody.message);
-  await notificationService.sendNotification(messageBody.from, senderNotification);
   await notificationService.sendNotification(messageBody.to, receiverNotification);
 
   return message;
