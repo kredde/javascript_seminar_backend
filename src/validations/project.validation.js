@@ -43,8 +43,7 @@ const addMessage = {
   body: Joi.object().keys({
     message: Joi.string().required(),
     from: Joi.string().custom(objectId),
-    to: Joi.string().custom(objectId),
-    classId: Joi.string().custom(objectId)
+    to: Joi.string().custom(objectId)
   })
 };
 
