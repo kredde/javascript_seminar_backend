@@ -5,7 +5,6 @@ const { messageService } = require('.');
 const createProjectNotification = require('../utils/notifications').createProject;
 const { receiveMessage } = require('../utils/notifications');
 const ApiError = require('../utils/ApiError');
-const logger = require('../config/logger');
 
 const createProject = async (classId, body, teacher) => {
   const teacherClass = await classService.getClassById(classId, teacher);
