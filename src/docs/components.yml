@@ -57,7 +57,9 @@ components:
           type: string
           enum: [pending, ongoing, done]
         messages:
-          $ref: '#/components/schemas/Messages'
+          type: array
+          items:
+            $ref: '#/components/schemas/Messages'
         meetings:
           type: array
           items:
@@ -107,9 +109,9 @@ components:
         message:
           type: string
         from:
-          type: '#/components/schemas/User'
+          $ref: '#/components/schemas/User'
         to:
-          type: '#/components/schemas/User'
+          $ref: '#/components/schemas/User'
         timestamp:
           type: string
     Messages:
