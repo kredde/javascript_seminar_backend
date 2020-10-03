@@ -39,11 +39,22 @@ const receiveMessage = (user, messageBody) => ({
     url: `${config.frontendHost}/See the message`
   },
   type: 'all'
+})
+
+const createStudentNotification = (token) = ({
+  title: `Activate student account`,
+  text: `Activate your new student account by clicking the following link`,
+  cta: {
+    text: `Click here to activate account`,
+    url: `${config.frontendHost}/callback?token=${token}`
+  },
+  type: 'all'
 });
 
 module.exports = {
   register,
   forgotPassword,
   createProject,
-  receiveMessage
+  receiveMessage,
+  createStudentNotification
 };
