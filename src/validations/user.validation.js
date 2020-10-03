@@ -8,7 +8,7 @@ const createUser = {
     password: Joi.string().required().custom(password),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    schoolName: Joi.string()
+    role: Joi.string()
   })
 };
 
