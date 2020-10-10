@@ -548,3 +548,75 @@ module.exports.ISO_LANGUAGES = {
     name: 'Zhuang, Chuang'
   }
 };
+
+module.exports.SUBJECTS = {
+  math: {
+    name: 'Mathematics'
+  },
+  science: {
+    name: 'General Sciences'
+  },
+  physics: {
+    name: 'Physics'
+  },
+  chemistry: {
+    name: 'Chemistry'
+  },
+  biology: {
+    name: 'Biology'
+  },
+  geography: {
+    name: 'Geography'
+  },
+  history: {
+    name: 'History'
+  },
+  religion: {
+    name: 'Religion'
+  },
+  politics: {
+    name: 'Politics'
+  },
+  sport: {
+    name: 'Sport'
+  },
+  music: {
+    name: 'Music'
+  },
+  art: {
+    name: 'Art'
+  },
+  art_history: {
+    name: 'Art history'
+  },
+  economics: {
+    name: 'Economics'
+  },
+  business: {
+    name: 'Business Studies'
+  },
+  accounting: {
+    name: 'Accounting'
+  },
+  computing: {
+    name: 'Computing'
+  },
+  life: {
+    name: 'Life and career orientation'
+  },
+  law: {
+    name: 'Law'
+  },
+  phylosophy: {
+    name: 'Phylosophy'
+  },
+  theater: {
+    name: 'Theater'
+  },
+  psychology: {
+    name: 'Psychology'
+  },
+  language: {
+    name: 'Language class'
+  }
+};
