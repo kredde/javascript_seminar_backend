@@ -18,6 +18,11 @@ components:
         firstName: Max
         lastName: Test
         role: teacher
+    Users:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/User'
     Class:
       type: object
       properties:

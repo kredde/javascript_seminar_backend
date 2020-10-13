@@ -102,4 +102,31 @@ router
   .route('/notifications/:notificationId')
   .get(auth(), validate(userValidation.getNotification), userController.getNotification);
 
+/**
+ * @swagger
+ * path:
+ *  /me/students:
+ *    get:
+ *      summary: Get all your students
+ *      description: Logged in users can fetch only their students
+ *      tags: [User]
+ *      security:
+ *        - bearerAuth: []
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Users'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+
+router.route('/students').get(auth(), validate(userValidation.getStudents), userController.getStudents);
+
 module.exports = router;

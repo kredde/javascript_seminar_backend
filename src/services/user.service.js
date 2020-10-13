@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
-const { User } = require('../models');
+const { User, Class } = require('../models');
 const ApiError = require('../utils/ApiError');
+const logger = require('../config/logger');
 
 /**
  * Create a user
@@ -80,11 +81,24 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+const getStudents = async (userId) => {
+  const classes = await Class.find({ teacher: userId }).populate('students');
+  if (!classes) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Classes not found');
+  }
+  const students = new Set();
+  logger.info(students);
+  for (let i = 0; i < classes.length; i += 1)
+    for (let j = 0; j < classes[i].students.length; j += 1) students.add(classes[i].students[j]);
+  return Array.from(students);
+};
+
 module.exports = {
   createUser,
   queryUsers,
   getUserById,
   getUserByEmail,
   updateUserById,
-  deleteUserById
+  deleteUserById,
+  getStudents
 };

@@ -26,9 +26,15 @@ const getNotification = catchAsync(async (req, res) => {
   res.send(notification);
 });
 
+const getStudents = catchAsync(async (req, res) => {
+  const students = await userService.getStudents(req.user._id);
+  res.send(students);
+});
+
 module.exports = {
   getUser,
   updateUser,
   getNotifications,
-  getNotification
+  getNotification,
+  getStudents
 };
