@@ -35,7 +35,7 @@ module.exports = router;
  *        content:
  *          application/json:
  *            schema:
- *               $ref: '#/components/schemas/Students'
+ *               $ref: '#/components/schemas/User'
  *      responses:
  *        "200":
  *          description: OK
@@ -45,7 +45,7 @@ module.exports = router;
  *                type: object
  *                properties:
  *                  class:
- *                    $ref: '#/components/schemas/Students'
+ *                    $ref: '#/components/schemas/User'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -77,7 +77,7 @@ module.exports = router;
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Student'
+ *                 $ref: '#/components/schemas/User'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -110,7 +110,7 @@ module.exports = router;
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Student'
+ *                 $ref: '#/components/schemas/User'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -142,7 +142,7 @@ module.exports = router;
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Student'
+ *                 $ref: '#/components/schemas/User'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -174,7 +174,7 @@ module.exports = router;
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Student'
+ *                 $ref: '#/components/schemas/User'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
