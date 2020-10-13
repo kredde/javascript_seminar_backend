@@ -21,13 +21,12 @@ const getStudent = catchAsync(async (req, res) => {
 });
 
 const updateStudent = catchAsync(async (req, res) => {
-    const _student = await userService.updateUserById(req.params.studentId, req.body);
+    const _student = await userService.addStudentInformation(req.params.studentId, req.body);
     res.send(_student);
 });
-
 
 module.exports = {
     createStudent,
     getStudent,
     updateStudent
-  };
+};

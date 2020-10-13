@@ -41,7 +41,7 @@ const receiveMessage = (user, messageBody) => ({
   type: 'all'
 })
 
-const createStudentNotification = (token) = ({
+const createStudentNotification = (token) => ({
   title: `Activate student account`,
   text: `Activate your new student account by clicking the following link`,
   cta: {
