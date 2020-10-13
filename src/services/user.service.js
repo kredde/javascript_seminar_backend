@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
 const { User, Class } = require('../models');
 const ApiError = require('../utils/ApiError');
-const logger = require('../config/logger');
 
 /**
  * Create a user
@@ -87,9 +86,7 @@ const getStudents = async (userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Classes not found');
   }
   const students = new Set();
-  logger.info(students);
-  for (let i = 0; i < classes.length; i += 1)
-    for (let j = 0; j < classes[i].students.length; j += 1) students.add(classes[i].students[j]);
+  classes.forEach((_class) => _class.students.forEach((student) => students.add(student)));
   return Array.from(students);
 };
 

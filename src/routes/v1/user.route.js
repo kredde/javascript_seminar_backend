@@ -127,6 +127,6 @@ router
  *          $ref: '#/components/responses/NotFound'
  */
 
-router.route('/students').get(auth(), validate(userValidation.getStudents), userController.getStudents);
+router.route('/students').get(auth('teacher'), validate(userValidation.getStudents), userController.getStudents);
 
 module.exports = router;
