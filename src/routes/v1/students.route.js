@@ -138,15 +138,15 @@ module.exports = router;
  *      requestBody:
  *          required: true
  *          content:
- *              application/json:
+ *            application/json:
  *              schema:
- *              type: object
- *              properties:
- *                  age: 
- *                      type: string
+ *                type: object
+ *                properties:
+ *                  age:
+ *                    type: string
  *                  hobbies:
- *                       type: string
- *              example:
+ *                    type: string
+ *                example:
  *                  age: 16
  *                  hobbies: coding
  *      responses:
