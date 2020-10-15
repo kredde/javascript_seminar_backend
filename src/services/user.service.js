@@ -72,9 +72,9 @@ const addStudentInformation = async (userId, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   if (!updateBody.age && !updateBody.hobby) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cant update student. No valid properties.');
   }
-  Object.assign(user, updateBody);
+  Object.assign(user, { age: updateBody.age, hobby: updateBody.hobby });
   await user.save();
   return user;
 };

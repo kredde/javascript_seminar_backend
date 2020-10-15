@@ -9,8 +9,7 @@ const router = express.Router();
 router.route('/students').post(auth('teacher'), validate(userValidation.createUser), studentsController.createStudent);
 router.route('/students/:studentsId').get(auth('teacher'), validate(userValidation.getUser), studentsController.getStudent);
 router.route('/students/:studentsId').get(auth('student'), validate(userValidation.getUser), studentsController.getStudent);
-router.route('/students/:studentsId').patch(auth('teacher'), validate(userValidation.updateUser), studentsController.updateStudent);
-router.route('/students/:studentsId').patch(auth('student'), validate(userValidation.updateUser), studentsController.updateStudent);
+router.route('/students/:studentsId').patch(auth(), validate(userValidation.updateUser), studentsController.updateStudent);
 
 module.exports = router;
 
@@ -119,38 +118,6 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  */
 
- /**
- * @swagger
- * path:
- *  /students/{studentsId}:
- *    patch:
- *      summary: update a student
- *      description: teacher updates a student
- *      tags: [Students]
- *      security:
- *        - bearerAuth: []
- *      parameters:
- *        - in: path
- *          name: studentId
- *          required: true
- *          schema:
- *            type: string
- *          description: Student id
- *      responses:
- *        "200":
- *          description: OK
- *          content:
- *            application/json:
- *              schema:
- *                 $ref: '#/components/schemas/User'
- *        "401":
- *          $ref: '#/components/responses/Unauthorized'
- *        "403":
- *          $ref: '#/components/responses/Forbidden'
- *        "404":
- *          $ref: '#/components/responses/NotFound'
- */
-
   /**
  * @swagger
  * path:
@@ -168,6 +135,20 @@ module.exports = router;
  *          schema:
  *            type: string
  *          description: Student id
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *              schema:
+ *              type: object
+ *              properties:
+ *                  age: 
+ *                      type: string
+ *                  hobbies:
+ *                       type: string
+ *              example:
+ *                  age: 16
+ *                  hobbies: coding
  *      responses:
  *        "200":
  *          description: OK

@@ -5,7 +5,7 @@ const { createStudentNotification } = require('../utils/notifications');
 const { userService, tokenService, notificationService } = require('../services');
 
 const createStudent = catchAsync(async (req, res) => {
-    const student = await userService.createUser(req.body);
+    const student = await userService.createUser({ ...req.body, role : 'student' })
     const token = await tokenService.generateAuthTokens(student);
     const receiverNotification = createStudentNotification(token);
     await notificationService.sendNotification(messageBody.to, receiverNotification);
