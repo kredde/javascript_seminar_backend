@@ -4,12 +4,12 @@ const userValidation = require('../../validations/user.validation');
 const studentsController = require('../../controllers/students.controller');
 const auth = require('../../middlewares/auth');
 
-
 const router = express.Router();
 router.route('/students').post(auth('teacher'), validate(userValidation.createUser), studentsController.createStudent);
-router.route('/students/:studentsId').get(auth('teacher'), validate(userValidation.getUser), studentsController.getStudent);
-router.route('/students/:studentsId').get(auth('student'), validate(userValidation.getUser), studentsController.getStudent);
-router.route('/students/:studentsId').patch(auth(), validate(userValidation.updateUser), studentsController.updateStudent);
+router.route('/students/:studentsId').get(auth(), validate(userValidation.getUser), studentsController.getStudent);
+router
+  .route('/students/:studentsId')
+  .patch(auth(), validate(userValidation.updateUser), studentsController.updateStudent);
 
 module.exports = router;
 
@@ -20,7 +20,7 @@ module.exports = router;
  *   description: CRUD for students, only accessible by teachers
  */
 
- /**
+/**
  * @swagger
  * path:
  *  /students:
@@ -53,7 +53,7 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  */
 
- /**
+/**
  * @swagger
  * path:
  *  /students/{studentsId}:
@@ -85,8 +85,7 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  */
 
- 
- /**
+/**
  * @swagger
  * path:
  *  /students/{studentsId}:
@@ -118,7 +117,7 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  */
 
-  /**
+/**
  * @swagger
  * path:
  *  /students/{studentsId}:
