@@ -14,7 +14,7 @@ const createClass = async (classBody) => {
     const _class = await Class.create(classBody);
     return _class;
   }
-  throw new ApiError(httpStatus.UNAUTHORIZED, 'Can not create more than 10 classes');
+  throw new ApiError(httpStatus.BAD_REQUEST, 'Can not create more than 10 classes');
 };
 
 /**
