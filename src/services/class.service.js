@@ -9,8 +9,12 @@ const ApiError = require('../utils/ApiError');
  */
 
 const createClass = async (classBody) => {
-  const _class = await Class.create(classBody);
-  return _class;
+  const classes = await Class.find({ teacher: classBody.teacher });
+  if (classes.length <= 9) {
+    const _class = await Class.create(classBody);
+    return _class;
+  }
+  throw new ApiError(httpStatus.BAD_REQUEST, 'Can not create more than 10 classes');
 };
 
 /**
