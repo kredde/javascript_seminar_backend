@@ -100,5 +100,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
-  addStudentInformation,
+  addStudentInformation
 };

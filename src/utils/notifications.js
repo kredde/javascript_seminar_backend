@@ -39,7 +39,7 @@ const receiveMessage = (user, messageBody) => ({
     url: `${config.frontendHost}/See the message`
   },
   type: 'all'
-})
+});
 
 const createStudentNotification = (token) => ({
   title: `Activate student account`,
