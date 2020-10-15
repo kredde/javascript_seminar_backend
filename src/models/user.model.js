@@ -41,6 +41,18 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ['teacher', 'student'],
       required: true
+    },
+    age: {
+      type: Number
+    },
+    hobbies: {
+      type: String
+    },
+    notes: {
+      type: String
+    },
+    proficiency_level: {
+      type: String
     }
   },
   {
