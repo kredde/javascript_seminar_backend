@@ -1,31 +1,17 @@
 const express = require('express');
 const validate = require('../../middlewares/validate');
-const userValidation = require('../../validations/user.validation');
-const studentsController = require('../../controllers/students.controller');
+const { userValidation, studentValidation } = require('../../validations');
+const studentController = require('../../controllers/student.controller');
 const auth = require('../../middlewares/auth');
 
 const router = express.Router();
-router.route('/students').post(auth('teacher'), validate(userValidation.createUser), studentsController.createStudent);
-router.route('/students/:studentsId').get(auth(), validate(userValidation.getUser), studentsController.getStudent);
-router
-  .route('/students/:studentsId')
-  .patch(auth(), validate(userValidation.updateUser), studentsController.updateStudent);
-
-module.exports = router;
-
-/**
- * @swagger
- * tags:
- *   name: Students
- *   description: CRUD for students, only accessible by teachers
- */
 
 /**
  * @swagger
  * path:
  *  /students:
  *    post:
- *      summary: Create a new student
+ *      summary: Register a student account
  *      tags: [Students]
  *      security:
  *        - bearerAuth: []
@@ -34,32 +20,56 @@ module.exports = router;
  *        content:
  *          application/json:
  *            schema:
- *               $ref: '#/components/schemas/User'
+ *              type: object
+ *              required:
+ *                - firstName
+ *                - lastName
+ *                - email
+ *                - password
+ *              properties:
+ *                firstName:
+ *                  type: string
+ *                lastName:
+ *                  type: string
+ *                email:
+ *                  type: string
+ *                  format: email
+ *                  description: must be unique
+ *                password:
+ *                  type: string
+ *                  format: password
+ *                  minLength: 8
+ *                  description: At least one number and one letter
+ *              example:
+ *                firstName: Max
+ *                lastName: Mark
+ *                email: fake@example.com
+ *                password: password1
  *      responses:
- *        "200":
- *          description: OK
+ *        "201":
+ *          description: Created
  *          content:
  *            application/json:
  *              schema:
  *                type: object
  *                properties:
- *                  class:
+ *                  user:
  *                    $ref: '#/components/schemas/User'
- *        "401":
- *          $ref: '#/components/responses/Unauthorized'
- *        "403":
- *          $ref: '#/components/responses/Forbidden'
- *        "404":
- *          $ref: '#/components/responses/NotFound'
+ *                  tokens:
+ *                    $ref: '#/components/schemas/AuthTokens'
+ *        "400":
+ *          $ref: '#/components/responses/DuplicateEmail'
  */
+
+router.route('/').post(auth('teacher'), validate(userValidation.createStudent), studentController.createStudent);
 
 /**
  * @swagger
  * path:
- *  /students/{studentsId}:
+ *  /students/{studentId}:
  *    get:
- *      summary: Get a student
- *      description: teacher calls up a student user
+ *      summary: Get student information
+ *      description: get the student profile
  *      tags: [Students]
  *      security:
  *        - bearerAuth: []
@@ -69,7 +79,7 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Student id
+ *          description: student id
  *      responses:
  *        "200":
  *          description: OK
@@ -85,45 +95,15 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  */
 
-/**
- * @swagger
- * path:
- *  /students/{studentsId}:
- *    get:
- *      summary: Get a student
- *      description: The student calls up his user account
- *      tags: [Students]
- *      security:
- *        - bearerAuth: []
- *      parameters:
- *        - in: path
- *          name: studentId
- *          required: true
- *          schema:
- *            type: string
- *          description: Student id
- *      responses:
- *        "200":
- *          description: OK
- *          content:
- *            application/json:
- *              schema:
- *                 $ref: '#/components/schemas/User'
- *        "401":
- *          $ref: '#/components/responses/Unauthorized'
- *        "403":
- *          $ref: '#/components/responses/Forbidden'
- *        "404":
- *          $ref: '#/components/responses/NotFound'
- */
+router.route('/:studentId').get(auth('teacher'), validate(studentValidation.getStudent), studentController.getStudent);
 
 /**
  * @swagger
  * path:
- *  /students/{studentsId}:
+ *  /students/{studentId}:
  *    patch:
- *      summary: update a student
- *      description: student updates his informations
+ *      summary: update student information
+ *      description: update the student profile
  *      tags: [Students]
  *      security:
  *        - bearerAuth: []
@@ -135,19 +115,25 @@ module.exports = router;
  *            type: string
  *          description: Student id
  *      requestBody:
- *          required: true
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  age:
- *                    type: string
- *                  hobbies:
- *                    type: string
- *                example:
- *                  age: 16
- *                  hobbies: coding
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                age:
+ *                  type: string
+ *                hobbies:
+ *                  type: string
+ *                notes:
+ *                  type: string
+ *                proficiency_level:
+ *                  type: string
+ *              example:
+ *                age: 12
+ *                hobbies: football
+ *                notes: very shy
+ *                proficiency_level: C1
  *      responses:
  *        "200":
  *          description: OK
@@ -162,3 +148,6 @@ module.exports = router;
  *        "404":
  *          $ref: '#/components/responses/NotFound'
  */
+router.route('/:studentId').patch(auth(), validate(studentValidation.updateStudent), studentController.updateStudent);
+
+module.exports = router;
