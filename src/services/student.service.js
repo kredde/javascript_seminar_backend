@@ -2,9 +2,14 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const { userService } = require('.');
 
-const hasAuthority = (userId, studentId) => {
-  /** still need to do functionality get all students of a teacher */
-  if (!userId && !studentId) return true;
+const hasAuthority = async (userId, studentId) => {
+  const user = await userService.getUserById(userId);
+  if (user.role === 'teacher') {
+    const students = await userService.getStudents(userId);
+    const studentIds = students.map((student) => student._id.toString());
+    return userId.equals(studentId) || studentIds.includes(studentId);
+  }
+  return userId.equals(studentId);
 };
 const isEmailAndNameChanged = (student, updateBody) => {
   return (
@@ -14,7 +19,7 @@ const isEmailAndNameChanged = (student, updateBody) => {
   );
 };
 const getStudent = async (userId, studentId) => {
-  if (hasAuthority(userId, studentId)) {
+  if (!(await hasAuthority(userId, studentId))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'unauthorized');
   }
   const student = await userService.getUserById(studentId);
