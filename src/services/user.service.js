@@ -66,6 +66,19 @@ const updateUserById = async (userId, updateBody) => {
   return user;
 };
 
+const addStudentInformation = async (userId, updateBody) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  if (!updateBody.age && !updateBody.hobby) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cant update student. No valid properties.');
+  }
+  Object.assign(user, { age: updateBody.age, hobby: updateBody.hobby });
+  await user.save();
+  return user;
+};
+
 /**
  * Delete user by id
  * @param {ObjectId} userId
@@ -97,5 +110,6 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
-  getStudents
+  getStudents,
+  addStudentInformation
 };
