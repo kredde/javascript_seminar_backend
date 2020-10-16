@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { toJSON, paginate } = require('./plugins');
+const { toJSON } = require('./plugins');
 
 const schoolSchema = mongoose.Schema({
   name: {
@@ -9,7 +9,6 @@ const schoolSchema = mongoose.Schema({
 });
 
 schoolSchema.plugin(toJSON);
-schoolSchema.plugin(paginate);
 
 /**
  * @typedef School
