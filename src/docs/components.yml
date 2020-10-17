@@ -49,6 +49,26 @@ components:
         subject: mathematics
         topics: [addition, subtraction]
         level: 2
+    Meeting:
+      type: object
+      properties:
+        id:
+          type: string
+        project:
+          type: string
+        date:
+          type: string
+          format: date-time
+        groupAssignments:
+          type: string
+          enum: [tandem, group3, group4, whole_class]
+        groups:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+              description: student ids
     Project:
       type: object
       properties:

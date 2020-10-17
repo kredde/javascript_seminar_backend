@@ -7,6 +7,7 @@ const schoolRoute = require('./school.route');
 const projectRoute = require('./project.route');
 const metaRoute = require('./meta.route');
 const studentsRoute = require('./students.route');
+const meetingRoute = require('./meeting.route');
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.use('/docs', docsRoute);
 router.use('/me', userRoute);
 router.use('/classes', classRoute);
 router.use('/schools', schoolRoute);
+router.use('/classes', meetingRoute);
 router.use('/classes', projectRoute);
 router.use('/', metaRoute);
 router.use('/students', studentsRoute);
