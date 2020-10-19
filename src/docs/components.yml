@@ -34,9 +34,16 @@ components:
           type: string
         subject:
           type: string
-          # enum: [sub1, sub2, su3]
+        country:
+          type: string
+        projectDuration:
+          type: number
+        meetingFrequency:
+          type: number
         level:
           type: number
+        languageLevel:
+          type: string
         teacher:
           $ref: '#/components/schemas/User'
         students:
@@ -46,6 +53,10 @@ components:
       example:
         name: Class 1
         language: en
+        country: de
+        projectDuration: 10
+        meetingFrequency: 2
+        languageLevel: A1
         subject: mathematics
         topics: [addition, subtraction]
         level: 2

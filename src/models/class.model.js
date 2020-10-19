@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
-const { ISO_LANGUAGES } = require('../utils/constants');
+const { ISO_LANGUAGES, LANGUAGE_LEVELS, ISO_COUNTRIES } = require('../utils/constants');
 
 const languageCodes = Object.keys(ISO_LANGUAGES);
+const countryCodes = ISO_COUNTRIES.map((country) => country.code);
 
 const classSchema = mongoose.Schema({
   name: {
@@ -34,6 +35,20 @@ const classSchema = mongoose.Schema({
   teacher: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'User'
+  },
+  languageLevel: {
+    type: String,
+    enum: LANGUAGE_LEVELS
+  },
+  projectDuration: {
+    type: Number
+  },
+  meetingFrequency: {
+    type: Number
+  },
+  country: {
+    type: String,
+    enum: countryCodes
   },
   students: [
     {
