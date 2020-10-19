@@ -53,7 +53,7 @@ const findSimilarClasses = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Class was not found');
   }
 
-  const similarClasses = await classService.findSimilarClasses(currentClass, req.user._id);
+  const similarClasses = await classService.findSimilarClasses(currentClass, req.user._id, req.query);
   res.send(similarClasses);
 });
 

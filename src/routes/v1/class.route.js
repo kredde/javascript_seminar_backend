@@ -316,6 +316,18 @@ module.exports = router;
  *          schema:
  *            type: string
  *          description: Class id
+ *        - in: query
+ *          name: projectDuration
+ *          schema:
+ *           type: string
+ *        - in: query
+ *          name: languageLevel
+ *          schema:
+ *           type: string
+ *        - in: query
+ *          name: country
+ *          schema:
+ *           type: string
  *      responses:
  *        "200":
  *          description: OK

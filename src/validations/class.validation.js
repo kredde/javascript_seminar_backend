@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const { objectId } = require('./custom.validation');
-const { ISO_LANGUAGES } = require('../utils/constants');
+const { ISO_LANGUAGES, ISO_COUNTRIES } = require('../utils/constants');
 
 const createClass = {
   body: Joi.object().keys({
@@ -8,6 +8,9 @@ const createClass = {
     language: Joi.any()
       .allow(...Object.keys(ISO_LANGUAGES))
       .required(),
+    country: Joi.any().allow(...ISO_COUNTRIES.map((country) => country.code)),
+    projectDuration: Joi.number(),
+    meetingFrequency: Joi.number(),
     subject: Joi.string().required(),
     level: Joi.number().max(10).min(1),
     topics: Joi.array().items(Joi.string())
@@ -27,7 +30,12 @@ const updateClass = {
   body: Joi.object().keys({
     id: Joi.string(),
     name: Joi.string().required(),
-    language: Joi.string().required().length(2),
+    language: Joi.any()
+      .allow(...Object.keys(ISO_LANGUAGES))
+      .required(),
+    country: Joi.any().allow(...ISO_COUNTRIES.map((country) => country.code)),
+    projectDuration: Joi.number(),
+    meetingFrequency: Joi.number(),
     subject: Joi.string().required(),
     level: Joi.number().max(10).min(1),
     teacher: Joi.string(),

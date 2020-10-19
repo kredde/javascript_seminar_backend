@@ -84,12 +84,15 @@ const getAllClasses = async (teacher) => {
  * @param {ObjectId} teacher
  * @returns {Promise<[Class]>}
  */
-const findSimilarClasses = async (currentClass, teacher) => {
+const findSimilarClasses = async (currentClass, teacher, query) => {
   const similarClasses = await Class.find({
     teacher: { $ne: teacher },
     subject: currentClass.subject,
     language: currentClass.language,
-    level: { $gte: Math.min(1, currentClass.level - 3), $lte: Math.max(currentClass.level + 3, 10) }
+    level: { $gte: Math.min(1, currentClass.level - 1), $lte: Math.max(currentClass.level + 1, 10) },
+    languageLevel: query.languageLevel,
+    projectDuration: query.projectDuration,
+    country: query.country
   });
 
   // TODO sort classes
