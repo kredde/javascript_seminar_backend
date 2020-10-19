@@ -60,4 +60,29 @@ router.get('/languages', metaController.getLanguages);
  */
 router.get('/subjects', metaController.getSubjects);
 
+/**
+ * @swagger
+ * path:
+ *  /countries:
+ *    get:
+ *      summary: Get list of valid countries
+ *      tags: [Meta]
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                      name: string
+ *                      value: string
+ *                  example:
+ *                     name: Germany
+ *                     value: de
+ */
+router.get('/countries', metaController.getCountries);
+
 module.exports = router;
