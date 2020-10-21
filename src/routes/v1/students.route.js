@@ -61,7 +61,7 @@ const router = express.Router();
  *          $ref: '#/components/responses/DuplicateEmail'
  */
 
-router.route('/').post(auth('teacher'), validate(userValidation.createStudent), studentController.createStudent);
+router.route('/').post(auth('teacher'), validate(userValidation.createUser), studentController.createStudent);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.route('/').post(auth('teacher'), validate(userValidation.createStudent), 
  *          $ref: '#/components/responses/NotFound'
  */
 
-router.route('/:studentId').get(auth('teacher'), validate(studentValidation.getStudent), studentController.getStudent);
+router.route('/:studentId').get(auth(), validate(studentValidation.getStudent), studentController.getStudent);
 
 /**
  * @swagger
