@@ -44,6 +44,10 @@ components:
           type: number
         languageLevel:
           type: string
+        topics:
+          type: array
+          items:
+            type: string
         teacher:
           $ref: '#/components/schemas/User'
         students:
@@ -59,6 +63,7 @@ components:
         languageLevel: A1
         subject: mathematics
         topics: [addition, subtraction]
+        teacher: id
         level: 2
     Meeting:
       type: object
