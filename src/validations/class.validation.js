@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const { objectId } = require('./custom.validation');
-const { ISO_LANGUAGES, ISO_COUNTRIES } = require('../utils/constants');
+const { ISO_LANGUAGES, ISO_COUNTRIES, LANGUAGE_LEVELS } = require('../utils/constants');
 
 const createClass = {
   body: Joi.object().keys({
@@ -13,7 +13,8 @@ const createClass = {
     meetingFrequency: Joi.number(),
     subject: Joi.string().required(),
     level: Joi.number().max(10).min(1),
-    topics: Joi.array().items(Joi.string())
+    topics: Joi.array().items(Joi.string()),
+    languageLevel: Joi.any().allow(...LANGUAGE_LEVELS)
   })
 };
 
@@ -40,7 +41,8 @@ const updateClass = {
     level: Joi.number().max(10).min(1),
     teacher: Joi.string(),
     students: Joi.array(),
-    topics: Joi.array().items(Joi.string())
+    topics: Joi.array().items(Joi.string()),
+    languageLevel: Joi.any().allow(...LANGUAGE_LEVELS)
   })
 };
 
