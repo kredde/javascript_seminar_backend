@@ -31,10 +31,16 @@ const getStudents = catchAsync(async (req, res) => {
   res.send(students);
 });
 
+const getMeetings = catchAsync(async (req, res) => {
+  const students = await userService.getMeetings(req.user);
+  res.send(students);
+});
+
 module.exports = {
   getUser,
   updateUser,
   getNotifications,
   getNotification,
-  getStudents
+  getStudents,
+  getMeetings
 };

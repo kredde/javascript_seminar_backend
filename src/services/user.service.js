@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
+const projectService = require('./project.service');
 const { User, Class } = require('../models');
 const ApiError = require('../utils/ApiError');
+const meetingService = require('./meeting.service');
 
 /**
  * Create a user
@@ -103,6 +105,21 @@ const getStudents = async (userId) => {
   return Array.from(students);
 };
 
+const getMeetings = async (user) => {
+  const { role } = user;
+
+  let classes;
+  if (role === 'teacher') {
+    classes = await Class.find({ teacher: user._id });
+  } else {
+    classes = await Class.find({ students: { $elemMatch: { $in: [user._id] } } });
+  }
+  const projects = await Promise.all(classes.map((classModel) => projectService.getProjects(classModel.id)));
+  const meetings = await Promise.all(projects.flat().map((project) => meetingService.getMeetings(project._id)));
+
+  return meetings.flat();
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -111,5 +128,6 @@ module.exports = {
   updateUserById,
   deleteUserById,
   getStudents,
-  addStudentInformation
+  addStudentInformation,
+  getMeetings
 };

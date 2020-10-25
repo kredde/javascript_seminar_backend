@@ -127,6 +127,35 @@ router
  *          $ref: '#/components/responses/NotFound'
  */
 
-router.route('/students').get(auth('teacher'), validate(userValidation.getStudents), userController.getStudents);
+router.route('/students').get(auth('teacher'), userController.getStudents);
+
+/**
+ * @swagger
+ * path:
+ *  /me/meetings:
+ *    get:
+ *      summary: Get all your meetings
+ *      description: Logged in users can fetch their meetings
+ *      tags: [User]
+ *      security:
+ *        - bearerAuth: []
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/Meeting'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+
+router.route('/meetings').get(auth('teacher'), userController.getMeetings);
 
 module.exports = router;

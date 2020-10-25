@@ -17,6 +17,7 @@ router
 router
   .route('/:classId/students/:studentId')
   .put(auth('teacher'), validate(classValidation.addStudent), classController.addStudent);
+
 router
   .route('/:classId/students/:studentId')
   .delete(auth('teacher'), validate(classValidation.removeStudent), classController.removeStudent);

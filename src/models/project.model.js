@@ -17,8 +17,7 @@ const projectSchema = mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Message'
     }
-  ],
-  meetings: []
+  ]
 });
 
 projectSchema.plugin(toJSON);
