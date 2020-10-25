@@ -57,7 +57,7 @@ components:
       example:
         name: Class 1
         language: en
-        country: de
+        country: DE
         projectDuration: 10
         meetingFrequency: 2
         languageLevel: A1
