@@ -93,7 +93,7 @@ const findSimilarClasses = async (currentClass, teacher, query) => {
     languageLevel: query.languageLevel,
     projectDuration: query.projectDuration,
     country: query.country
-  });
+  }).populate('teacher');
 
   // TODO sort classes
   return similarClasses;
