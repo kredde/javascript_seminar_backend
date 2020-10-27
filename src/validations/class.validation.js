@@ -11,7 +11,6 @@ const createClass = {
     country: Joi.any().allow(...ISO_COUNTRIES.map((country) => country.code)),
     projectDuration: Joi.number(),
     meetingFrequency: Joi.number(),
-    teacher: Joi.string(),
     subject: Joi.string().required(),
     level: Joi.number().max(10).min(1),
     topics: Joi.array().items(Joi.string()),

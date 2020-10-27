@@ -48,7 +48,28 @@ module.exports = router;
  *        content:
  *          application/json:
  *            schema:
- *               $ref: '#/components/schemas/Class'
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 language:
+ *                   type: string
+ *                 subject:
+ *                   type: string
+ *                 country:
+ *                   type: string
+ *                 projectDuration:
+ *                   type: number
+ *                 meetingFrequency:
+ *                   type: number
+ *                 level:
+ *                   type: number
+ *                 languageLevel:
+ *                   type: string
+ *                 topics:
+ *                   type: array
+ *                   items:
+ *                     type: string
  *      responses:
  *        "200":
  *          description: OK
