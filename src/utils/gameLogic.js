@@ -1,5 +1,6 @@
 /* eslint-disable */
 const fetch = require('node-fetch');
+const config = require('../config/config');
 
 // Map <SessionId, GameState>
 let openSessions = new Map();
