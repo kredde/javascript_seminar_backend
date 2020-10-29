@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const socketIo = require('socket.io');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
+const games = require('./utils/gameLogic.js');
 
 let server;
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
@@ -9,6 +11,10 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
   });
+
+  // GAMES SOCKET
+  const io = socketIo.listen(server);
+  games.gameInit(io);
 });
 
 const exitHandler = () => {

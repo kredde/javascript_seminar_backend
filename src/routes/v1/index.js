@@ -8,6 +8,7 @@ const projectRoute = require('./project.route');
 const metaRoute = require('./meta.route');
 const studentsRoute = require('./students.route');
 const meetingRoute = require('./meeting.route');
+const gamesRoute = require('./games.route');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/classes', meetingRoute);
 router.use('/classes', projectRoute);
 router.use('/', metaRoute);
 router.use('/students', studentsRoute);
+router.use('/games', gamesRoute);
 
 module.exports = router;
