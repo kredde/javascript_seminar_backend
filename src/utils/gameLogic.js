@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 let openSessions = new Map();
 let io;
 
-let url = 'https://javascript-group-d-frontend.herokuapp.com';
+let url = config.backendHost;
 
 module.exports = {
   gameInit: function (ioServer) {
