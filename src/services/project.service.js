@@ -1,7 +1,8 @@
 const httpStatus = require('http-status');
-const { Project, Class } = require('../models');
-const { classService, userService, notificationService } = require('.');
-const { messageService } = require('.');
+const { Project, Class, User } = require('../models');
+const classService = require('./class.service');
+const notificationService = require('./notification.service');
+const messageService = require('./message.service');
 const createProjectNotification = require('../utils/notifications').createProject;
 const { receiveMessage } = require('../utils/notifications');
 const ApiError = require('../utils/ApiError');
@@ -15,7 +16,7 @@ const createProject = async (classId, body, teacher) => {
   }
 
   const project = await Project.create({ classes: [teacherClass._id, otherClass._id], state: 'pending' });
-  const teacherModel = await userService.getUserById(teacher);
+  const teacherModel = await User.findById(teacher);
   const notification = createProjectNotification({ teacherClass, otherClass, teacher: teacherModel });
   await notificationService.sendNotification(otherClass.teacher, notification);
 
@@ -70,7 +71,7 @@ const addMessage = async (id, messageBody, teacher) => {
   }
   const message = await messageService.createMessage(messageBody);
   await Project.updateOne({ _id: id }, { $push: { messages: message._id } });
-  const receiverNotification = receiveMessage(await userService.getUserById(messageBody.from), messageBody.message);
+  const receiverNotification = receiveMessage(await User.findById(messageBody.from), messageBody.message);
   await notificationService.sendNotification(messageBody.to, receiverNotification);
 
   return message;

@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
-const { Notification } = require('../models');
+const { Notification, User } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { userService, emailService } = require('.');
+const emailService = require('./email.service');
 
 const getNotificationById = async (id, user) => {
   const notification = await Notification.findOne({ _id: id, user });
@@ -24,7 +24,7 @@ const getAllNotifications = async (user, type) => {
 };
 
 const sendNotification = async (userId, body) => {
-  const user = await userService.getUserById(userId);
+  const user = await User.findById(userId);
   const notification = await Notification.create({ ...body, user: userId });
 
   const savedNotification = await notification.save();
