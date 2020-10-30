@@ -51,16 +51,14 @@ router.get(
       }
       if (game == null) return res.sendStatus(404);
       const allquestions = [];
-      game.questions.forEach((element) => {
+      (game.questions || []).forEach((element) => {
         QuizQuestion.findById(element, (err1, qst) => {
           allquestions.push(qst.toJSON());
-          if (allquestions.length === game.questions.length) {
-            // eslint-disable-next-line
-            game.questions = allquestions;
-            res.status(200).json(game.toJSON());
-          }
         });
       });
+      // eslint-disable-next-line
+      game.questions = allquestions;
+      res.status(200).json(game.toJSON());
     });
   })
 );
@@ -82,14 +80,12 @@ router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
     }
     if (game == null) return res.sendStatus(404);
     const allquestions = [];
-    game.questions.forEach((element) => {
+    (game.questions || []).forEach((element) => {
       QuizQuestion.findById(element, (err1, qst) => {
         allquestions.push(qst.toJSON());
-        if (allquestions.length === game.questions.length) {
-          res.status(200).json(allquestions);
-        }
       });
     });
+    res.status(200).json(allquestions);
   });
 });
 
