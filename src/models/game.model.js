@@ -33,14 +33,14 @@ const questionSchema = new mongoose.Schema({
 });
 questionSchema.plugin(toJSON);
 
-const aliasGame = mongoose.model('Alias', aliasSchema);
-const drawitGame = mongoose.model('DrawIt', drawitSchema);
-const quizGame = mongoose.model('QuizGame', quizSchema);
-const quizQuestion = mongoose.model('QuizQuestion', questionSchema);
+const AliasGame = mongoose.model('Alias', aliasSchema);
+const DrawitGame = mongoose.model('DrawIt', drawitSchema);
+const QuizGame = mongoose.model('QuizGame', quizSchema);
+const QuizQuestion = mongoose.model('QuizQuestion', questionSchema);
 
 module.exports = {
-  aliasGame,
-  drawitGame,
-  quizGame,
-  quizQuestion
+  AliasGame,
+  DrawitGame,
+  QuizGame,
+  QuizQuestion
 };

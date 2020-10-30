@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
-const { aliasGame, drawitGame, quizGame, quizQuestion } = require('../../models/game.model');
+const { AliasGame, DrawitGame, QuizGame, QuizQuestion } = require('../../models/game.model');
 const catchAsync = require('../../utils/catchAsync');
 
 const router = express.Router();
@@ -26,7 +26,7 @@ router.get(
   '/quiz/quizzes',
   auth(),
   catchAsync(async (req, res) => {
-    const games = await quizGame.find();
+    const games = await QuizGame.find();
     res.json(games);
   })
 );
@@ -45,14 +45,14 @@ router.get(
   '/quiz/quizzes/:id',
   auth(),
   catchAsync(async (req, res) => {
-    quizGame.findById(req.params.id, (err, game) => {
+    QuizGame.findById(req.params.id, (err, game) => {
       if (err) {
         return res.sendStatus(404);
       }
       if (game == null) return res.sendStatus(404);
       const allquestions = [];
       game.questions.forEach((element) => {
-        quizQuestion.findById(element, (err1, qst) => {
+        QuizQuestion.findById(element, (err1, qst) => {
           allquestions.push(qst.toJSON());
           if (allquestions.length === game.questions.length) {
             // eslint-disable-next-line
@@ -76,14 +76,14 @@ router.get(
  *        - bearerAuth: []
  */
 router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
-  quizGame.findById(req.params.id, (err, game) => {
+  QuizGame.findById(req.params.id, (err, game) => {
     if (err) {
       return res.sendStatus(404);
     }
     if (game == null) return res.sendStatus(404);
     const allquestions = [];
     game.questions.forEach((element) => {
-      quizQuestion.findById(element, (err1, qst) => {
+      QuizQuestion.findById(element, (err1, qst) => {
         allquestions.push(qst.toJSON());
         if (allquestions.length === game.questions.length) {
           res.status(200).json(allquestions);
@@ -104,7 +104,7 @@ router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.get('/quiz/questions', auth(), (req, res) => {
-  return quizQuestion.find((err, qst) => res.json(qst));
+  return QuizQuestion.find((err, qst) => res.json(qst));
 });
 
 /**
@@ -118,7 +118,7 @@ router.get('/quiz/questions', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.get('/quiz/question/:id', auth(), (req, res) => {
-  quizQuestion.findById(req.params.id, (err, qst) => {
+  QuizQuestion.findById(req.params.id, (err, qst) => {
     if (err || qst == null) {
       return res.sendStatus(404);
     }
@@ -137,7 +137,7 @@ router.get('/quiz/question/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/quiz/create', auth(), (req, res) => {
-  const newQuiz = quizGame.create(req.body);
+  const newQuiz = new QuizGame(req.body);
   newQuiz.save((err, qz) => {
     if (err) {
       return res.sendStatus(500);
@@ -157,7 +157,7 @@ router.post('/quiz/create', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/quiz/question/create', auth(), (req, res) => {
-  const newQst = quizQuestion.create(req.body);
+  const newQst = new QuizQuestion(req.body);
   newQst.save((err, qst) => {
     if (err) {
       return res.sendStatus(500);
@@ -177,7 +177,7 @@ router.post('/quiz/question/create', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.put('/quiz/:id', auth(), (req, res) => {
-  quizGame.findByIdAndUpdate(
+  QuizGame.findByIdAndUpdate(
     req.params.id,
     { name: req.body.name, description: req.body.description, questions: req.body.questions },
     { new: true },
@@ -201,7 +201,7 @@ router.put('/quiz/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.put('/quiz/question/:id', auth(), (req, res) => {
-  quizQuestion.findByIdAndUpdate(
+  QuizQuestion.findByIdAndUpdate(
     req.params.id,
     {
       type: req.body.type,
@@ -231,7 +231,7 @@ router.put('/quiz/question/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.delete('/quiz/:id', auth(), (req, res) => {
-  quizGame.deleteOne({ _id: req.params.id }, (err, quiz) => {
+  QuizGame.deleteOne({ _id: req.params.id }, (err, quiz) => {
     if (err) {
       res.sendStatus(404);
     }
@@ -251,7 +251,7 @@ router.delete('/quiz/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.delete('/quiz/question/:id', auth(), (req, res) => {
-  quizQuestion.deleteOne({ _id: req.params.id }, (err, qst) => {
+  QuizQuestion.deleteOne({ _id: req.params.id }, (err, qst) => {
     if (err) {
       res.sendStatus(404);
     } else {
@@ -272,7 +272,7 @@ router.delete('/quiz/question/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.get('/drawit/games', auth(), (req, res) => {
-  drawitGame.find((err, games) => res.json(games));
+  DrawitGame.find((err, games) => res.json(games));
 });
 
 /**
@@ -286,7 +286,7 @@ router.get('/drawit/games', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.get('/drawit/:id', (req, res) => {
-  drawitGame.findById(req.params.id, (err, game) => {
+  DrawitGame.findById(req.params.id, (err, game) => {
     if (err || game == null) {
       return res.sendStatus(404);
     }
@@ -305,7 +305,7 @@ router.get('/drawit/:id', (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/drawit/create', auth(), (req, res) => {
-  const newGame = drawitGame.create(req.body);
+  const newGame = new DrawitGame(req.body);
   newGame.save((err, _newGame) => {
     if (err || _newGame == null) {
       res.sendStatus();
@@ -326,7 +326,7 @@ router.post('/drawit/create', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.put('/drawit/:id', auth(), (req, res) => {
-  drawitGame.findByIdAndUpdate(
+  DrawitGame.findByIdAndUpdate(
     req.params.id,
     { name: req.body.name, description: req.body.description, words: req.body.words },
     { new: true },
@@ -350,7 +350,7 @@ router.put('/drawit/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.delete('/drawit/:id', auth(), (req, res) => {
-  drawitGame.deleteOne({ _id: req.params.id }, (err, game) => {
+  DrawitGame.deleteOne({ _id: req.params.id }, (err, game) => {
     if (err) {
       res.sendStatus(404);
     }
@@ -370,7 +370,7 @@ router.delete('/drawit/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.get('/alias/games', auth(), (req, res) => {
-  aliasGame.find((err, games) => res.json(games));
+  AliasGame.find((err, games) => res.json(games));
 });
 
 /**
@@ -384,7 +384,7 @@ router.get('/alias/games', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.get('/alias/:id', (req, res) => {
-  aliasGame.findById(req.params.id, (err, game) => {
+  AliasGame.findById(req.params.id, (err, game) => {
     if (err || game == null) {
       return res.sendStatus(404);
     }
@@ -403,7 +403,7 @@ router.get('/alias/:id', (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/alias/create', auth(), (req, res) => {
-  const newGame = aliasGame.create(req.body);
+  const newGame = new AliasGame(req.body);
   newGame.save((err, _newGame) => {
     res.status(200).json(_newGame.toJSON());
   });
@@ -420,7 +420,7 @@ router.post('/alias/create', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.put('/alias/:id', auth(), (req, res) => {
-  aliasGame.findByIdAndUpdate(
+  AliasGame.findByIdAndUpdate(
     req.params.id,
     { name: req.body.name, description: req.body.description, words: req.body.words },
     (err, game) => {
@@ -441,7 +441,7 @@ router.put('/alias/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.delete('/alias/:id', auth(), (req, res) => {
-  aliasGame.deleteOne({ _id: req.params.id }, (err, game) => {
+  AliasGame.deleteOne({ _id: req.params.id }, (err, game) => {
     if (game == null) return res.sendStatus(404);
     res.sendStatus(200);
   });
