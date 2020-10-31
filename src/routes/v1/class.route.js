@@ -70,6 +70,16 @@ module.exports = router;
  *                   type: array
  *                   items:
  *                     type: string
+ *               example:
+ *                 name: Class 1
+ *                 language: en
+ *                 subject: mathematics
+ *                 country: DE
+ *                 projectDuration: 10
+ *                 meetingFrequency: 2
+ *                 level: 2
+ *                 languageLevel: A1
+ *                 topics: [addition, subtraction]
  *      responses:
  *        "200":
  *          description: OK
