@@ -15,7 +15,8 @@ const meetingSchema = mongoose.Schema({
     enum: ['tandem', 'group3', 'group4', 'whole_class'],
     required: true
   },
-  groups: [[{ type: mongoose.Schema.ObjectId, ref: 'User' }]]
+  groups: [[{ type: mongoose.Schema.ObjectId, ref: 'User' }]],
+  taskList: [String]
 });
 
 meetingSchema.plugin(toJSON);

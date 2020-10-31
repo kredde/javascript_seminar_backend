@@ -90,6 +90,10 @@ router
  *                groupAssignment:
  *                  type: string
  *                  enum: [tandem, group3, group4, whole_class]
+ *                taskList:
+ *                  type: array
+ *                  items: string
+ *                  example: [reading, games]
  *      responses:
  *        "200":
  *          description: OK

@@ -36,7 +36,10 @@ const getProjectById = async (id, teacher) => {
 };
 
 const getProjects = async (classId) => {
-  const projects = await Project.find({ classes: { $elemMatch: { $in: [classId] } } });
+  const projects = await Project.find({ classes: { $elemMatch: { $in: [classId] } } }).populate({
+    path: 'classes',
+    populate: { path: 'teacher' }
+  });
   return projects;
 };
 
