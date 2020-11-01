@@ -90,9 +90,13 @@ const findSimilarClasses = async (currentClass, teacher, query) => {
     subject: currentClass.subject,
     language: currentClass.language,
     level: { $gte: Math.min(1, currentClass.level - 1), $lte: Math.max(currentClass.level + 1, 10) },
-    languageLevel: query.languageLevel,
+    students: {
+      $size: { $gte: Math.min(0, currentClass.students.length - 4), $lte: currentClass.students.length + 4 }
+    },
+    languageLevel: currentClass.languageLevel,
     projectDuration: query.projectDuration,
-    country: query.country
+    country: query.country,
+    meetingFrequency: query.meetingFrequency
   }).populate('teacher');
 
   // TODO sort classes

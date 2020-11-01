@@ -42,10 +42,20 @@ const embedComponents = (obj, parent, parentKey, fullSchema) => {
   });
 };
 
+const removeGamingRoutes = (schema) => {
+  const obj = { ...schema };
+  Object.keys(obj.paths).forEach((key) => {
+    if (key.startsWith('/games')) {
+      delete obj.paths[key];
+    }
+  });
+  return obj;
+};
+
 // serves the swaggger specification
 router.get('/swagger.json', (req, res) => {
   res.header('Content-Type', 'application/json');
-  const schema = { ...specs };
+  const schema = removeGamingRoutes(specs);
   embedComponents(schema, null, null, schema);
   res.send(JSON.stringify(schema, null, 2));
 });

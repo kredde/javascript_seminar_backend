@@ -337,7 +337,8 @@ module.exports = router;
  *  /classes/{classId}/find:
  *    get:
  *      summary: Find similar classes
- *      description: Find similar classes to match with
+ *      description: Find similar classes to match with. It returns all classes that are from a different teacher, with the same subject, language and languageLevel.
+ *                   Also the level of the classes must be similar (+-1) and the number of students as well (+-4). Additionally the request can be filtered for projectDuration, meetingFrequency and country
  *      tags: [Classes]
  *      security:
  *        - bearerAuth: []
@@ -353,7 +354,7 @@ module.exports = router;
  *          schema:
  *           type: string
  *        - in: query
- *          name: languageLevel
+ *          name: meetingFrequency
  *          schema:
  *           type: string
  *        - in: query
