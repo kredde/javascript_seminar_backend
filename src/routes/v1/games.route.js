@@ -26,7 +26,7 @@ router.get(
   '/quiz/quizzes',
   auth(),
   catchAsync(async (req, res) => {
-    const games = await QuizGame.find();
+    const games = await QuizGame.find({ teacher: req.user.id });
     res.json(games);
   })
 );
@@ -99,9 +99,14 @@ router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
  *      security:
  *        - bearerAuth: []
  */
-router.get('/quiz/questions', auth(), (req, res) => {
-  return QuizQuestion.find((err, qst) => res.json(qst));
-});
+router.get(
+  '/quiz/questions',
+  auth(),
+  catchAsync(async (req, res) => {
+    const questions = await QuizQuestion.find({ teacher: req.user.id });
+    res.json(questions);
+  })
+);
 
 /**
  * @swagger
@@ -133,7 +138,9 @@ router.get('/quiz/question/:id', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/quiz/create', auth(), (req, res) => {
-  const newQuiz = new QuizGame(req.body);
+  let quiz = req.body;
+  quiz.teacher = req.user.id;
+  const newQuiz = new QuizGame(quiz);
   newQuiz.save((err, qz) => {
     if (err) {
       return res.sendStatus(500);
@@ -153,7 +160,9 @@ router.post('/quiz/create', auth(), (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/quiz/question/create', auth(), (req, res) => {
-  const newQst = new QuizQuestion(req.body);
+  let question = req.body;
+  question.teacher = req.user.id;
+  const newQst = new QuizQuestion(question);
   newQst.save((err, qst) => {
     if (err) {
       return res.sendStatus(500);
@@ -175,7 +184,7 @@ router.post('/quiz/question/create', auth(), (req, res) => {
 router.put('/quiz/:id', auth(), (req, res) => {
   QuizGame.findByIdAndUpdate(
     req.params.id,
-    { name: req.body.name, description: req.body.description, questions: req.body.questions },
+    { name: req.body.name, description: req.body.description, questions: req.body.questions, teacher: req.user.id, duration: req.body.duration },
     { new: true },
     (err, game) => {
       if (err || game == null) {
@@ -204,7 +213,8 @@ router.put('/quiz/question/:id', auth(), (req, res) => {
       name: req.body.name,
       question: req.body.question,
       options: req.body.options,
-      answer: req.body.answer
+      answer: req.body.answer,
+      teacher: req.user.id
     },
     { new: true },
     (err, qst) => {
@@ -267,9 +277,14 @@ router.delete('/quiz/question/:id', auth(), (req, res) => {
  *      security:
  *        - bearerAuth: []
  */
-router.get('/drawit/games', auth(), (req, res) => {
-  DrawitGame.find((err, games) => res.json(games));
-});
+router.get(
+  '/drawit/games',
+  auth(),
+  catchAsync(async (req, res) => {
+    const games = await DrawitGame.find({ teacher: req.user.id });
+    res.json(games);
+  })
+);
 
 /**
  * @swagger
@@ -301,7 +316,9 @@ router.get('/drawit/:id', (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/drawit/create', auth(), (req, res) => {
-  const newGame = new DrawitGame(req.body);
+  let game = req.body;
+  game.teacher = req.user.id;
+  const newGame = new DrawitGame(game);
   newGame.save((err, _newGame) => {
     if (err || _newGame == null) {
       res.sendStatus();
@@ -324,7 +341,7 @@ router.post('/drawit/create', auth(), (req, res) => {
 router.put('/drawit/:id', auth(), (req, res) => {
   DrawitGame.findByIdAndUpdate(
     req.params.id,
-    { name: req.body.name, description: req.body.description, words: req.body.words },
+    { name: req.body.name, description: req.body.description, words: req.body.words, teacher: req.user.id, duration: req.body.duration },
     { new: true },
     (err, game) => {
       if (err || game == null) {
@@ -365,9 +382,14 @@ router.delete('/drawit/:id', auth(), (req, res) => {
  *      security:
  *        - bearerAuth: []
  */
-router.get('/alias/games', auth(), (req, res) => {
-  AliasGame.find((err, games) => res.json(games));
-});
+router.get(
+  '/alias/games',
+  auth(),
+  catchAsync(async (req, res) => {
+    const games = await AliasGame.find({ teacher: req.user.id });
+    res.json(games);
+  })
+);
 
 /**
  * @swagger
@@ -399,7 +421,9 @@ router.get('/alias/:id', (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/alias/create', auth(), (req, res) => {
-  const newGame = new AliasGame(req.body);
+  let game = req.body;
+  game.teacher = req.user.id;
+  const newGame = new AliasGame(game);
   newGame.save((err, _newGame) => {
     res.status(200).json(_newGame.toJSON());
   });
@@ -418,7 +442,7 @@ router.post('/alias/create', auth(), (req, res) => {
 router.put('/alias/:id', auth(), (req, res) => {
   AliasGame.findByIdAndUpdate(
     req.params.id,
-    { name: req.body.name, description: req.body.description, words: req.body.words },
+    { name: req.body.name, description: req.body.description, words: req.body.words, teacher: req.user.id, duration: req.body.duration },
     (err, game) => {
       if (game == null) return res.sendStatus(404);
       res.sendStatus(200);

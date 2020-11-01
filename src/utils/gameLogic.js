@@ -35,10 +35,6 @@ module.exports = {
       socket.on('updateGame', (data) => {
         handleUpdateGameMessage(data);
       });
-
-      socket.on('playerResult', (data) => {
-        handlePlayerResultMessage(data);
-      });
     });
   }
 };
@@ -112,14 +108,16 @@ async function createAliasSession(sessionId, gameType, playerName, taskId) {
     description: '',
     taskId: taskId,
     state: 'lobby',
-    timelimit: 30,
-    timeleft: 30
+    timelimit: 120,
+    timeleft: 120
   };
   try {
     let alias = await getAliasGame(taskId);
     session.words = alias.words;
     session.name = alias.name;
     session.description = alias.description;
+    session.timeleft = alias.duration;
+    session.timelimit = alias.duration;
     return session;
   } catch (error) {
     console.log('could not get alias game');
@@ -137,11 +135,11 @@ async function createTruthlieSession(sessionId, gameType, playerName, taskId) {
     countDownStarted: false, // indicates if countdown started, a change starts countdown for all clients
     options: [],
     guessed: [],
-    lie: '', // False statemenr
+    lie: '', // False statement
     name: '', // name of the game
     state: 'lobby',
-    timelimit: 30,
-    timeleft: 30
+    timelimit: 60,
+    timeleft: 60
   };
   return session;
 }
@@ -159,8 +157,8 @@ async function createDrawItSession(sessionId, gameType, playerName, taskId) {
     description: '',
     taskId: taskId,
     state: 'lobby',
-    timelimit: 30,
-    timeleft: 30,
+    timelimit: 120,
+    timeleft: 120,
     drawing: null
   };
   try {
@@ -168,6 +166,8 @@ async function createDrawItSession(sessionId, gameType, playerName, taskId) {
     session.words = alias.words;
     session.name = alias.name;
     session.description = drawit.description;
+    session.timeleft = drawit.duration;
+    session.timelimit = drawit.duration;
     return session;
   } catch (error) {
     console.log('could not get drawit game');
@@ -184,7 +184,8 @@ async function getAliasGame(taskId) {
       id: taskId,
       name: 'Mock Alias Game',
       description: 'this is not a real game',
-      words: ['Banana', 'Trump', 'Bicycle', 'Pluto']
+      words: ['Banana', 'Trump', 'Bicycle', 'Pluto'],
+      duration: 45
     };
   } else {
     // Find by ID
@@ -208,7 +209,8 @@ async function getDrawItGame(taskId) {
       id: taskId,
       name: 'Mock Draw It Game',
       description: 'this is not a real game',
-      words: ['Banana', 'Trump', 'Bicycle', 'Pluto']
+      words: ['Banana', 'Trump', 'Bicycle', 'Pluto'],
+      duration: 45
     };
   } else {
     // Find by ID
@@ -319,17 +321,5 @@ function handleQuizUpdateMessage(data) {
     // TODO Maybe get answers later
     io.to(data.sessionId).emit('updateGame', data);
     openSessions.set(data.sessionId, data);
-  }
-}
-
-// For Quiz give students also the correct result
-// For Alias and Drawit just forward the number of correct words!
-function handlePlayerResultMessage(data) {
-  if (data.gameType == 'alias' || data.gameType == 'drawit') {
-    console.log('Send gameResult for ' + data.gameType);
-    io.to(data.sessionId).emit('gameResult', data);
-    openSessions.set(data.sessionId, data);
-  } else if (data.gameType == 'quiz') {
-    console.log('Got quiz Result. TODO');
   }
 }
