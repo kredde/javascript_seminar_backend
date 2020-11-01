@@ -27,8 +27,10 @@ const router = express.Router();
  *                items:
  *                  type: object
  *                  properties:
- *                      name: string
- *                      value: string
+ *                    name:
+ *                      type: string
+ *                    value:
+ *                      type: string
  *                  example:
  *                     name: German
  *                     value: de
@@ -52,8 +54,10 @@ router.get('/languages', metaController.getLanguages);
  *                items:
  *                  type: object
  *                  properties:
- *                      name: string
- *                      value: string
+ *                    name:
+ *                      type: string
+ *                    value:
+ *                      type: string
  *                  example:
  *                     name: Mathematics
  *                     value: mathematics
@@ -77,8 +81,10 @@ router.get('/subjects', metaController.getSubjects);
  *                items:
  *                  type: object
  *                  properties:
- *                      name: string
- *                      value: string
+ *                    name:
+ *                      type: string
+ *                    value:
+ *                      type: string
  *                  example:
  *                     name: Germany
  *                     value: de

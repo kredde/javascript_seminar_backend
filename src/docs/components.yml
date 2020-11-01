@@ -87,8 +87,8 @@ components:
               description: student ids
         taskList:
           type: array
-          items: string
-          description: taskList
+          items:
+            type: string
     Project:
       type: object
       properties:
