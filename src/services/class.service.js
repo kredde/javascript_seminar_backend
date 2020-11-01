@@ -85,22 +85,39 @@ const getAllClasses = async (teacher) => {
  * @returns {Promise<[Class]>}
  */
 const findSimilarClasses = async (currentClass, teacher, query) => {
-  const similarClasses = await Class.find({
+  const classQuery = {
     teacher: { $ne: teacher },
     subject: currentClass.subject,
     language: currentClass.language,
-    level: { $gte: Math.min(1, currentClass.level - 1), $lte: Math.max(currentClass.level + 1, 10) },
-    students: {
-      $size: { $gte: Math.min(0, currentClass.students.length - 4), $lte: currentClass.students.length + 4 }
-    },
-    languageLevel: currentClass.languageLevel,
-    projectDuration: query.projectDuration,
-    country: query.country,
-    meetingFrequency: query.meetingFrequency
-  }).populate('teacher');
+    level: { $gte: Math.min(1, currentClass.level - 1), $lte: Math.max(currentClass.level + 1, 10) }
+  };
+
+  if (currentClass.languageLevel) {
+    classQuery.languageLevel = currentClass.languageLevel;
+  }
+
+  if (query.projectDuration) {
+    classQuery.projectDuration = query.projectDuration;
+  }
+
+  if (query.country) {
+    classQuery.country = query.country;
+  }
+
+  if (query.meetingFrequency) {
+    classQuery.meetingFrequency = query.meetingFrequency;
+  }
+
+  const similarClasses = await Class.find(classQuery).populate('teacher');
+
+  const fiteredClasses = similarClasses.filter(
+    (cl) =>
+      cl.students.length >= Math.min(0, (currentClass.students.length || 0) - 4) &&
+      cl.students.length <= (currentClass.students.length || 0) + 4
+  );
 
   // TODO sort classes
-  return similarClasses;
+  return fiteredClasses;
 };
 
 module.exports = {
