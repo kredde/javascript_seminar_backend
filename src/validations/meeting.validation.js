@@ -10,7 +10,8 @@ const createMeeting = {
     date: Joi.date().required(),
     groupAssignment: Joi.any()
       .allow(...['tandem', 'group3', 'group4', 'whole_class'])
-      .required()
+      .required(),
+    taskList: Joi.array().items(Joi.string())
   })
 };
 
@@ -38,7 +39,8 @@ const updateMeeting = {
     date: Joi.date(),
     project: Joi.string,
     groupAssignment: Joi.any().allow(...['tandem', 'group3', 'group4', 'whole_class']),
-    groups: Joi.array().items(Joi.string().custom(objectId))
+    groups: Joi.array().items(Joi.string().custom(objectId)),
+    taskList: Joi.array().items(Joi.string())
   })
 };
 
