@@ -89,6 +89,8 @@ components:
           type: array
           items:
             type: string
+        duration:
+          type: number
     Project:
       type: object
       properties:

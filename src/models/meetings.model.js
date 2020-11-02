@@ -16,7 +16,8 @@ const meetingSchema = mongoose.Schema({
     required: true
   },
   groups: [[{ type: mongoose.Schema.ObjectId, ref: 'User' }]],
-  taskList: [String]
+  taskList: [String],
+  duration: Number
 });
 
 meetingSchema.plugin(toJSON);

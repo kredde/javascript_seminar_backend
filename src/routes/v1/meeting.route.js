@@ -94,6 +94,8 @@ router
  *                  type: array
  *                  items:
  *                    type: string
+ *                duration:
+ *                  type: number
  *      responses:
  *        "200":
  *          description: OK
