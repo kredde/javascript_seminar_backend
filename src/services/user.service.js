@@ -96,13 +96,7 @@ const deleteUserById = async (userId) => {
 };
 
 const getStudents = async (userId) => {
-  const classes = await Class.find({ teacher: userId }).populate('students');
-  if (!classes) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Classes not found');
-  }
-  const students = new Set();
-  classes.forEach((_class) => _class.students.forEach((student) => students.add(student)));
-  return Array.from(students);
+  return User.find({ createdBy: userId, role: 'student' });
 };
 
 const getMeetings = async (user) => {

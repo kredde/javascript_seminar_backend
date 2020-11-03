@@ -53,6 +53,11 @@ const userSchema = mongoose.Schema(
     },
     proficiency_level: {
       type: String
+    },
+    createdBy: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+      private: true
     }
   },
   {
