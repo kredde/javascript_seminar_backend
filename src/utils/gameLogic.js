@@ -6,7 +6,7 @@ const config = require('../config/config');
 let openSessions = new Map();
 let io;
 
-let url = config.backendHost;
+let url = "http://localhost:5000/v1";
 
 module.exports = {
   gameInit: function (ioServer) {
@@ -23,8 +23,8 @@ module.exports = {
         console.log('Client Connected: ' + data);
       });
 
-      socket.on('disconnect', () => {
-        console.log('Disconnecting');
+      socket.on('disconnect', (data) => {
+        console.log('Disconnecting', data, socket);
         connectedUsers.delete(socket.userId);
       });
 
@@ -55,11 +55,10 @@ async function handleJoinGameMessage(data, socket) {
     // use existing Session
     console.log('Existing Session!' + openSessions.get(data.sessionId));
 
-    // TODO what happens with wrong taskid?
-
     // Update Gamesession
     let currentGame = openSessions.get(data.sessionId);
     currentGame.players.push(data.playerName);
+
     // TODO further update Details
 
     // Send new State in Room to every listener
@@ -108,7 +107,6 @@ async function createAliasSession(sessionId, gameType, playerName, taskId) {
     description: '',
     taskId: taskId,
     state: 'lobby',
-    timelimit: 120,
     timeleft: 120
   };
   try {
@@ -117,7 +115,6 @@ async function createAliasSession(sessionId, gameType, playerName, taskId) {
     session.name = alias.name;
     session.description = alias.description;
     session.timeleft = alias.duration;
-    session.timelimit = alias.duration;
     return session;
   } catch (error) {
     console.log('could not get alias game');
@@ -138,8 +135,9 @@ async function createTruthlieSession(sessionId, gameType, playerName, taskId) {
     lie: '', // False statement
     name: '', // name of the game
     state: 'lobby',
-    timelimit: 60,
-    timeleft: 60
+    timelimit: 15,
+    timeleft: 15,
+    next: true
   };
   return session;
 }
@@ -157,7 +155,6 @@ async function createDrawItSession(sessionId, gameType, playerName, taskId) {
     description: '',
     taskId: taskId,
     state: 'lobby',
-    timelimit: 120,
     timeleft: 120,
     drawing: null
   };
@@ -167,7 +164,6 @@ async function createDrawItSession(sessionId, gameType, playerName, taskId) {
     session.name = alias.name;
     session.description = drawit.description;
     session.timeleft = drawit.duration;
-    session.timelimit = drawit.duration;
     return session;
   } catch (error) {
     console.log('could not get drawit game');
@@ -191,7 +187,6 @@ async function getAliasGame(taskId) {
     // Find by ID
     try {
       let alias = fetch(url + '/games/alias/' + taskId).then((res) => res.json());
-      console.log('FETCHED ALIAS', alias);
       return alias;
     } catch (error) {
       console.log(error);
@@ -216,7 +211,6 @@ async function getDrawItGame(taskId) {
     // Find by ID
     try {
       let drawit = fetch(url + '/games/drawit/' + taskId).then((res) => res.json());
-      console.log('FETCHED DRAW IT', alias);
       return drawit;
     } catch (error) {
       console.log(error);
@@ -267,34 +261,20 @@ function handleQuizUpdateMessage(data) {
     let taskId;
     let hex = /[0-9A-Fa-f]{6}/g;
     if (data.taskId == null || data.taskId == undefined || data.taskId == '' || !hex.test(data.taskId)) {
-      console.log('Invalid Task ID, sending random quiz');
-      fetch(url + '/games/quiz/quizzes')
-        .then((res) => res.json())
-        .then((json) => {
-          taskId = json[Math.floor(Math.random() * json.length)]._id;
-        })
-        .then(() => {
-          fetch(url + '/games/quiz/quizzes/' + taskId + '/questions')
-            .then((res) => res.json())
-            .then((json) => {
-              json.forEach((question) => {
-                let q = {
-                  question: question.question,
-                  answers: question.options,
-                  correctAnswers: question.answer,
-                  selectedAnswers: [],
-                  type: question.type,
-                  leftAnswers: question.options,
-                  rightAnswers: []
-                };
-                data.quizes.push(q);
-              });
-              io.to(data.sessionId).emit('updateGame', data);
-              openSessions.set(data.sessionId, data);
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
+      console.log('Invalid Task ID, sending mock quiz');
+      let quiz = { id: taskId, name: "This is a mock quiz!", description: "The Quiz you were looking for could not be found...", questions: [] };
+      let q = {
+        question: "What's the matching translation?",
+        answers: ["tree", "Baum", "Katze", "cat", "Game", "Spiel"],
+        correctAnswers: [[0, 1][2, 3], [4, 5]],
+        selectedAnswers: [],
+        type: "match",
+        leftAnswers: ["tree", "Baum", "Katze", "cat", "Game", "Spiel"],
+        rightAnswers: []
+      };
+      data.quizes.push(q);
+      io.to(data.sessionId).emit('updateGame', data);
+      openSessions.set(data.sessionId, data);
     } else {
       taskId = data.taskId;
       fetch(url + '/games/quiz/quizzes/' + taskId + '/questions')
