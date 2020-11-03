@@ -17,7 +17,11 @@ const projectSchema = mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Message'
     }
-  ]
+  ],
+  startedBy: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User'
+  }
 });
 
 projectSchema.plugin(toJSON);

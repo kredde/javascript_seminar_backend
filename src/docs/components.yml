@@ -111,6 +111,8 @@ components:
           type: array
           items:
             type: object
+        startedBy:
+          $ref: '#/components/schemas/User'
     Notification:
       type: object
       properties:

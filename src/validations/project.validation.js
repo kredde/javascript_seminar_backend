@@ -6,7 +6,8 @@ const createProject = {
     classId: Joi.string().custom(objectId)
   }),
   body: Joi.object().keys({
-    class: Joi.string().custom(objectId).required()
+    class: Joi.string().custom(objectId).required(),
+    initialMessage: Joi.string()
   })
 };
 

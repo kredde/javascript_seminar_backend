@@ -21,9 +21,11 @@ const forgotPassword = (data) => ({
   type: 'email'
 });
 
-const createProject = ({ teacher, teacherClass, otherClass }) => ({
+const createProject = ({ teacher, teacherClass, otherClass, message }) => ({
   title: `Project invitation`,
-  text: `${teacher.firstName} ${teacher.lastName} (${teacherClass.name}), has invited your class (${otherClass.name}) to join a project`,
+  text: `${teacher.firstName} ${teacher.lastName} (${teacherClass.name}), has invited your class (${
+    otherClass.name
+  }) to join a project. ${message && `\n\n Message from ${teacher.firstName} ${teacher.lastName}:\n "${message}"`}`,
   cta: {
     text: 'Accept invitation',
     url: `${config.frontendHost}/accept-invitation`

@@ -40,6 +40,8 @@ const router = express.Router();
  *               class:
  *                 type: string
  *                 description: the class to match with
+ *               initialMessage:
+ *                 type: string
  *      responses:
  *        "200":
  *          description: OK

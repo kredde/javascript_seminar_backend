@@ -9,22 +9,40 @@ const ApiError = require('../utils/ApiError');
 
 const createProject = async (classId, body, teacher) => {
   const teacherClass = await classService.getClassById(classId, teacher);
-  const otherClass = await Class.findById(body);
+  const otherClass = await Class.findById(body.class);
 
   if (!teacherClass || !otherClass) {
     throw new ApiError(httpStatus.NOT_FOUND, 'One of the classes does not exist');
   }
 
-  const project = await Project.create({ classes: [teacherClass._id, otherClass._id], state: 'pending' });
+  const project = await Project.create({
+    classes: [teacherClass._id, otherClass._id],
+    state: 'pending',
+    startedBy: teacher
+  });
+  if (body.initialMessage) {
+    const message = await messageService.createMessage({
+      message: body.initialMessage,
+      from: teacher,
+      to: otherClass.teacher
+    });
+    project.messages.push(message._id);
+    await project.save();
+  }
   const teacherModel = await User.findById(teacher);
-  const notification = createProjectNotification({ teacherClass, otherClass, teacher: teacherModel });
+  const notification = createProjectNotification({
+    teacherClass,
+    otherClass,
+    teacher: teacherModel,
+    message: body.initialMessage
+  });
   await notificationService.sendNotification(otherClass.teacher, notification);
 
   return project;
 };
 
 const getProjectById = async (id, teacher) => {
-  const project = await Project.findOne({ _id: id }).populate('classes');
+  const project = await Project.findOne({ _id: id }).populate('classes').populate('startedBy');
   if (!project) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
   }
@@ -36,10 +54,12 @@ const getProjectById = async (id, teacher) => {
 };
 
 const getProjects = async (classId) => {
-  const projects = await Project.find({ classes: { $elemMatch: { $in: [classId] } } }).populate({
-    path: 'classes',
-    populate: { path: 'teacher' }
-  });
+  const projects = await Project.find({ classes: { $elemMatch: { $in: [classId] } } })
+    .populate({
+      path: 'classes',
+      populate: { path: 'teacher' }
+    })
+    .populate('startedBy');
   return projects;
 };
 
