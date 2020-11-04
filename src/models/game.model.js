@@ -5,6 +5,11 @@ const aliasSchema = new mongoose.Schema({
   name: String,
   description: String,
   words: Object,
+  teacher: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User'
+  },
+  duration: Number,
   versionKey: false
 });
 aliasSchema.plugin(toJSON);
@@ -13,6 +18,11 @@ const drawitSchema = new mongoose.Schema({
   name: String,
   description: String,
   words: Object,
+  teacher: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User'
+  },
+  duration: Number,
   versionKey: false
 });
 drawitSchema.plugin(toJSON);
@@ -20,7 +30,12 @@ drawitSchema.plugin(toJSON);
 const quizSchema = new mongoose.Schema({
   name: String,
   description: String,
-  questions: Object
+  questions: Object,
+  teacher: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User'
+  },
+  duration: Number
 });
 quizSchema.plugin(toJSON);
 
@@ -29,7 +44,11 @@ const questionSchema = new mongoose.Schema({
   name: String,
   question: String,
   options: Object,
-  answer: Object
+  answer: Object,
+  teacher: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User'
+  }
 });
 questionSchema.plugin(toJSON);
 
