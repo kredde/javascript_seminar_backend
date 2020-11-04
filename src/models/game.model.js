@@ -48,7 +48,7 @@ const questionSchema = new mongoose.Schema({
   teacher: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'User'
-  },
+  }
 });
 questionSchema.plugin(toJSON);
 
