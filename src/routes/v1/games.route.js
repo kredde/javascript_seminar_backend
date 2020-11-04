@@ -322,7 +322,7 @@ router.get('/drawit/:id', (req, res) => {
  *        - bearerAuth: []
  */
 router.post('/drawit/create', auth(), (req, res) => {
-  let game = req.body;
+  const game = req.body;
   game.teacher = req.user.id;
   const newGame = new DrawitGame(game);
   newGame.save((err, _newGame) => {
