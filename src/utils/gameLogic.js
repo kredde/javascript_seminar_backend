@@ -266,13 +266,23 @@ function handleQuizUpdateMessage(data) {
       let q = {
         question: "What's the matching translation?",
         answers: ["tree", "Baum", "Katze", "cat", "Game", "Spiel"],
-        correctAnswers: [[0, 1][2, 3], [4, 5]],
+        correctAnswers: [[0, 1], [2, 3], [4, 5]],
         selectedAnswers: [],
         type: "match",
         leftAnswers: ["tree", "Baum", "Katze", "cat", "Game", "Spiel"],
         rightAnswers: []
       };
       data.quizes.push(q);
+      let q2 = {
+        question: "When did World War 2 end?",
+        answers: ["2. September 1945", "3.September 1939", "30. June 1944", "5. January 1945"],
+        correctAnswers: [0],
+        selectedAnswers: [],
+        type: "select",
+        leftAnswers: ["2. September 1945", "3.September 1939", "30. June 1944", "5. January 1945"],
+        rightAnswers: []
+      }
+      data.quizes.push(q2);
       io.to(data.sessionId).emit('updateGame', data);
       openSessions.set(data.sessionId, data);
     } else {
