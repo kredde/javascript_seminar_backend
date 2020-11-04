@@ -88,7 +88,7 @@ const updateRecordings = async (req, res) => {
 };
 
 const get = async (req, res) => {
-  await res.sendStatus(402);
+  await res.sendStatus(204);
 };
 
 export { getRecordings, publishRecordings, deleteRecordings, updateRecordings, get };

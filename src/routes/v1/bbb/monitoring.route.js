@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import Router from 'express-promise-router';
-import monitoringController from '~/controllers/bbb/monitoring.controller';
+import * as monitoringController from '~/controllers/bbb/monitoring.controller';
 
 const monitoringRouter = Router();
 
@@ -106,6 +106,6 @@ export default monitoringRouter;
  *    - monitoring
  *    summary: Forbidden
  *    responses:
- *      403:
- *        description: Forbidden
+ *      204:
+ *        description: No Content
  */

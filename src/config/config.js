@@ -7,7 +7,8 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
-    HTTPS: Joi.string().required().description('whether to use https or not'),
+    HTTPS: Joi.string().valid('true', 'false').default('false').description('whether to use https or not'),
+    INSECURE: Joi.string().valid('true', 'false').default('false').description('true with self-signed certificate'),
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
@@ -21,10 +22,9 @@ const envVarsSchema = Joi.object()
     FRONTEND_HOST: Joi.string(),
     BACKEND_HOST: Joi.string(),
     BBB_FQDN: Joi.string().required().description('bbb server fqdn'),
-    // BBB_URL: Joi.string().required().description('bbb server url'),
     BBB_SECRET: Joi.string().required().description('bbb api secret'),
-    BBB_P_KEY: Joi.string().description('path to bbb private key'),
-    BBB_P_CERT: Joi.string().description('path to bbb cert')
+    BBB_P_KEY: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb private key'),
+    BBB_P_CERT: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb cert')
   })
   .unknown();
 
@@ -37,6 +37,7 @@ if (error) {
 module.exports = {
   env: envVars.NODE_ENV,
   https: envVars.HTTPS,
+  insecure: envVars.INSECURE,
   port: envVars.PORT,
   frontendHost: envVars.FRONTEND_HOST,
   backendHost: envVars.BACKEND_HOST,

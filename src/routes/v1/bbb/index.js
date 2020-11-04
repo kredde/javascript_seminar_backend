@@ -1,6 +1,6 @@
 import Router from 'express-promise-router';
 
-import bbbController from '~/controllers/bbb/bbb.controller';
+import * as bbbController from '~/controllers/bbb';
 
 const bbbRouter = Router();
 const route = '/bbb';

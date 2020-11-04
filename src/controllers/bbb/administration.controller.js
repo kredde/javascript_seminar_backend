@@ -3,6 +3,8 @@ import { v4 as uuid4 } from 'uuid';
 import xml2js from 'xml2js';
 
 import bbb from '~/config/bbb';
+import generatePassword from '~/services/bbb.service';
+// import logger from '~/config/logger';
 
 const { api } = bbb;
 
@@ -10,13 +12,16 @@ const create = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
 
   const b = req.body;
-  // console.log(b);
 
   if (b.meetingName === undefined) return res.sendStatus(400);
 
   const kwParams = {};
-  kwParams.attendeePW = b.attendeePW;
-  kwParams.moderatorPW = b.moderatorPW;
+
+  const attendeePw = generatePassword(32);
+  const moderatorPW = generatePassword(32);
+
+  kwParams.attendeePW = attendeePw;
+  kwParams.moderatorPW = moderatorPW;
   kwParams.welcome = b.welcome;
   kwParams.dialNumber = b.dialNumber;
   kwParams.voiceBridge = b.voiceBridge;
@@ -55,10 +60,9 @@ const create = async (req, res) => {
 
   // api module itself is responsible for constructing URLs
   const meetingCreateUrl = api.administration.create(b.meetingName, uuid, kwParams);
-
-  // console.log(meetingCreateUrl);
-
   const meetingInfo = {};
+
+  // logger.info(`${meetingCreateUrl}`);
 
   try {
     const xmlResponse = await axios.get(meetingCreateUrl);
@@ -173,7 +177,7 @@ const endDel = async (req, res) => {
 };
 
 const get = async (req, res) => {
-  await res.sendStatus(402);
+  await res.sendStatus(204);
 };
 
 export { create, join, endPost, endDel, get };

@@ -1,7 +1,7 @@
 import Router from 'express-promise-router';
 import bodyParser from 'body-parser';
 
-import recordingController from '~/controllers/bbb/recording.controller';
+import * as recordingController from '~/controllers/bbb/recording.controller';
 
 const recordingRouter = Router();
 
@@ -161,6 +161,6 @@ export default recordingRouter;
  *    - recording
  *    summary: Forbidden
  *    responses:
- *      403:
- *        description: Forbidden
+ *      204:
+ *        description: No Content
  */

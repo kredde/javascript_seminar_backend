@@ -9,10 +9,11 @@ const logger = require('./config/logger');
 const games = require('./utils/gameLogic.js');
 
 let server;
+
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info('Connected to MongoDB');
 
-  if (config.https) {
+  if (config.https === 'true') {
     const options = {
       key: fs.readFileSync(config.bbbKey),
       cert: fs.readFileSync(config.bbbCert)

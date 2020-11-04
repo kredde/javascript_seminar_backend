@@ -55,7 +55,7 @@ const isMeetingRunning = async (req, res) => {
 };
 
 const get = async (req, res) => {
-  await res.sendStatus(403);
+  await res.sendStatus(204);
 };
 
 export { getMeetings, getMeetingInfo, isMeetingRunning, get };

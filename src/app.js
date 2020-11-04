@@ -21,6 +21,9 @@ if (config.env !== 'test') {
   app.use(morgan.errorHandler);
 }
 
+// for self-signed cert in dev
+if (config.insecure) process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // set security HTTP headers
 app.use(
   helmet({

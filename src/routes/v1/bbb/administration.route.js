@@ -288,6 +288,6 @@ export default administrationRouter;
  *    - administration
  *    summary: Forbidden
  *    responses:
- *      403:
- *        description: Forbidden
+ *      204:
+ *        description: No Content
  */
