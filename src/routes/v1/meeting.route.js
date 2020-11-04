@@ -211,7 +211,7 @@ router
 /**
  * @swagger
  * path:
- *   /classes/{classId}/students/{studentId}/meetings/{meetingId}:
+ *   /classes/{classId}/projects/{projectId}/meetings/{meetingId}:
  *     delete:
  *       summary: delete a meeting
  *       description: delete a meeting
@@ -226,7 +226,7 @@ router
  *            type: string
  *          description: Class id
  *        - in: path
- *          name: studentId
+ *          name: projectId
  *          required: true
  *          schema:
  *            type: string
