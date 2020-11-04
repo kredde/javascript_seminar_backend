@@ -24,7 +24,7 @@ module.exports = {
       });
 
       socket.on('disconnect', (data) => {
-        console.log('Disconnecting', data, socket);
+        //console.log('Disconnecting', data, socket);
         connectedUsers.delete(socket.userId);
       });
 
