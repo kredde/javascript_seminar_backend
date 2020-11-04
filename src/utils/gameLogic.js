@@ -6,7 +6,7 @@ const config = require('../config/config');
 let openSessions = new Map();
 let io;
 
-let url = "http://localhost:5000/v1";
+let url = config.backendHost;
 
 module.exports = {
   gameInit: function (ioServer) {
