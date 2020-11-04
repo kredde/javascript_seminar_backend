@@ -7,6 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
+    HTTPS: Joi.string().required().description('whether to use https or not'),
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
@@ -18,7 +19,12 @@ const envVarsSchema = Joi.object()
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
     FRONTEND_HOST: Joi.string(),
-    BACKEND_HOST: Joi.string()
+    BACKEND_HOST: Joi.string(),
+    BBB_FQDN: Joi.string().required().description('bbb server fqdn'),
+    // BBB_URL: Joi.string().required().description('bbb server url'),
+    BBB_SECRET: Joi.string().required().description('bbb api secret'),
+    BBB_P_KEY: Joi.string().description('path to bbb private key'),
+    BBB_P_CERT: Joi.string().description('path to bbb cert')
   })
   .unknown();
 
@@ -30,9 +36,15 @@ if (error) {
 
 module.exports = {
   env: envVars.NODE_ENV,
+  https: envVars.HTTPS,
   port: envVars.PORT,
   frontendHost: envVars.FRONTEND_HOST,
   backendHost: envVars.BACKEND_HOST,
+  bbbFqdn: envVars.BBB_FQDN,
+  // bbbHost: envVars.BBB_URL,
+  bbbSecret: envVars.BBB_SECRET,
+  bbbKey: envVars.BBB_P_KEY,
+  bbbCert: envVars.BBB_P_CERT,
   mongoose: {
     url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
     options: {

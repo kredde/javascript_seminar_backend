@@ -1,3 +1,6 @@
+import fs from 'fs';
+import { createServer } from 'spdy';
+
 const mongoose = require('mongoose');
 const socketIo = require('socket.io');
 const app = require('./app');
@@ -8,9 +11,25 @@ const games = require('./utils/gameLogic.js');
 let server;
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info('Connected to MongoDB');
-  server = app.listen(config.port, () => {
-    logger.info(`Listening to port ${config.port}`);
-  });
+
+  if (config.https) {
+    const options = {
+      key: fs.readFileSync(config.bbbKey),
+      cert: fs.readFileSync(config.bbbCert)
+    };
+
+    createServer(options, app).listen(config.port, (err) => {
+      if (err) {
+        logger.error(err);
+        return process.exit(1);
+      }
+      logger.info(`Listening on port ${config.port}`);
+    });
+  } else {
+    server = app.listen(config.port, () => {
+      logger.info(`Listening to port ${config.port}`);
+    });
+  }
 
   // GAMES SOCKET
   const io = socketIo.listen(server);

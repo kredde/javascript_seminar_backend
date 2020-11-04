@@ -3,8 +3,19 @@
     "node": true,
     "jest": true
   },
-  "extends": ["airbnb-base", "plugin:jest/recommended", "plugin:security/recommended", "plugin:prettier/recommended"],
-  "plugins": ["jest", "security", "prettier"],
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended",
+    "plugin:security/recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": [
+    "jest",
+    "security",
+    "prettier"
+  ],
   "parserOptions": {
     "ecmaVersion": 2018
   },
@@ -15,8 +26,16 @@
     "consistent-return": "off",
     "jest/expect-expect": "off",
     "security/detect-object-injection": "off",
-    "prettier/prettier": ["error", {
-      "endOfLine":"auto"
-    }]
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
   }
 }
