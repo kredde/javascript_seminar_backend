@@ -1,3 +1,5 @@
+import bbbRouter from './bbb';
+
 const express = require('express');
 const authRoute = require('./auth.route');
 const docsRoute = require('./docs.route');
@@ -22,5 +24,7 @@ router.use('/classes', projectRoute);
 router.use('/', metaRoute);
 router.use('/students', studentsRoute);
 router.use('/games', gamesRoute);
+
+router.use(bbbRouter);
 
 module.exports = router;

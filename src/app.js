@@ -21,8 +21,28 @@ if (config.env !== 'test') {
   app.use(morgan.errorHandler);
 }
 
+// for self-signed cert in dev
+if (config.insecure === 'true') process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // set security HTTP headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'", config.bbbFqdn],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", 'https:', 'data'],
+        frameAncestors: ["'self'", config.bbbFqdn],
+        imgSrc: ["'self'", 'data:'],
+        objectSrc: ["'none'"],
+        scriptSrc: ["'self'", config.bbbFqdn],
+        scriptSrcAttr: ["'none'"],
+        styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+        upgradeInsecureRequests: []
+      }
+    }
+  })
+);
 
 // parse json request body
 app.use(express.json());
