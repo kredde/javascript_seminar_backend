@@ -28,7 +28,7 @@ module.exports = {
       });
 
       socket.on('updateGame', (data) => {
-        //console.log("Update game", data)
+        openSessions.set(data.sessionId, data)
         handleUpdateGameMessage(data);
       });
 
@@ -70,7 +70,7 @@ async function handleJoinGameMessage(data, socket) {
     Promise.resolve(currentGame).then(game => {
 
       //player wants to join other game -> not possible
-      if (game.taskId != data.taskId) {
+      if (game.taskId && game.taskId != data.taskId) {
         socket.disconnect();
         connectedUsers.delete(socket.id);
       }
@@ -194,12 +194,13 @@ async function createDrawItSession(sessionId, gameType, playerName, taskId) {
     taskId: taskId,
     state: 'lobby',
     timeleft: 120,
-    drawing: null
+    drawing: null,
+    drawingHistory: []
   };
   try {
     let drawit = await getDrawItGame(taskId);
-    session.words = alias.words;
-    session.name = alias.name;
+    session.words = drawit.words;
+    session.name = drawit.name;
     session.description = drawit.description;
     session.timeleft = drawit.duration;
     return session;
@@ -278,6 +279,9 @@ async function handleAliasUpdateMessage(data) {
 }
 
 async function handleDrawItUpdateMessage(data) {
+  if (data.drawing) {
+    data.drawingHistory = data.drawingHistory.concat(data.drawing);
+  }
   io.to(data.sessionId).emit('updateGame', data);
   openSessions.set(data.sessionId, data);
 }
