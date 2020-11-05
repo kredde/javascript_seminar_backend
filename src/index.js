@@ -1,9 +1,12 @@
-import fs from 'fs';
-import { createServer } from 'spdy';
+require('@babel/register');
 
-const mongoose = require('mongoose');
 const socketIo = require('socket.io');
+const mongoose = require('mongoose');
+
+const fs = require('fs');
+const spdy = require('spdy');
 const app = require('./app');
+
 const config = require('./config/config');
 const logger = require('./config/logger');
 const games = require('./utils/gameLogic.js');
@@ -19,7 +22,7 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
       cert: fs.readFileSync(config.bbbCert)
     };
 
-    createServer(options, app).listen(config.port, (err) => {
+    spdy.createServer(options, app).listen(config.port, (err) => {
       if (err) {
         logger.error(err);
         return process.exit(1);

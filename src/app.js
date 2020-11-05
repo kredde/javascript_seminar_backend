@@ -22,7 +22,7 @@ if (config.env !== 'test') {
 }
 
 // for self-signed cert in dev
-if (config.insecure) process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+if (config.insecure === 'true') process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // set security HTTP headers
 app.use(

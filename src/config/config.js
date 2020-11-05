@@ -27,22 +27,15 @@ const envVarsSchema = Joi.object()
       .valid('true', 'false')
       .default('false')
       .description('use to temporarily disable bbb for integration'),
-    BBB_FQDN: Joi.when('BBB_ENABLE', { is: 'true', then: Joi.string().required().description('bbb server fqdn') }),
-    BBB_SECRET: Joi.when('BBB_ENABLE', { is: 'true', then: Joi.string().required().description('bbb api secret') }),
-    BBB_P_KEY: Joi.when('BBB_ENABLE', {
-      is: 'true',
-      then: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb private key')
-    }),
-    BBB_P_CERT: Joi.when('BBB_ENABLE', {
-      is: 'true',
-      then: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb cert')
-    })
 
     // Temporary - Uncomment this when removing BBB_ENABLE
     // BBB_FQDN: Joi.string().required().description('bbb server fqdn'),
     // BBB_SECRET: Joi.string().required().description('bbb api secret'),
-    // BBB_P_KEY: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb private key'),
-    // BBB_P_CERT: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb cert')
+    BBB_FQDN: Joi.when('BBB_ENABLE', { is: 'true', then: Joi.string().required().description('bbb server fqdn') }),
+    BBB_SECRET: Joi.when('BBB_ENABLE', { is: 'true', then: Joi.string().required().description('bbb api secret') }),
+
+    BBB_P_KEY: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb private key'),
+    BBB_P_CERT: Joi.when('HTTPS', { is: 'true', then: Joi.string().required() }).description('path to bbb cert')
   })
   .unknown();
 
@@ -60,7 +53,6 @@ module.exports = {
   frontendHost: envVars.FRONTEND_HOST,
   backendHost: envVars.BACKEND_HOST,
   bbbFqdn: envVars.BBB_FQDN,
-  // bbbHost: envVars.BBB_URL,
   bbbSecret: envVars.BBB_SECRET,
   bbbKey: envVars.BBB_P_KEY,
   bbbCert: envVars.BBB_P_CERT,
