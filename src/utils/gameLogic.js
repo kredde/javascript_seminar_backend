@@ -28,7 +28,7 @@ module.exports = {
       });
 
       socket.on('updateGame', (data) => {
-        console.log("Update game", data)
+        //console.log("Update game", data)
         handleUpdateGameMessage(data);
       });
 
@@ -69,10 +69,16 @@ async function handleJoinGameMessage(data, socket) {
     let currentGame = openSessions.get(data.sessionId);
     Promise.resolve(currentGame).then(game => {
 
-      game.players.push(data.playerName);
-
-      // Send new State in Room to every listener
-      io.to(data.sessionId).emit('updateGame', game);
+      //player wants to join other game -> not possible
+      if (game.taskId != data.taskId) {
+        socket.disconnect();
+        connectedUsers.delete(socket.id);
+      }
+      else {
+        game.players.push(data.playerName);
+        // Send new State in Room to every listener
+        io.to(data.sessionId).emit('updateGame', game);
+      }
     })
   }
 }
