@@ -4,66 +4,98 @@ const config = require('../config/config');
 
 // Map <SessionId, GameState>
 let openSessions = new Map();
+let connectedUsers = new Map();
 let io;
 
 let url = config.backendHost;
 
 module.exports = {
   gameInit: function (ioServer) {
-    console.log('Creating Games socket');
-    //create a io socket
     io = ioServer;
-    // io = socket(server);
-    const connectedUsers = new Set(); //a list of every connection to the socket
+    console.log('Creating Games socket');
+
     io.on('connection', function (socket) {
-      console.log('Made socket connection');
+      console.log('Made socket connection', socket.id);
 
       // Defines Signals to react to
       socket.on('connect', (data) => {
         console.log('Client Connected: ' + data);
       });
 
-      socket.on('disconnect', (data) => {
-        //console.log('Disconnecting', data, socket);
-        connectedUsers.delete(socket.userId);
-      });
-
       socket.on('joinGame', (data) => {
+        console.log("client joined game", data);
         handleJoinGameMessage(data, socket);
       });
 
       socket.on('updateGame', (data) => {
+        console.log("Update game", data)
         handleUpdateGameMessage(data);
+      });
+
+      socket.on('disconnect', () => {
+        handleDisconnect(socket);
+      });
+      socket.on('customDisconnect', () => {
+        console.log('Disconnecting');
+        handleDisconnect(socket);
       });
     });
   }
 };
 
 async function handleJoinGameMessage(data, socket) {
+  if (connectedUsers.has(socket.id)) {
+    console.log("User has already joined");
+    return;
+  }
   // Join Room that will be subscribed
   socket.join(data.sessionId);
+  connectedUsers.set(socket.id, { id: data.sessionId, name: data.playerName });
 
   if (openSessions.get(data.sessionId) == undefined) {
     // Create new Session
-
-    console.log('Create new Session for ' + data.playerName);
-    let currentGame = await createSession(data.sessionId, data.gameType, data.playerName, data.taskId);
+    console.log('Create new Session for ' + data.playerName + " with session id: ", data.sessionId);
+    let currentGame = createSession(data.sessionId, data.gameType, data.playerName, data.taskId);
     openSessions.set(data.sessionId, currentGame);
-
-    io.to(data.sessionId).emit('updateGame', currentGame);
+    currentGame.then(game => {
+      openSessions.set(data.sessionId, game);
+      io.to(data.sessionId).emit('updateGame', game);
+    })
   } else {
     // use existing Session
-    console.log('Existing Session!' + openSessions.get(data.sessionId));
+    console.log('User joines exisiting session ', data.sessionId);
 
     // Update Gamesession
     let currentGame = openSessions.get(data.sessionId);
-    currentGame.players.push(data.playerName);
+    Promise.resolve(currentGame).then(game => {
 
-    // TODO further update Details
+      game.players.push(data.playerName);
 
-    // Send new State in Room to every listener
-    io.to(data.sessionId).emit('updateGame', openSessions.get(data.sessionId));
+      // Send new State in Room to every listener
+      io.to(data.sessionId).emit('updateGame', game);
+    })
   }
+}
+
+function handleDisconnect(socket) {
+  try {
+    let sessionId = connectedUsers.get(socket.id).id;
+    let playername = connectedUsers.get(socket.id).name;
+    let sessionGame = openSessions.get(sessionId);
+    sessionGame.players = sessionGame.players.filter(name => name !== playername);
+    io.to(sessionId).emit('updateGame', sessionGame);
+
+    // TODO do not delete game, save for one hour? --> needs more info in game object!
+    if (sessionGame.players.length == 0) {
+      openSessions.delete(sessionId);
+      console.log('Closing session: ' + sessionId);
+    }
+
+    connectedUsers.delete(socket.id);
+  } catch (error) {
+    console.log("error handling disconnect event for socket: ", socket.id, error);
+  }
+
 }
 
 function createSession(sessionId, gameType, playerName, taskId) {
@@ -221,12 +253,6 @@ async function getDrawItGame(taskId) {
 
 // Send Update to every participant
 async function handleUpdateGameMessage(data) {
-  // Remove session data if nobody is connected
-  if (data.players.length == 0) {
-    openSessions.set(data.sessionId, undefined);
-    console.log('Closing session: ' + data.sessionId);
-    return;
-  }
   if (data.gameType == 'alias') {
     await handleAliasUpdateMessage(data);
   } else if (data.gameType == 'drawit') {
