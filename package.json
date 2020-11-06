@@ -9,8 +9,10 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "start": "pm2 start ecosystem.config.json --no-daemon",
+    "build": "babel src --out-dir dist",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/index.js",
+    "heroku-postbuild": "npm run build",
+    "start": "npm run build && pm2 start ecosystem.config.json --no-daemon",
     "test": "jest -i",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
@@ -21,7 +23,6 @@
     "prettier:fix": "prettier --write **/*.js"
   },
   "dependencies": {
-    "@babel/register": "^7.12.1",
     "@hapi/joi": "^17.1.0",
     "axios": "^0.21.0",
     "bcryptjs": "^2.4.3",
@@ -60,8 +61,10 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.1",
     "@babel/core": "^7.12.3",
     "@babel/node": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "coveralls": "^3.0.7",

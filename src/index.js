@@ -1,5 +1,3 @@
-require('@babel/register');
-
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 

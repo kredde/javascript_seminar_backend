@@ -52,6 +52,7 @@ module.exports = {
   port: envVars.PORT,
   frontendHost: envVars.FRONTEND_HOST,
   backendHost: envVars.BACKEND_HOST,
+  bbbEnable: envVars.BBB_ENABLE,
   bbbFqdn: envVars.BBB_FQDN,
   bbbSecret: envVars.BBB_SECRET,
   bbbKey: envVars.BBB_P_KEY,
