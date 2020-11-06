@@ -1,4 +1,5 @@
 import bbbRouter from './bbb';
+import config from '~/config/config';
 
 const express = require('express');
 const authRoute = require('./auth.route');
@@ -25,6 +26,6 @@ router.use('/', metaRoute);
 router.use('/students', studentsRoute);
 router.use('/games', gamesRoute);
 
-router.use(bbbRouter);
+if (config.bbbEnable === 'true') router.use(bbbRouter);
 
 module.exports = router;
