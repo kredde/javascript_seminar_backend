@@ -89,6 +89,13 @@ function handleDisconnect(socket) {
     let playername = connectedUsers.get(socket.id).name;
     let sessionGame = openSessions.get(sessionId);
     sessionGame.players = sessionGame.players.filter(name => name !== playername);
+    if (sessionGame.gameType === "truthlie" && sessionGame.state === "lobby" && !sessionGame.players.includes(sessionGame.currentPlayer)) {
+      if (sessionGame.players.length > sessionGame.played.length) {
+        const notPlayed = sessionGame.players.filter(player => !sessionGame.played.includes(player));;
+        sessionGame.currentPlayer = notPlayed[0];
+        openSessions.set(sessionId, sessionGame);
+      }
+    }
     io.to(sessionId).emit('updateGame', sessionGame);
 
     // TODO do not delete game, save for one hour? --> needs more info in game object!
