@@ -1,15 +1,15 @@
 import Router from 'express-promise-router';
 
 import * as bbbController from '~/controllers/bbb';
-// import auth from '~/middlewares/auth';
+import auth from '~/middlewares/auth';
 
 const bbbRouter = Router();
 const route = '/bbb';
 
-bbbRouter.use(route, /* auth('teacher'), */ bbbController.administrationRouter);
-bbbRouter.use(route, /* auth('teacher'), */ bbbController.monitoringRouter);
-bbbRouter.use(route, /* auth('teacher'), */ bbbController.recordingRouter);
-bbbRouter.get(route, /* auth(), */ bbbController.get);
+bbbRouter.use(route, auth('teacher'), bbbController.administrationRouter);
+bbbRouter.use(route, auth('teacher'), bbbController.monitoringRouter);
+bbbRouter.use(route, auth('teacher'), bbbController.recordingRouter);
+bbbRouter.get(route, auth(), bbbController.get);
 
 export default bbbRouter;
 
