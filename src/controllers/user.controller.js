@@ -32,8 +32,13 @@ const getStudents = catchAsync(async (req, res) => {
 });
 
 const getMeetings = catchAsync(async (req, res) => {
-  const students = await userService.getMeetings(req.user);
-  res.send(students);
+  const meetings = await userService.getMeetings(req.user);
+  res.send(meetings);
+});
+
+const getMeeting = catchAsync(async (req, res) => {
+  const meeting = await userService.getMeeting(req.user, req.params.meetingId);
+  res.send(meeting);
 });
 
 module.exports = {
@@ -42,5 +47,6 @@ module.exports = {
   getNotifications,
   getNotification,
   getStudents,
-  getMeetings
+  getMeetings,
+  getMeeting
 };

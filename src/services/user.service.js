@@ -3,6 +3,7 @@ const projectService = require('./project.service');
 const { User, Class } = require('../models');
 const ApiError = require('../utils/ApiError');
 const meetingService = require('./meeting.service');
+const bbbService = require('./bbb.service');
 
 /**
  * Create a user
@@ -109,9 +110,36 @@ const getMeetings = async (user) => {
     classes = await Class.find({ students: { $elemMatch: { $in: [user._id] } } });
   }
   const projects = await Promise.all(classes.map((classModel) => projectService.getProjects(classModel.id)));
-  const meetings = await Promise.all(projects.flat().map((project) => meetingService.getMeetings(project._id)));
+  const meetings = await Promise.all(
+    projects
+      .flat()
+      .map((project) => meetingService.getMeetings(project._id).populate('groups.participants').populate('groups.room'))
+  );
 
   return meetings.flat();
+};
+
+const getMeeting = async (user, id) => {
+  const meetings = await getMeetings(user);
+  const meeting = meetings.find((m) => m._id === id);
+
+  if (!meeting) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'meeting not found');
+  }
+
+  const group = meeting.groups.find((gr) => gr.participants.map((st) => st._id).indexOf(user._id) >= 0);
+
+  if (!group) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'meeting not found');
+  }
+
+  const joinUrl = await bbbService.join({
+    meetingId: group.room.meetingId,
+    fullName: group.room.name,
+    password: user.role === 'teacher' ? group.room.moderatorPW : group.room.attendeePW
+  });
+
+  return { ...meeting, joinUrl };
 };
 
 module.exports = {
@@ -123,5 +151,6 @@ module.exports = {
   deleteUserById,
   getStudents,
   addStudentInformation,
-  getMeetings
+  getMeetings,
+  getMeeting
 };
