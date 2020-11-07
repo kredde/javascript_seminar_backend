@@ -4,9 +4,7 @@ import xml2js from 'xml2js';
 
 import bbb from '~/config/bbb';
 import { generatePassword } from '~/services/bbb.service';
-// import logger from '~/config/logger';
-
-const { api } = bbb;
+import logger from '~/config/logger';
 
 const create = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -16,14 +14,14 @@ const create = async (req, res) => {
   if (b.meetingName === undefined) return res.sendStatus(400);
 
   const kwParams = {
-    attendeePw: generatePassword(32),
+    attendeePW: generatePassword(32),
     moderatorPW: generatePassword(32),
     welcome: b.welcome,
     dialNumber: b.dialNumber,
     voiceBridge: b.voiceBridge,
     maxParticipants: b.maxParticipants,
     logoutURL: b.logoutURL,
-    record: b.record,
+    record: b.record || true,
     duration: b.duration,
     isBreakout: b.isBreakout,
     parentMeetingID: b.parentMeetingID,
@@ -56,14 +54,13 @@ const create = async (req, res) => {
   const uuid = uuid4();
 
   // api module itself is responsible for constructing URLs
-  const meetingCreateUrl = api.administration.create(b.meetingName, uuid, kwParams);
+  const meetingCreateUrl = bbb.api.administration.create(b.meetingName, uuid, kwParams);
+
+  logger.info(meetingCreateUrl);
 
   try {
     const xmlResponse = await axios.get(meetingCreateUrl);
-
-    const result = await xml2js.parseStringPromise(xmlResponse.data, {
-      mergeAttrs: true
-    });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
 
     const response = {
       meetingID: result.response.meetingID,
@@ -102,7 +99,7 @@ const join = async (req, res) => {
 
   // api module itself is responsible for constructing URLs
   // password is either moderatorPW/attendeePW
-  const meetingJoinUrl = api.administration.join(b.fullName, b.meetingId, b.password, kwParams);
+  const meetingJoinUrl = bbb.api.administration.join(b.fullName, b.meetingId, b.password, kwParams);
 
   const response = {
     meetingJoinUrl
@@ -121,7 +118,7 @@ const endPost = async (req, res) => {
 
   // api module itself is responsible for constructing URLs
   // password has to be moderatorPW
-  const meetingEndUrl = api.administration.end(b.meetingId, b.moderatorPW);
+  const meetingEndUrl = bbb.api.administration.end(b.meetingId, b.moderatorPW);
 
   const response = {
     meetingEndUrl
@@ -137,13 +134,12 @@ const endDel = async (req, res) => {
 
   if (p.meetingId === undefined || p.moderatorPW === undefined) return res.sendStatus(400);
 
-  const meetingEndUrl = api.administration.end(p.meetingId, p.moderatorPW);
+  const meetingEndUrl = bbb.api.administration.end(p.meetingId, p.moderatorPW);
 
   try {
     const xmlResponse = await axios.get(meetingEndUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, {
-      mergeAttrs: true
-    });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
+
     res.status(200).json(result.response);
   } catch (error) {
     res.status(500).json('Could not end meeting');

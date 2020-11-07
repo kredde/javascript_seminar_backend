@@ -10,8 +10,12 @@ const createMeeting = async (meetingBody) => {
   const groups = await createGroups(meeting);
 
   const roomPromises = groups.map((group, index) =>
-    bbbService.create({ meetingName: `group_${index}-${meeting.id}`, maxParticipants: group.length })
+    bbbService.create({
+      meetingName: `group_${index}-${meeting.id}`, // This is the name shown in the meeting room, so maybe change
+      maxParticipants: group.length
+    })
   );
+
   const roomObjects = await Promise.all(roomPromises);
 
   const roomCreatePromises = roomObjects.map((room) => new Room(room).save());

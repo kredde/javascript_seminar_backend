@@ -133,9 +133,9 @@ const getMeeting = async (user, id) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'meeting not found');
   }
 
-  const joinUrl = await bbbService.join({
+  const joinUrl = bbbService.join({
     meetingId: group.room.meetingId,
-    fullName: group.room.name,
+    fullName: `${user.firstName} ${user.lastName}`,
     password: user.role === 'teacher' ? group.room.moderatorPW : group.room.attendeePW
   });
 

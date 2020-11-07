@@ -14,7 +14,7 @@ const create = async (obj) => {
   if (obj.meetingName === undefined) return Promise.reject();
 
   const kwParams = {
-    attendeePw: generatePassword(32),
+    attendeePW: generatePassword(32),
     moderatorPW: generatePassword(32),
     welcome: obj.welcome,
     dialNumber: obj.dialNumber,
@@ -57,14 +57,12 @@ const create = async (obj) => {
 
   try {
     const xmlResponse = await axios.get(meetingCreateUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, {
-      mergeAttrs: true
-    });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
 
     return {
-      meetingId: result.response.meetingID[0],
-      attendeePW: result.response.attendeePW[0],
-      moderatorPW: result.response.moderatorPW[0]
+      meetingId: result.response.meetingID,
+      attendeePW: result.response.attendeePW,
+      moderatorPW: result.response.moderatorPW
     };
   } catch (error) {
     return Promise.reject();

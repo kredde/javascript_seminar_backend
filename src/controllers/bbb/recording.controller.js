@@ -22,7 +22,8 @@ const getRecordings = async (req, res) => {
 
   try {
     const xmlResponse = await axios.get(getRecordingsUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
+
     res.status(200).json(result.response);
   } catch (error) {
     res.status(500).json('Could not get recordings');
@@ -40,7 +41,7 @@ const publishRecordings = async (req, res) => {
 
   try {
     const xmlResponse = await axios.get(publishRecordingsUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
     res.status(200).json(result.response);
   } catch (error) {
     res.status(500).json('Could not publish recordings');
@@ -58,7 +59,7 @@ const deleteRecordings = async (req, res) => {
 
   try {
     const xmlResponse = await axios.get(deleteRecordingsUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
     res.status(200).json(result.response);
   } catch (error) {
     res.status(500).json('Could not delete recordings');
@@ -80,7 +81,8 @@ const updateRecordings = async (req, res) => {
 
   try {
     const xmlResponse = await axios.get(updateRecordingsUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
+
     res.status(200).json(result.response);
   } catch (error) {
     res.status(500).json('Could not update recordings');
