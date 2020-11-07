@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
-const { userService } = require('.');
+const userService = require('./user.service');
 
 const hasAuthority = async (userId, studentId) => {
   const user = await userService.getUserById(userId);
