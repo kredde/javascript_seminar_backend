@@ -6,3 +6,4 @@ module.exports.Notification = require('./notification.model');
 module.exports.Project = require('./project.model');
 module.exports.Message = require('./message.model');
 module.exports.Meeting = require('./meetings.model');
+module.exports.Room = require('./room.model');

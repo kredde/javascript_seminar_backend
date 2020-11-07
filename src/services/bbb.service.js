@@ -57,15 +57,14 @@ const create = async (obj) => {
 
   try {
     const xmlResponse = await axios.get(meetingCreateUrl);
-
     const result = await xml2js.parseStringPromise(xmlResponse.data, {
       mergeAttrs: true
     });
 
     return {
-      meetingID: result.response.meetingID,
-      attendeePW: result.response.attendeePW,
-      moderatorPW: result.response.moderatorPW
+      meetingId: result.response.meetingID[0],
+      attendeePW: result.response.attendeePW[0],
+      moderatorPW: result.response.moderatorPW[0]
     };
   } catch (error) {
     return Promise.reject();
