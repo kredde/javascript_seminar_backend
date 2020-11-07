@@ -110,18 +110,14 @@ const getMeetings = async (user) => {
     classes = await Class.find({ students: { $elemMatch: { $in: [user._id] } } });
   }
   const projects = await Promise.all(classes.map((classModel) => projectService.getProjects(classModel.id)));
-  const meetings = await Promise.all(
-    projects
-      .flat()
-      .map((project) => meetingService.getMeetings(project._id).populate('groups.participants').populate('groups.room'))
-  );
+  const meetings = await Promise.all(projects.flat().map((project) => meetingService.getMeetings(project._id)));
 
   return meetings.flat();
 };
 
 const getMeeting = async (user, id) => {
   const meetings = await getMeetings(user);
-  const meeting = meetings.find((m) => m._id === id);
+  const meeting = meetings.find((m) => String(m._id) === id);
 
   if (!meeting) {
     throw new ApiError(httpStatus.NOT_FOUND, 'meeting not found');
@@ -130,16 +126,16 @@ const getMeeting = async (user, id) => {
   const group = meeting.groups.find((gr) => gr.participants.map((st) => st._id).indexOf(user._id) >= 0);
 
   if (!group) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'meeting not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'group not found');
   }
 
-  const joinUrl = bbbService.join({
+  const response = bbbService.join({
     meetingId: group.room.meetingId,
     fullName: `${user.firstName} ${user.lastName}`,
     password: user.role === 'teacher' ? group.room.moderatorPW : group.room.attendeePW
   });
 
-  return { ...meeting, joinUrl };
+  return { ...meeting.toJSON(), joinUrl: response.meetingJoinUrl || 'asd' };
 };
 
 module.exports = {
