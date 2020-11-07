@@ -6,10 +6,14 @@ const { createGroups } = require('../utils/create-groups');
 
 const createMeeting = async (meetingBody) => {
   const meeting = await Meeting.create(meetingBody);
-  meeting.groups = await createGroups(meeting);
+  const groups = await createGroups(meeting);
 
-  // Todo: create meeting for each group and add to either group or meeting?
-  await bbbService.create(/* obj.meetingName required */ {});
+  const roomPromises = groups.map((group, index) =>
+    bbbService.create({ meetingName: `group_${index}-${meeting.id}`, maxParticipants: group.length })
+  );
+  const rooms = await Promise.all(roomPromises);
+
+  meeting.groups = groups.map((group, i) => ({ participants: group, room: rooms[i] }));
 
   await meeting.save();
   return meeting;

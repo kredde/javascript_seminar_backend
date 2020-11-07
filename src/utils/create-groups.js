@@ -7,7 +7,7 @@ module.exports.createGroups = async (meeting) => {
   const secondClass = await Class.findById(project.classes[1]).populate('students');
 
   if (meeting.groupsAssignment === 'whole_class') {
-    return [firstClass.students.concat(secondClass.students)];
+    return [(firstClass.students || []).concat(secondClass.students || [])];
   }
 
   const firstRandomStudents = shuffle(firstClass.students);
@@ -41,7 +41,11 @@ module.exports.createGroups = async (meeting) => {
 
   // if there is just one student in the last group it is added to the previous
   if (currentGroup.length < 2) {
-    groups[groups.length - 1] = groups[groups.length - 1].concat(currentGroup);
+    if (groups.length) {
+      groups[groups.length - 1] = groups[groups.length - 1].concat(currentGroup);
+    } else {
+      groups[0] = currentGroup;
+    }
   } else {
     groups.push(currentGroup);
   }

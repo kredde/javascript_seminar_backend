@@ -21,7 +21,7 @@ const create = async (obj) => {
     voiceBridge: obj.voiceBridge,
     maxParticipants: obj.maxParticipants,
     logoutURL: obj.logoutURL,
-    record: obj.record,
+    record: obj.record || true,
     duration: obj.duration,
     isBreakout: obj.isBreakout,
     parentMeetingID: obj.parentMeetingID,
