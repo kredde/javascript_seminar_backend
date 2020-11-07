@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const bbbService = require('./bbb.service');
 const { Meeting } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { createGroups } = require('../utils/create-groups');
@@ -6,6 +7,9 @@ const { createGroups } = require('../utils/create-groups');
 const createMeeting = async (meetingBody) => {
   const meeting = await Meeting.create(meetingBody);
   meeting.groups = await createGroups(meeting);
+
+  // Todo: create meeting for each group and add to either group or meeting?
+  await bbbService.create(/* obj.meetingName required */ {});
 
   await meeting.save();
   return meeting;
