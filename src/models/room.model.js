@@ -1,7 +1,7 @@
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
-const jwt = require('jsonwebtoken');
-const config = require('../config');
+const config = require('../config/config');
 
 const roomSchema = mongoose.Schema({
   meetingId: {
