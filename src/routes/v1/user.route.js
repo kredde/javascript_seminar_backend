@@ -156,7 +156,7 @@ router.route('/students').get(auth('teacher'), userController.getStudents);
  *          $ref: '#/components/responses/NotFound'
  */
 
-router.route('/meetings').get(userController.getMeetings);
+router.route('/meetings').get(auth(), userController.getMeetings);
 
 /**
  * @swagger
@@ -189,6 +189,6 @@ router.route('/meetings').get(userController.getMeetings);
  *          $ref: '#/components/responses/NotFound'
  */
 
-router.route('/meetings/:meetingId').get(userController.getMeeting);
+router.route('/meetings/:meetingId').get(auth(), userController.getMeeting);
 
 module.exports = router;

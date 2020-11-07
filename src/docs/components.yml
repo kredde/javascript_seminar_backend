@@ -96,6 +96,8 @@ components:
             type: string
         duration:
           type: number
+        joinUrl:
+          type: string
     Project:
       type: object
       properties:
