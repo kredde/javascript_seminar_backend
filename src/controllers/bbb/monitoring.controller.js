@@ -2,14 +2,11 @@ import axios from 'axios';
 import xml2js from 'xml2js';
 
 import bbb from '~/config/bbb';
-import logger from '~/config/logger';
 
 const { api } = bbb;
 
 const getMeetings = async (req, res) => {
   const getMeetingsUrl = api.monitoring.getMeetings();
-
-  logger.info(getMeetingsUrl);
 
   try {
     const xmlResponse = await axios.get(getMeetingsUrl);
