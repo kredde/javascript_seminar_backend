@@ -4,7 +4,6 @@ import xml2js from 'xml2js';
 
 import bbb from '~/config/bbb';
 import { generatePassword } from '~/services/bbb.service';
-import logger from '~/config/logger';
 
 const create = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -55,8 +54,6 @@ const create = async (req, res) => {
 
   // api module itself is responsible for constructing URLs
   const meetingCreateUrl = bbb.api.administration.create(b.meetingName, uuid, kwParams);
-
-  logger.info(meetingCreateUrl);
 
   try {
     const xmlResponse = await axios.get(meetingCreateUrl);
