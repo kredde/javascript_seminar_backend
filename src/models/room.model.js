@@ -18,42 +18,6 @@ const roomSchema = mongoose.Schema({
   }
 });
 
-roomSchema.pre('save', async function (next) {
-  const room = this;
-  if (room.isModified('attendeePW')) {
-    room.attendeePW = await jwt.sign(room.attendeePW, config.jwt.secret);
-  }
-
-  if (room.isModified('moderatorPW')) {
-    room.moderatorPW = await jwt.sign(room.moderatorPW, config.jwt.secret);
-  }
-  next();
-});
-
-roomSchema.pre('findOne', async function (next) {
-  const room = this;
-  if (room.isModified('attendeePW')) {
-    room.attendeePW = await jwt.verify(room.attendeePW, config.jwt.secret);
-  }
-
-  if (room.isModified('moderatorPW')) {
-    room.moderatorPW = await jwt.verify(room.moderatorPW, config.jwt.secret);
-  }
-  next();
-});
-
-roomSchema.pre('findAll', async function (next) {
-  const room = this;
-  if (room.isModified('attendeePW')) {
-    room.attendeePW = await jwt.verify(room.attendeePW, config.jwt.secret);
-  }
-
-  if (room.isModified('moderatorPW')) {
-    room.moderatorPW = await jwt.verify(room.moderatorPW, config.jwt.secret);
-  }
-  next();
-});
-
 roomSchema.plugin(toJSON);
 
 /**
