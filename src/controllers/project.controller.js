@@ -38,6 +38,11 @@ const updateProject = catchAsync(async (req, res) => {
   res.send(project);
 });
 
+const deleteProject = catchAsync(async (req, res) => {
+  const project = await projectService.deleteProjectById(req.params.projectId, req.user._id);
+  res.send(project);
+});
+
 const getAllMessages = catchAsync(async (req, res) => {
   const messages = await projectService.getAllMessages(req.params.projectId, req.user._id);
   res.send(messages);
@@ -54,6 +59,7 @@ module.exports = {
   getProjects,
   acceptInvitation,
   updateProject,
+  deleteProject,
   getAllMessages,
   addMessage
 };

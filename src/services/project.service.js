@@ -76,6 +76,15 @@ const updateProjectById = async (id, teacher, body) => {
   return project;
 };
 
+const deleteProjectById = async (id, teacher) => {
+  const project = await getProjectById(id,teacher);
+  if (!project) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
+  }
+  await project.remove();
+  return project;
+};
+
 const getAllMessages = async (id, teacher) => {
   const project = await Project.findOne({ _id: id }).populate('classes messages');
 
@@ -105,6 +114,7 @@ module.exports = {
   getProjectById,
   getProjects,
   updateProjectById,
+  deleteProjectById,
   getAllMessages,
   addMessage
 };
