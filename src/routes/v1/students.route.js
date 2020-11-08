@@ -1,6 +1,6 @@
 const express = require('express');
 const validate = require('../../middlewares/validate');
-const { userValidation, studentValidation } = require('../../validations');
+const { studentValidation } = require('../../validations');
 const studentController = require('../../controllers/student.controller');
 const auth = require('../../middlewares/auth');
 
