@@ -3,10 +3,7 @@ import { v4 as uuid4 } from 'uuid';
 import xml2js from 'xml2js';
 
 import bbb from '~/config/bbb';
-import generatePassword from '~/services/bbb.service';
-// import logger from '~/config/logger';
-
-const { api } = bbb;
+import { generatePassword } from '~/services/bbb.service';
 
 const create = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -15,72 +12,60 @@ const create = async (req, res) => {
 
   if (b.meetingName === undefined) return res.sendStatus(400);
 
-  const kwParams = {};
-
-  const attendeePw = generatePassword(32);
-  const moderatorPW = generatePassword(32);
-
-  kwParams.attendeePW = attendeePw;
-  kwParams.moderatorPW = moderatorPW;
-  kwParams.welcome = b.welcome;
-  kwParams.dialNumber = b.dialNumber;
-  kwParams.voiceBridge = b.voiceBridge;
-  kwParams.maxParticipants = b.maxParticipants;
-  kwParams.logoutURL = b.logoutURL;
-  kwParams.record = b.record;
-  kwParams.duration = b.duration;
-  kwParams.isBreakout = b.isBreakout;
-  kwParams.parentMeetingID = b.parentMeetingID;
-  kwParams.sequence = b.sequence;
-  kwParams.freeJoin = b.freeJoin;
-  kwParams.meta = b.meta;
-  kwParams.moderatorOnlyMessage = b.moderatorOnlyMessage;
-  kwParams.autoStartRecording = b.autoStartRecording;
-  kwParams.allowStartStopRecording = b.allowStartStopRecording;
-  kwParams.webcamsOnlyForModerator = b.webcamsOnlyForModerator;
-  kwParams.logo = b.logo;
-  kwParams.bannerText = b.bannerText;
-  kwParams.bannerColor = b.bannerColor;
-  kwParams.copyright = b.copyright;
-  kwParams.muteOnStart = b.muteOnStart;
-  kwParams.allowModsToUnmuteUsers = b.allowModsToUnmuteUsers;
-  kwParams.lockSettingsDisableCam = b.lockSettingsDisableCam;
-  kwParams.lockSettingsDisableMic = b.lockSettingsDisableMic;
-  kwParams.lockSettingsDisablePrivateChat = b.lockSettingsDisablePrivateChat;
-  kwParams.lockSettingsDisablePublicChat = b.lockSettingsDisablePublicChat;
-  kwParams.lockSettingsDisableNote = b.lockSettingsDisableNote;
-  kwParams.lockSettingsLockedLayout = b.lockSettingsLockedLayout;
-  kwParams.lockSettingsLockOnJoin = b.lockSettingsLockOnJoin;
-  kwParams.lockSettingsLockOnJoinConfigurable = b.lockSettingsLockOnJoinConfigurable;
-  kwParams.guestPolicy = b.guestPolicy;
+  const kwParams = {
+    attendeePW: generatePassword(32),
+    moderatorPW: generatePassword(32),
+    welcome: b.welcome,
+    dialNumber: b.dialNumber,
+    voiceBridge: b.voiceBridge,
+    maxParticipants: b.maxParticipants,
+    logoutURL: b.logoutURL,
+    record: b.record || true,
+    duration: b.duration,
+    isBreakout: b.isBreakout,
+    parentMeetingID: b.parentMeetingID,
+    sequence: b.sequence,
+    freeJoin: b.freeJoin,
+    meta: b.meta,
+    moderatorOnlyMessage: b.moderatorOnlyMessage,
+    autoStartRecording: b.autoStartRecording,
+    allowStartStopRecording: b.allowStartStopRecording,
+    webcamsOnlyForModerator: b.webcamsOnlyForModerator,
+    logo: b.logo,
+    bannerText: b.bannerText,
+    bannerColor: b.bannerColor,
+    copyright: b.copyright,
+    muteOnStart: b.muteOnStart,
+    allowModsToUnmuteUsers: b.allowModsToUnmuteUsers,
+    lockSettingsDisableCam: b.lockSettingsDisableCam,
+    lockSettingsDisableMic: b.lockSettingsDisableMic,
+    lockSettingsDisablePrivateChat: b.lockSettingsDisablePrivateChat,
+    lockSettingsDisablePublicChat: b.lockSettingsDisablePublicChat,
+    lockSettingsDisableNote: b.lockSettingsDisableNote,
+    lockSettingsLockedLayout: b.lockSettingsLockedLayout,
+    lockSettingsLockOnJoin: b.lockSettingsLockOnJoin,
+    lockSettingsLockOnJoinConfigurable: b.lockSettingsLockOnJoinConfigurable,
+    guestPolicy: b.guestPolicy
+  };
 
   Object.keys(kwParams).forEach((key) => kwParams[key] === undefined && delete kwParams[key]);
 
   const uuid = uuid4();
 
   // api module itself is responsible for constructing URLs
-  const meetingCreateUrl = api.administration.create(b.meetingName, uuid, kwParams);
-  const meetingInfo = {};
-
-  // logger.info(`${meetingCreateUrl}`);
+  const meetingCreateUrl = bbb.api.administration.create(b.meetingName, uuid, kwParams);
 
   try {
     const xmlResponse = await axios.get(meetingCreateUrl);
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
 
-    const result = await xml2js.parseStringPromise(xmlResponse.data, {
-      mergeAttrs: true
-    });
+    const response = {
+      meetingID: result.response.meetingID,
+      attendeePW: result.response.attendeePW,
+      moderatorPW: result.response.moderatorPW
+    };
 
-    const moderatorUrl = api.administration.join(b.moderator, uuid, b.moderatorPW);
-    const attendeeUrl = api.administration.join(b.attendee, uuid, b.attendeePW);
-    const meetingEndUrl = api.administration.end(uuid, b.moderatorPW);
-
-    meetingInfo.attendeeUrl = attendeeUrl;
-    meetingInfo.moderatorUrl = moderatorUrl;
-    meetingInfo.meetingEndUrl = meetingEndUrl;
-    meetingInfo.result = result;
-
-    await res.status(200).json(meetingInfo);
+    await res.status(200).json(response);
   } catch (error) {
     await res.status(500).json('Could not create meeting');
   }
@@ -96,40 +81,28 @@ const join = async (req, res) => {
   if (b.fullName === undefined || b.meetingId === undefined || b.password === undefined) return res.sendStatus(400);
 
   // gather optional params
-  const kwParams = {};
-
-  kwParams.createTime = b.createTime;
-  kwParams.userID = b.userID;
-  kwParams.webVoiceConf = b.webVoiceConf;
-  kwParams.configToken = b.configToken;
-  kwParams.defaultLayout = b.defaultLayout;
-  kwParams.avatarURL = b.avatarURL;
-  kwParams.redirect = b.redirect;
-  kwParams.clientURL = b.clientURL;
-  kwParams.joinViaHtml5 = b.joinViaHtml5;
-  kwParams.guest = b.guest;
+  const kwParams = {
+    createTime: b.createTime,
+    userID: b.userID,
+    webVoiceConf: b.webVoiceConf,
+    configToken: b.configToken,
+    defaultLayout: b.defaultLayout,
+    avatarURL: b.avatarURL,
+    redirect: b.redirect,
+    clientURL: b.clientURL,
+    joinViaHtml5: b.joinViaHtml5,
+    guest: b.guest
+  };
 
   // api module itself is responsible for constructing URLs
   // password is either moderatorPW/attendeePW
-  const meetingJoinUrl = api.administration.join(b.fullName, b.meetingId, b.password);
-  const meetingInfo = {};
+  const meetingJoinUrl = bbb.api.administration.join(b.fullName, b.meetingId, b.password, kwParams);
 
-  meetingInfo.request = {};
-  meetingInfo.request.createTime = b.createTime;
-  meetingInfo.request.userID = b.userID;
-  meetingInfo.request.webVoiceConf = b.webVoiceConf;
-  meetingInfo.request.configToken = b.configToken;
-  meetingInfo.request.defaultLayout = b.defaultLayout;
-  meetingInfo.request.avatarURL = b.avatarURL;
-  meetingInfo.request.redirect = b.redirect;
-  meetingInfo.request.clientURL = b.clientURL;
-  meetingInfo.request.joinViaHtml5 = b.joinViaHtml5;
-  meetingInfo.request.guest = b.guest;
+  const response = {
+    meetingJoinUrl
+  };
 
-  meetingInfo.response = {};
-  meetingInfo.response.joinURL = meetingJoinUrl;
-
-  await res.status(200).json(meetingInfo);
+  await res.status(200).json(response);
 };
 
 const endPost = async (req, res) => {
@@ -142,18 +115,13 @@ const endPost = async (req, res) => {
 
   // api module itself is responsible for constructing URLs
   // password has to be moderatorPW
-  const meetingEndUrl = api.administration.end(b.meetingId, b.moderatorPW);
+  const meetingEndUrl = bbb.api.administration.end(b.meetingId, b.moderatorPW);
 
-  const meetingInfo = {};
-  meetingInfo.request = {};
+  const response = {
+    meetingEndUrl
+  };
 
-  meetingInfo.request.meetingId = b.meetingId;
-  meetingInfo.request.moderatorPW = b.moderatorPW;
-
-  meetingInfo.response = {};
-  meetingInfo.response.meetingEndUrl = meetingEndUrl;
-
-  await res.status(200).json(meetingInfo);
+  await res.status(200).json(response);
 };
 
 const endDel = async (req, res) => {
@@ -163,13 +131,12 @@ const endDel = async (req, res) => {
 
   if (p.meetingId === undefined || p.moderatorPW === undefined) return res.sendStatus(400);
 
-  const meetingEndUrl = api.administration.end(p.meetingId, p.moderatorPW);
+  const meetingEndUrl = bbb.api.administration.end(p.meetingId, p.moderatorPW);
 
   try {
     const xmlResponse = await axios.get(meetingEndUrl);
-    const result = await xml2js.parseStringPromise(xmlResponse.data, {
-      mergeAttrs: true
-    });
+    const result = await xml2js.parseStringPromise(xmlResponse.data, { mergeAttrs: true, explicitArray: false });
+
     res.status(200).json(result.response);
   } catch (error) {
     res.status(500).json('Could not end meeting');

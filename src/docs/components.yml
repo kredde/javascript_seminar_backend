@@ -81,16 +81,23 @@ components:
         groups:
           type: array
           items:
-            type: array
-            items:
-              type: string
-              description: student ids
+            type: object
+            properties:
+              participants:
+                type: array
+                items:
+                  type: string
+                  description: student ids
+              room:
+                type: object
         taskList:
           type: array
           items:
             type: string
         duration:
           type: number
+        joinUrl:
+          type: string
     Project:
       type: object
       properties:

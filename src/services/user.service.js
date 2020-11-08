@@ -3,6 +3,7 @@ const projectService = require('./project.service');
 const { User, Class } = require('../models');
 const ApiError = require('../utils/ApiError');
 const meetingService = require('./meeting.service');
+const bbbService = require('./bbb.service');
 
 /**
  * Create a user
@@ -114,6 +115,29 @@ const getMeetings = async (user) => {
   return meetings.flat();
 };
 
+const getMeeting = async (user, id) => {
+  const meetings = await getMeetings(user);
+  const meeting = meetings.find((m) => String(m._id) === id);
+
+  if (!meeting) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'meeting not found');
+  }
+
+  const group = meeting.groups.find((gr) => gr.participants.map((st) => st._id).indexOf(user._id) >= 0);
+
+  if (!group) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'group not found');
+  }
+
+  const response = bbbService.join({
+    meetingId: group.room.meetingId,
+    fullName: `${user.firstName} ${user.lastName}`,
+    password: user.role === 'teacher' ? group.room.moderatorPW : group.room.attendeePW
+  });
+
+  return { ...meeting.toJSON(), joinUrl: response.meetingJoinUrl || 'asd' };
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -123,5 +147,6 @@ module.exports = {
   deleteUserById,
   getStudents,
   addStudentInformation,
-  getMeetings
+  getMeetings,
+  getMeeting
 };
