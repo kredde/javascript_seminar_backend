@@ -77,7 +77,7 @@ const updateProjectById = async (id, teacher, body) => {
 };
 
 const deleteProjectById = async (id, teacher) => {
-  const project = await getProjectById(id,teacher);
+  const project = await getProjectById(id, teacher);
   if (!project) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
   }
