@@ -86,6 +86,8 @@ const join = (obj) => {
     guest: obj.guest
   };
 
+  Object.keys(kwParams).forEach((key) => kwParams[key] === undefined && delete kwParams[key]);
+
   // api module itself is responsible for constructing URLs
   // password is either moderatorPW/attendeePW
   const meetingJoinUrl = bbb.api.administration.join(obj.fullName, obj.meetingId, obj.password, kwParams);
