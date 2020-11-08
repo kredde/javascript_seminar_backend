@@ -48,7 +48,7 @@ const createStudentNotification = (token) => ({
   text: `Activate your new student account by clicking the following link`,
   cta: {
     text: `Click here to activate account`,
-    url: `${config.frontendHost}/callback?token=${token}`
+    url: `${config.frontendHost}/callback?token=${token.access.token}`
   },
   type: 'all'
 });

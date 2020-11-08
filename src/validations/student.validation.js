@@ -21,7 +21,19 @@ const updateStudent = {
     .min(1)
 };
 
+const createStudent = {
+  body: Joi.object()
+    .keys({
+      password: Joi.string(),
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required()
+    })
+    .min(1)
+};
+
 module.exports = {
   getStudent,
-  updateStudent
+  updateStudent,
+  createStudent
 };

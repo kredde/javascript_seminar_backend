@@ -1,11 +1,18 @@
 const httpStatus = require('http-status');
+const { v4 } = require('uuid');
+
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { createStudentNotification } = require('../utils/notifications');
 const { userService, tokenService, notificationService, studentService } = require('../services');
 
 const createStudent = catchAsync(async (req, res) => {
-  const student = await userService.createUser({ ...req.body, role: 'student', createdBy: req.user.id });
+  const student = await userService.createUser({
+    ...req.body,
+    role: 'student',
+    createdBy: req.user.id,
+    password: v4()
+  });
   const tokens = await tokenService.generateAuthTokens(student);
   const receiverNotification = createStudentNotification(tokens);
   await notificationService.sendNotification(student._id, receiverNotification);
