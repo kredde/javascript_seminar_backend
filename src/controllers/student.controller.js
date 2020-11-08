@@ -15,7 +15,8 @@ const createStudent = catchAsync(async (req, res) => {
     // password: v4()
   });
   const tokens = await tokenService.generateAuthTokens(student);
-  const receiverNotification = createStudentNotification(tokens);
+  const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
+  const receiverNotification = createStudentNotification(tokens, resetPasswordToken);
   await notificationService.sendNotification(student._id, receiverNotification);
   res.status(httpStatus.CREATED).send({ student, tokens });
 });

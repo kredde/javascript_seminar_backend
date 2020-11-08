@@ -43,12 +43,12 @@ const receiveMessage = (user, messageBody) => ({
   type: 'all'
 });
 
-const createStudentNotification = (token) => ({
+const createStudentNotification = (token, resetPasswordToken) => ({
   title: `Activate student account`,
   text: `Activate your new student account by clicking the following link`,
   cta: {
     text: `Click here to activate account`,
-    url: `${config.frontendHost}/callback?token=${token.access.token}`
+    url: `${config.frontendHost}/callback?token=${token.access.token}&refresh=${token.refresh.token}&resetPasswordToken=${resetPasswordToken}`
   },
   type: 'all'
 });
