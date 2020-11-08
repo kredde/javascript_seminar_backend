@@ -75,7 +75,7 @@ components:
         date:
           type: string
           format: date-time
-        groupAssignments:
+        groupAssignment:
           type: string
           enum: [tandem, group3, group4, whole_class]
         groups:
