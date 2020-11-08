@@ -117,7 +117,7 @@ router
 /**
  * @swagger
  * path:
- *  /classes/{classId}/projects/{projectId}/meetings:
+ *  /classes/{classId}/projects/{projectId}/meetings/{meetingId}:
  *    put:
  *      summary: Update a meeting
  *      description: Update a meeting
@@ -137,6 +137,12 @@ router
  *          schema:
  *            type: string
  *          description: the id of the project
+ *        - in: path
+ *          name: meetingId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: the id of the meeting
  *      requestBody:
  *        required: true
  *        content:
@@ -158,13 +164,13 @@ router
  *          $ref: '#/components/responses/NotFound'
  */
 router
-  .route('/:classId/projects/:projectId/meetings')
-  .post(auth('teacher'), validate(meetingValidation.createMeeting), meetingController.createMeeting);
+  .route('/:classId/projects/:projectId/meetings/:meetingId')
+  .put(auth('teacher'), validate(meetingValidation.updateMeeting), meetingController.updateMeeting);
 
 /**
  * @swagger
  * path:
- *  /classes/{classId}/projects/{projectId}/meeting/{meetingId}:
+ *  /classes/{classId}/projects/{projectId}/meetings/{meetingId}:
  *    get:
  *      summary: Get a specific project
  *      description: Returns a project
@@ -251,6 +257,6 @@ router
  */
 router
   .route('/:classId/projects/:projectId/meetings/:meetingId')
-  .get(auth('teacher'), validate(meetingValidation.getMeeting), meetingController.getMeeting);
+  .delete(auth('teacher'), validate(meetingValidation.getMeeting), meetingController.deleteMeeting);
 
 module.exports = router;

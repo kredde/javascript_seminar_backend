@@ -18,6 +18,8 @@ const createMeeting = {
 
 const getMeeting = {
   params: Joi.object().keys({
+    projectId: Joi.string().custom(objectId),
+    classId: Joi.string().custom(objectId),
     meetingId: Joi.string().custom(objectId)
   })
 };
@@ -38,7 +40,7 @@ const updateMeeting = {
   body: Joi.object().keys({
     id: Joi.string(),
     date: Joi.date(),
-    project: Joi.string,
+    project: Joi.string().custom(objectId),
     groupAssignment: Joi.any().allow(...['tandem', 'group3', 'group4', 'whole_class']),
     groups: Joi.array().items(Joi.object()),
     taskList: Joi.array().items(Joi.string()),
