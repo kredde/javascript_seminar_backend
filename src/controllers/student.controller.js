@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { v4 } = require('uuid');
+// const { v4 } = require('uuid');
 
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
@@ -10,8 +10,9 @@ const createStudent = catchAsync(async (req, res) => {
   const student = await userService.createUser({
     ...req.body,
     role: 'student',
-    createdBy: req.user.id,
-    password: v4()
+    createdBy: req.user.id
+    // TODO remove later
+    // password: v4()
   });
   const tokens = await tokenService.generateAuthTokens(student);
   const receiverNotification = createStudentNotification(tokens);
