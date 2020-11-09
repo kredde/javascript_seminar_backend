@@ -139,6 +139,47 @@ router
 /**
  * @swagger
  * path:
+ *  /classes/{classId}/projects/{projectId}:
+ *    delete:
+ *      summary: delete a specific project by Id
+ *      description: delete a project
+ *      tags: [Projects]
+ *      security:
+ *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: classId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: the class id
+ *        - in: path
+ *          name: projectId
+ *          required: true
+ *          schema:
+ *            type: string
+ *            description: the projectId id
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/Project'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+router
+  .route('/:classId/projects/:projectId')
+  .delete(auth('teacher'), validate(projectValidation.deleteProject), projectController.deleteProject);
+
+/**
+ * @swagger
+ * path:
  *  /classes/{classId}/projects/{projectId}/accept-invitation:
  *    post:
  *      summary: Accept an invitation to a project

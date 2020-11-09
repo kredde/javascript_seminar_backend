@@ -29,6 +29,13 @@ const getProject = {
   })
 };
 
+const deleteProject = {
+  params: Joi.object().keys({
+    classId: Joi.string().custom(objectId),
+    projectId: Joi.string().custom(objectId)
+  })
+};
+
 const getAllMessages = {
   params: Joi.object().keys({
     projectId: Joi.string().custom(objectId),
@@ -52,6 +59,7 @@ module.exports = {
   createProject,
   updateProject,
   getProject,
+  deleteProject,
   getAllMessages,
   addMessage
 };
