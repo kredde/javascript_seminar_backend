@@ -6,7 +6,7 @@ module.exports.createGroups = async (meeting) => {
   const firstClass = await Class.findById(project.classes[0]).populate('students');
   const secondClass = await Class.findById(project.classes[1]).populate('students');
 
-  if (meeting.groupsAssignment === 'whole_class') {
+  if (meeting.groupAssignment === 'whole_class') {
     return [(firstClass.students || []).concat(secondClass.students || [])];
   }
 
@@ -25,7 +25,7 @@ module.exports.createGroups = async (meeting) => {
   let j = 0;
 
   while (i + j < length) {
-    if ((i + j) % groupsAssignments[meeting.groupsAssignment] === 0 && i + j > 0) {
+    if ((i + j) % groupsAssignments[meeting.groupAssignment] === 0 && i + j > 0) {
       groups.push(currentGroup);
       currentGroup = [];
     }
