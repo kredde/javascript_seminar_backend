@@ -11,7 +11,12 @@ const createMeeting = {
     groupAssignment: Joi.any()
       .allow(...['tandem', 'group3', 'group4', 'whole_class'])
       .required(),
-    taskList: Joi.array().items(Joi.string()),
+    taskList: Joi.object().keys({
+      quizzes: Joi.array(),
+      aliases: Joi.array(),
+      drawits: Joi.array(),
+      simpleTasks: Joi.array()
+    }),
     duration: Joi.number()
   })
 };
@@ -43,7 +48,12 @@ const updateMeeting = {
     project: Joi.string().custom(objectId),
     groupAssignment: Joi.any().allow(...['tandem', 'group3', 'group4', 'whole_class']),
     groups: Joi.array().items(Joi.object()),
-    taskList: Joi.array().items(Joi.string()),
+    taskList: Joi.object().keys({
+      quizzes: Joi.array(),
+      aliases: Joi.array(),
+      drawits: Joi.array(),
+      simpleTasks: Joi.array()
+    }),
     duration: Joi.number(),
     joinUrl: Joi.string()
   })

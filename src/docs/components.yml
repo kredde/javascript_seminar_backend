@@ -91,9 +91,25 @@ components:
               room:
                 type: object
         taskList:
-          type: array
-          items:
-            type: string
+          type: object
+          properties:
+            quizzes:
+              items:
+                type: object
+            aliases:
+              items:
+                type: object
+            drawits:
+              items:
+                type: object
+            simpleTasks:
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
         duration:
           type: number
         joinUrl:

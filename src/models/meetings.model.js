@@ -21,7 +21,12 @@ const meetingSchema = mongoose.Schema({
       room: { type: mongoose.Schema.ObjectId, ref: 'Room' }
     }
   ],
-  taskList: [String],
+  taskList: {
+    quizzes: [{ type: mongoose.Schema.ObjectId, ref: 'QuizGame' }],
+    aliases: [{ type: mongoose.Schema.ObjectId, ref: 'Alias' }],
+    drawits: [{ type: mongoose.Schema.ObjectId, ref: 'DrawIt' }],
+    simpleTasks: [{ name: String, desription: String }]
+  },
   duration: Number
 });
 

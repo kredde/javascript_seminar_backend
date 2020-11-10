@@ -27,11 +27,20 @@ const createMeeting = async (meetingBody) => {
 };
 
 const getMeetingById = async (id) => {
-  return Meeting.findOne({ _id: id }).populate('groups.participants').populate('groups.room');
+  return Meeting.findOne({ _id: id })
+    .populate('groups.participants')
+    .populate('groups.room')
+    .populate('taskList.quizzes')
+    .populate('taskList.drawits')
+    .populate('taskList.aliases');
 };
-
 const getMeetings = async (project) => {
-  return Meeting.find({ project }).populate('groups.participants').populate('groups.room');
+  return Meeting.find({ project })
+    .populate('groups.participants')
+    .populate('groups.room')
+    .populate('taskList.quizzes')
+    .populate('taskList.drawits')
+    .populate('taskList.aliases');
 };
 
 const updateMeetingById = async (meetingId, updateBody) => {
