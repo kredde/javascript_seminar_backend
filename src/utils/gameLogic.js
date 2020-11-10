@@ -45,6 +45,7 @@ module.exports = {
 
 async function handleJoinGameMessage(data, socket) {
   if (connectedUsers.has(socket.id)) {
+    connectedUsers.delete(socket.id);
     console.log("User has already joined");
     return;
   }
@@ -68,14 +69,16 @@ async function handleJoinGameMessage(data, socket) {
     // Update Gamesession
     let currentGame = openSessions.get(data.sessionId);
     Promise.resolve(currentGame).then(game => {
-
       //player wants to join other game -> not possible
-      if (game.taskId && game.taskId != data.taskId) {
+      if (game.taskId && game.taskId !== data.taskId) {
         socket.disconnect();
         connectedUsers.delete(socket.id);
-      }
-      else {
-        game.players.push(data.playerName);
+      } else {
+        // Add playername if not already connected.
+        // Only when joining with the same username / multiple devices
+        if (!game.players.includes(data.playerName)) {
+          game.players.push(data.playerName);
+        }
         // Send new State in Room to every listener
         io.to(data.sessionId).emit('updateGame', game);
       }
@@ -88,6 +91,10 @@ function handleDisconnect(socket) {
     let sessionId = connectedUsers.get(socket.id).id;
     let playername = connectedUsers.get(socket.id).name;
     let sessionGame = openSessions.get(sessionId);
+    if (sessionGame === undefined) {
+      connectedUsers.delete(socket.id);
+      return;
+    }
     sessionGame.players = sessionGame.players.filter(name => name !== playername);
     if (sessionGame.gameType === "truthlie" && sessionGame.state === "lobby" && !sessionGame.players.includes(sessionGame.currentPlayer)) {
       if (sessionGame.players.length > sessionGame.played.length) {
@@ -100,15 +107,22 @@ function handleDisconnect(socket) {
 
     // TODO do not delete game, save for one hour? --> needs more info in game object!
     if (sessionGame.players.length == 0) {
-      openSessions.delete(sessionId);
-      console.log('Closing session: ' + sessionId);
+      console.log('Closing session: ' + sessionId + " in 5 minutes");
+      setTimeout((sessionId) => {
+        let currentSession = openSessions.get(sessionId);
+        if (currentSession && currentSession.players.length > 0) {
+          console.log("Session " + sessionId + " not closed, still active players!");
+        } else {
+          openSessions.delete(sessionId);
+          console.log("Closed session after 5 minutes " + sessionId);
+        }
+      }, 1000 * 60 * 5, sessionId);
     }
 
     connectedUsers.delete(socket.id);
   } catch (error) {
     console.log("error handling disconnect event for socket: ", socket.id, error);
   }
-
 }
 
 function createSession(sessionId, gameType, playerName, taskId) {
@@ -134,7 +148,9 @@ async function createQuizSession(sessionId, gameType, playerName, taskId) {
     getSolution: false,
     countDownStarted: false,
     quizOver: false,
-    taskId: taskId
+    taskId: taskId,
+    timeleft: 180,
+    timelimit: 180
   };
   return session;
 }
@@ -180,8 +196,8 @@ async function createTruthlieSession(sessionId, gameType, playerName, taskId) {
     lie: '', // False statement
     name: '', // name of the game
     state: 'lobby',
-    timelimit: 15,
-    timeleft: 15,
+    timelimit: 60,
+    timeleft: 60,
     next: true
   };
   return session;
@@ -305,15 +321,20 @@ function handleQuizUpdateMessage(data) {
     let hex = /[0-9A-Fa-f]{6}/g;
     if (data.taskId == null || data.taskId == undefined || data.taskId == '' || !hex.test(data.taskId)) {
       console.log('Invalid Task ID, sending mock quiz');
-      let quiz = { id: taskId, name: "This is a mock quiz!", description: "The Quiz you were looking for could not be found...", questions: [] };
+      let quiz = { id: taskId, name: "This is a mock quiz!", description: "The Quiz you were looking for could not be found...", questions: [], duration: 600 };
       let q = {
         question: "What's the matching translation?",
         answers: ["tree", "Baum", "Katze", "cat", "Game", "Spiel"],
-        correctAnswers: [[0, 1], [2, 3], [4, 5]],
+        correctAnswers: [
+          [0, 1],
+          [2, 3],
+          [4, 5]
+        ],
         selectedAnswers: [],
         type: "match",
         leftAnswers: ["tree", "Baum", "Katze", "cat", "Game", "Spiel"],
-        rightAnswers: []
+        rightAnswers: [],
+        timeleft: quiz.duration
       };
       data.quizes.push(q);
       let q2 = {
