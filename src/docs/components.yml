@@ -219,6 +219,147 @@ components:
         message:
           type: string
 
+    QuizGame:
+      type: object
+      properties:
+        name: 
+          type: string
+          example: name of quiz
+        description:
+          type: string
+          example: optional description
+        questions:
+          type: array
+          items: 
+            type: string
+          example: ["5f8589d99258137114baed53"]
+        teacher:
+          $ref: '#/components/schemas/User'
+          example: id
+        duration:
+          type: number
+          example: 30
+
+    QuizGames:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/QuizGame'
+    
+    FullQuizGame:
+      type: object
+      properties:
+        name: 
+          type: string
+          example: name of quiz
+        description:
+          type: string
+          example: optional description
+        questions:
+          type: array
+          items: 
+            type: object
+            $ref: '#/components/schemas/QuizQuestion'
+        teacher:
+          $ref: '#/components/schemas/User'
+          example: id
+        duration:
+          type: number
+          example: 30
+
+    QuizQuestion:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 5f8589d99258137114baed53
+        type:
+          type: string
+          example: select
+        name: 
+          type: string
+          example: name of the question
+        question:
+          type: string
+          example: this is the question itself
+        teacher:
+          $ref: '#/components/schemas/User'
+          example: id
+        options:
+          type: array
+          items: 
+            type: string
+          example: ["option1", "option2", "option3", "option4"]
+       answer: 
+         type: array
+          items:
+            type: numbers
+         examples: [1,2]
+
+    DrawItGame:
+      type: object
+      properties:
+        _id: 
+          type: string
+          example: 5f8589d99258137114baed53
+        name:
+          type: string
+          example: name of game
+        description:
+          type: string
+          example: optional description
+        words:
+          type: array
+          items: 
+            type: string
+          example: ["array", "of", "words"]
+        duration:
+          type: number
+          example: 30
+        teacher:
+          $ref: '#/components/schemas/User'
+          example: id
+
+    DrawItGames:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/DrawItGame'
+
+    AliasGame:
+      type: object
+      properties:
+        _id: 
+          type: string
+          example: 5f8589d99258137114baed53
+        name:
+          type: string
+          example: name of game
+        description:
+          type: string
+          example: optional description
+        words:
+          type: array
+          items: 
+            type: string
+          example: ["array", "of", "words"]
+        duration:
+          type: number
+          example: 30
+        teacher:
+          $ref: '#/components/schemas/User'
+          example: id
+
+    AliasGames:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/AliasGame'
+        
+        
+
+
+
   responses:
     DuplicateEmail:
       description: Email already taken

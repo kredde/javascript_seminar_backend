@@ -18,9 +18,17 @@ const router = express.Router();
  *  /games/quiz/quizzes:
  *    get:
  *      summary: Get quizzes
+ *      description: Get all quizzes created by a teacher
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      responses:
+ *        "200": 
+ *          description: all available games
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/QuizGames'
  */
 router.get(
   '/quiz/quizzes',
@@ -37,9 +45,23 @@ router.get(
  *  /games/quiz/quizzes/{quizId}:
  *    get:
  *      summary: Get quiz
+ *      description: Get quiz with that id including questions
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of quiz
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the quiz 
+ *          schema: 
+ *            $ref: '#/components/schemas/FullQuizGame'
+ *         "404": 
+ *            description: no game with that id 
  */
 router.get(
   '/quiz/quizzes/:id',
@@ -68,10 +90,26 @@ router.get(
  * path:
  *  /games/quiz/quizzes/{quizId}/questions:
  *    get:
- *      summary: Get questions
+ *      summary: Get questions for a quiz
+ *      desctiption: Get all questions for quiz with the id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of quiz
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: Questions
+ *          schema: 
+ *            type: array
+ *             items:
+ *                $ref: '#/components/schemas/QuizQuestion'
+ *        "404": 
+ *          description: No quiz with that id
  */
 router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
   QuizGame.findById(req.params.id, (err, game) => {
@@ -94,10 +132,18 @@ router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
  * path:
  *  /games/quiz/questions:
  *    get:
- *      summary: Get questions
+ *      summary: Get all questions
+ *      desctiption: Get all questions created by a teacher
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      responses:
+ *        "200": 
+ *          description: Questions
+ *          schema: 
+ *            type: array
+ *             items:
+ *                $ref: '#/components/schemas/QuizQuestion'
  */
 router.get(
   '/quiz/questions',
@@ -114,9 +160,23 @@ router.get(
  *  /games/quiz/question/{questionId}:
  *    get:
  *      summary: Get question
+ *      desctiption: get question with that id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of question
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the question 
+ *          schema: 
+ *            $ref: '#/components/schemas/QuizQuestion'
+ *        "404": 
+ *          description: no question with that id 
  */
 router.get('/quiz/question/:id', auth(), (req, res) => {
   QuizQuestion.findById(req.params.id, (err, qst) => {
@@ -136,6 +196,28 @@ router.get('/quiz/question/:id', auth(), (req, res) => {
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                description:
+ *                  type: string
+ *                questions:
+ *                  type: object
+ *                duration:
+ *                  type: number
+ *      responses:
+ *        "200": 
+ *          description: the quiz was created 
+ *          schema: 
+ *            $ref: '#/components/schemas/QuizGame'
+ *        "500": 
+ *          description: could not create quiz              
  */
 router.post('/quiz/create', auth(), (req, res) => {
   const quiz = req.body;
@@ -154,10 +236,34 @@ router.post('/quiz/create', auth(), (req, res) => {
  * path:
  *  /games/quiz/create/question/create:
  *    post:
- *      summary: Create quiz
+ *      summary: Create quiz question
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                type:
+ *                  type: string
+ *                name:
+ *                  type: string
+ *                question:
+ *                  type: string
+ *                options:
+ *                  type: object
+ *                answer:
+ *                  type: object
+ *      responses:
+ *        "200": 
+ *          description: the question was created 
+ *          schema: 
+ *            $ref: '#/components/schemas/QuizQuestion'
+ *        "500": 
+ *          description: could not create question           
  */
 router.post('/quiz/question/create', auth(), (req, res) => {
   const question = req.body;
@@ -180,6 +286,25 @@ router.post('/quiz/question/create', auth(), (req, res) => {
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of quiz
+ *         required: true
+ *         type: string  
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/QuizGame'
+ *      responses:
+ *        "200": 
+ *          description: the quiz was updated 
+ *          schema: 
+ *            $ref: '#/components/schemas/QuizGame'
+ *        "404": 
+ *          description: could not update quiz
  */
 router.put('/quiz/:id', auth(), (req, res) => {
   QuizGame.findByIdAndUpdate(
@@ -205,11 +330,30 @@ router.put('/quiz/:id', auth(), (req, res) => {
  * @swagger
  * path:
  *  /games/quiz/question/{questionId}:
- *    get:
+ *    put:
  *      summary: Update question
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of question
+ *         required: true
+ *         type: string  
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/QuizQuestion'
+ *      responses:
+ *        "200": 
+ *          description: the question was updated 
+ *          schema: 
+ *            $ref: '#/components/schemas/QuizQuestion'
+ *        "404": 
+ *          description: could not update question
  */
 router.put('/quiz/question/:id', auth(), (req, res) => {
   QuizQuestion.findByIdAndUpdate(
@@ -238,9 +382,21 @@ router.put('/quiz/question/:id', auth(), (req, res) => {
  *  /games/quiz/{quizId}:
  *    delete:
  *      summary: Delete quiz
+ *      description: delete question with specified id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of question
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the quiz deleted successfully
+ *        "404": 
+ *           description: no quiz with that id 
  */
 router.delete('/quiz/:id', auth(), (req, res) => {
   QuizGame.deleteOne({ _id: req.params.id }, (err, quiz) => {
@@ -258,9 +414,21 @@ router.delete('/quiz/:id', auth(), (req, res) => {
  *  /games/quiz/question/{questionId}:
  *    delete:
  *      summary: Delete question
+ *      description: delete question with specified id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of question
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the question deleted successfully
+ *        "404": 
+ *           description: no question with that id 
  */
 router.delete('/quiz/question/:id', auth(), (req, res) => {
   QuizQuestion.deleteOne({ _id: req.params.id }, (err, qst) => {
@@ -279,9 +447,17 @@ router.delete('/quiz/question/:id', auth(), (req, res) => {
  *  /games/drawit/games:
  *    get:
  *      summary: Get drawit games
+ *      description: Get all draw it games created by a teacher
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      responses:
+ *        "200": 
+ *          description: all available games
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/DrawItGames'
  */
 router.get(
   '/drawit/games',
@@ -301,6 +477,19 @@ router.get(
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of game
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the game 
+ *          schema: 
+ *            $ref: '#/components/schemas/DrawItGame'
+ *        "404": 
+ *           description: no game with that id 
  */
 router.get('/drawit/:id', (req, res) => {
   DrawitGame.findById(req.params.id, (err, game) => {
@@ -316,10 +505,32 @@ router.get('/drawit/:id', (req, res) => {
  * path:
  *  /games/drawit/create:
  *    post:
- *      summary: Create drawit
+ *      summary: Create drawit game
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                description:
+ *                  type: string
+ *                words:
+ *                  type: object
+ *                duration:
+ *                  type: number
+ *      responses:
+ *        "200": 
+ *          description: the game was created 
+ *          schema: 
+ *            $ref: '#/components/schemas/DrawItGame'
+ *        "500": 
+ *          description: could not create game       
  */
 router.post('/drawit/create', auth(), (req, res) => {
   const game = req.body;
@@ -343,6 +554,25 @@ router.post('/drawit/create', auth(), (req, res) => {
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of game
+ *         required: true
+ *         type: string  
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/DrawItGame'
+ *      responses:
+ *        "200": 
+ *          description: the game was updated 
+ *          schema: 
+ *            $ref: '#/components/schemas/DrawItGame'
+ *        "404": 
+ *          description: could not update game
  */
 router.put('/drawit/:id', auth(), (req, res) => {
   DrawitGame.findByIdAndUpdate(
@@ -369,10 +599,22 @@ router.put('/drawit/:id', auth(), (req, res) => {
  * path:
  *  /games/drawit/{drawitId}:
  *    delete:
- *      summary: Delete drawit
+ *      summary: Delete drawit game
+ *      description: Delete game with that id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of game
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the game deleted successfully
+ *        "404": 
+ *           description: no game with that id 
  */
 router.delete('/drawit/:id', auth(), (req, res) => {
   DrawitGame.deleteOne({ _id: req.params.id }, (err, game) => {
@@ -389,10 +631,18 @@ router.delete('/drawit/:id', auth(), (req, res) => {
  * path:
  *  /games/alias/games:
  *    get:
- *      summary: Get aliasses
+ *      summary: Get alias games
+ *      description: get all alias games created by a teacher
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      responses:
+ *        "200": 
+ *          description: all available games
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/AliasGames'
  */
 router.get(
   '/alias/games',
@@ -409,9 +659,23 @@ router.get(
  *  /games/alias/{aliasId}:
  *    get:
  *      summary: Get alias
+ *      description: Get alias game with specified id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of game
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the game 
+ *          schema: 
+ *            $ref: '#/components/schemas/AliasGame'
+ *        "404": 
+ *           description: no game with that id 
  */
 router.get('/alias/:id', (req, res) => {
   AliasGame.findById(req.params.id, (err, game) => {
@@ -431,6 +695,28 @@ router.get('/alias/:id', (req, res) => {
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                description:
+ *                  type: string
+ *                words:
+ *                  type: object
+ *                duration:
+ *                  type: number
+ *      responses:
+ *        "200": 
+ *          description: the game was created 
+ *          schema: 
+ *            $ref: '#/components/schemas/AliasGame'
+ *        "500": 
+ *          description: could not create game
  */
 router.post('/alias/create', auth(), (req, res) => {
   const game = req.body;
@@ -450,6 +736,25 @@ router.post('/alias/create', auth(), (req, res) => {
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of game
+ *         required: true
+ *         type: string  
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AliasGame'
+ *      responses:
+ *        "200": 
+ *          description: the game was updated 
+ *          schema: 
+ *            $ref: '#/components/schemas/AliasGame'
+ *        "404": 
+ *          description: could not update game
  */
 router.put('/alias/:id', auth(), (req, res) => {
   AliasGame.findByIdAndUpdate(
@@ -474,9 +779,21 @@ router.put('/alias/:id', auth(), (req, res) => {
  *  /games/alias/{aliasId}:
  *    delete:
  *      summary: Delete alias
+ *      description: delete alias game with that id
  *      tags: [Games]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         description: pass id of game
+ *         required: true
+ *         type: string  
+ *      responses:
+ *        "200": 
+ *          description: the game deleted successfully
+ *        "404": 
+ *           description: no game with that id 
  */
 router.delete('/alias/:id', auth(), (req, res) => {
   AliasGame.deleteOne({ _id: req.params.id }, (err, game) => {
