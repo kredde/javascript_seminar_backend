@@ -73,7 +73,7 @@ module.exports = router;
  *               example:
  *                 name: Class 1
  *                 language: en
- *                 subject: mathematics
+ *                 subject: math
  *                 country: DE
  *                 projectDuration: 10
  *                 meetingFrequency: 2

@@ -46,7 +46,18 @@ const updateStudent = async (userId, studentId, updateBody) => {
   return student;
 };
 
+const deleteStudent = async (userId, studentId) => {
+  const student = await getStudent(userId, studentId);
+  if (!student) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  await student.remove();
+  return student;
+};
+
 module.exports = {
   getStudent,
-  updateStudent
+  updateStudent,
+  deleteStudent
 };
