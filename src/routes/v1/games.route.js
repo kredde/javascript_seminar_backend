@@ -461,9 +461,12 @@ router.put('/alias/:id', auth(), (req, res) => {
       teacher: req.user.id,
       duration: req.body.duration
     },
+    { new: true },
     (err, game) => {
-      if (game == null) return res.sendStatus(404);
-      res.sendStatus(200);
+      if (err || game == null) {
+        return res.sendStatus(404);
+      }
+      res.json(game.toJSON());
     }
   );
 });
