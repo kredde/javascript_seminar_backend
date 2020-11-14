@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const bbbService = require('./bbb.service');
-const { Meeting, Room } = require('../models');
+const { Meeting, Room, Project } = require('../models');
 
 const ApiError = require('../utils/ApiError');
 const { createGroups } = require('../utils/create-groups');
@@ -26,21 +26,54 @@ const createMeeting = async (meetingBody) => {
   return meeting;
 };
 
-const getMeetingById = async (id) => {
-  return Meeting.findOne({ _id: id })
+const getMeetingById = async (id, userId) => {
+  const meeting = await Meeting.findOne({ _id: id })
     .populate('groups.participants')
     .populate('groups.room')
     .populate('taskList.quizzes')
     .populate('taskList.drawits')
     .populate('taskList.aliases');
+
+  const project = await Project.findById(meeting.project).populate('classes');
+  const myClass = project.classes.find((_class) => String(_class.teacher) === String(userId));
+  if (myClass) {
+    const groups = meeting.groups.map((group) => {
+      const newGroup = { ...group.toJSON() };
+      newGroup.participants = newGroup.participants.map((student) => ({
+        ...student,
+        isMyClass: myClass.students.indexOf(String(student.id)) >= 0
+      }));
+      return newGroup;
+    });
+    return { ...meeting.toJSON(), groups };
+  }
+  return meeting;
 };
-const getMeetings = async (project) => {
-  return Meeting.find({ project })
+const getMeetings = async (projectId, userId) => {
+  const meetings = await Meeting.find({ project: projectId })
     .populate('groups.participants')
     .populate('groups.room')
     .populate('taskList.quizzes')
     .populate('taskList.drawits')
     .populate('taskList.aliases');
+
+  const project = await Project.findById(projectId).populate('classes');
+  const myClass = project.classes.find((_class) => String(_class.teacher) === String(userId));
+
+  if (myClass) {
+    return meetings.map((meeting) => {
+      const groups = meeting.groups.map((group) => {
+        const newGroup = { ...group.toJSON() };
+        newGroup.participants = newGroup.participants.map((student) => ({
+          ...student,
+          isMyClass: myClass.students.indexOf(String(student.id)) >= 0
+        }));
+        return newGroup;
+      });
+      return { ...meeting.toJSON(), groups };
+    });
+  }
+  return meetings;
 };
 
 const updateMeetingById = async (meetingId, updateBody) => {

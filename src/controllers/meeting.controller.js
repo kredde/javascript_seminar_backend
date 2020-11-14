@@ -9,7 +9,7 @@ const createMeeting = catchAsync(async (req, res) => {
 });
 
 const getMeeting = catchAsync(async (req, res) => {
-  const meeting = await meetingService.getMeetingById(req.params.meetingId);
+  const meeting = await meetingService.getMeetingById(req.params.meetingId, req.user._id);
   if (!meeting) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Meeting not found');
   }
@@ -17,7 +17,7 @@ const getMeeting = catchAsync(async (req, res) => {
 });
 
 const getMeetings = catchAsync(async (req, res) => {
-  const meetings = await meetingService.getMeetings(req.params.projectId);
+  const meetings = await meetingService.getMeetings(req.params.projectId, req.user._id);
   res.send(meetings);
 });
 
