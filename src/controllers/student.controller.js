@@ -34,8 +34,14 @@ const updateStudent = catchAsync(async (req, res) => {
   res.send(student);
 });
 
+const deleteStudent = catchAsync(async (req, res) => {
+  const student = await studentService.deleteStudent(req.user._id, req.params.studentId, req.body);
+  res.send(student);
+});
+
 module.exports = {
   createStudent,
   getStudent,
-  updateStudent
+  updateStudent,
+  deleteStudent
 };

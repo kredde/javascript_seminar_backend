@@ -76,6 +76,42 @@ const getAllClasses = async (teacher) => {
   return _classes;
 };
 
+function pre(level) {
+  switch (level) {
+    case 'A1':
+      return 'A1';
+    case 'A2':
+      return 'A1';
+    case 'B1':
+      return 'A2';
+    case 'B2':
+      return 'B1';
+    case 'C1':
+      return 'B2';
+    case 'C2':
+      return 'C1';
+    default:
+  }
+}
+
+function suc(level) {
+  switch (level) {
+    case 'A1':
+      return 'A2';
+    case 'A2':
+      return 'B1';
+    case 'B1':
+      return 'B2';
+    case 'B2':
+      return 'C1';
+    case 'C1':
+      return 'C2';
+    case 'C2':
+      return 'C2';
+    default:
+  }
+}
+
 /**
  * find a set of similar classes using the current class
  *
@@ -84,6 +120,7 @@ const getAllClasses = async (teacher) => {
  * @param {ObjectId} teacher
  * @returns {Promise<[Class]>}
  */
+
 const findSimilarClasses = async (currentClass, teacher, query) => {
   const classQuery = {
     teacher: { $ne: teacher },
@@ -92,8 +129,11 @@ const findSimilarClasses = async (currentClass, teacher, query) => {
     level: { $gte: Math.min(1, currentClass.level - 1), $lte: Math.max(currentClass.level + 1, 10) }
   };
 
+  // eslint-disable-next-line no-empty
   if (currentClass.languageLevel) {
-    classQuery.languageLevel = currentClass.languageLevel;
+    classQuery.languageLevel = {
+      $in: [pre(currentClass.languageLevel), currentClass.languageLevel, suc(currentClass.languageLevel)]
+    };
   }
 
   if (query.projectDuration) {

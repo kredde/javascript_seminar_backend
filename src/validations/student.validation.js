@@ -32,8 +32,16 @@ const createStudent = {
     .min(1)
 };
 
+const deleteStudent = {
+  params: Joi.object().keys({
+    userId: Joi.string().custom(objectId),
+    studentId: Joi.string().custom(objectId)
+  })
+};
+
 module.exports = {
   getStudent,
   updateStudent,
-  createStudent
+  createStudent,
+  deleteStudent
 };

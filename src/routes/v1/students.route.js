@@ -150,4 +150,38 @@ router.route('/:studentId').get(auth(), validate(studentValidation.getStudent), 
  */
 router.route('/:studentId').patch(auth(), validate(studentValidation.updateStudent), studentController.updateStudent);
 
+/**
+ * @swagger
+ * path:
+ *  /students/{studentId}:
+ *    delete:
+ *      summary: delete a student
+ *      description: delete a student
+ *      tags: [Students]
+ *      security:
+ *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: studentId
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: student id
+ *      responses:
+ *        "200":
+ *          description: OK
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/User'
+ *        "401":
+ *          $ref: '#/components/responses/Unauthorized'
+ *        "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *        "404":
+ *          $ref: '#/components/responses/NotFound'
+ */
+
+router.route('/:studentId').delete(auth(), validate(studentValidation.deleteStudent), studentController.deleteStudent);
+
 module.exports = router;
