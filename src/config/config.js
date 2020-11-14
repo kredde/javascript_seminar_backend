@@ -73,6 +73,7 @@ module.exports = {
   },
   email: {
     smtp: {
+      service: 'gmail',
       host: envVars.SMTP_HOST,
       port: envVars.SMTP_PORT,
       auth: {
