@@ -126,7 +126,7 @@ const findSimilarClasses = async (currentClass, teacher, query) => {
     teacher: { $ne: teacher },
     subject: currentClass.subject,
     language: currentClass.language,
-    level: { $gte: Math.min(1, currentClass.level - 1), $lte: Math.max(currentClass.level + 1, 10) }
+    level: currentClass.level
   };
 
   // eslint-disable-next-line no-empty
