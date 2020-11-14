@@ -54,7 +54,7 @@ const deleteStudent = async (userId, studentId) => {
 
   await student.remove();
   return student;
-}
+};
 
 module.exports = {
   getStudent,
