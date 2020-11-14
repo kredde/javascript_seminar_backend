@@ -60,8 +60,8 @@ router.get(
  *          description: the quiz 
  *          schema: 
  *            $ref: '#/components/schemas/FullQuizGame'
- *         "404": 
- *            description: no game with that id 
+ *        "404": 
+ *          description: no game with that id 
  */
 router.get(
   '/quiz/quizzes/:id',
@@ -106,8 +106,8 @@ router.get(
  *          description: Questions
  *          schema: 
  *            type: array
- *             items:
- *                $ref: '#/components/schemas/QuizQuestion'
+ *            items:
+ *              $ref: '#/components/schemas/QuizQuestion'
  *        "404": 
  *          description: No quiz with that id
  */
@@ -142,8 +142,8 @@ router.get('/quiz/quizzes/:id/questions', auth(), (req, res) => {
  *          description: Questions
  *          schema: 
  *            type: array
- *             items:
- *                $ref: '#/components/schemas/QuizQuestion'
+ *            items:
+ *              $ref: '#/components/schemas/QuizQuestion'
  */
 router.get(
   '/quiz/questions',
@@ -396,7 +396,7 @@ router.put('/quiz/question/:id', auth(), (req, res) => {
  *        "200": 
  *          description: the quiz deleted successfully
  *        "404": 
- *           description: no quiz with that id 
+ *          description: no quiz with that id 
  */
 router.delete('/quiz/:id', auth(), (req, res) => {
   QuizGame.deleteOne({ _id: req.params.id }, (err, quiz) => {
@@ -428,7 +428,7 @@ router.delete('/quiz/:id', auth(), (req, res) => {
  *        "200": 
  *          description: the question deleted successfully
  *        "404": 
- *           description: no question with that id 
+ *          description: no question with that id 
  */
 router.delete('/quiz/question/:id', auth(), (req, res) => {
   QuizQuestion.deleteOne({ _id: req.params.id }, (err, qst) => {
@@ -489,7 +489,7 @@ router.get(
  *          schema: 
  *            $ref: '#/components/schemas/DrawItGame'
  *        "404": 
- *           description: no game with that id 
+ *          description: no game with that id 
  */
 router.get('/drawit/:id', (req, res) => {
   DrawitGame.findById(req.params.id, (err, game) => {
@@ -614,7 +614,7 @@ router.put('/drawit/:id', auth(), (req, res) => {
  *        "200": 
  *          description: the game deleted successfully
  *        "404": 
- *           description: no game with that id 
+ *          description: no game with that id 
  */
 router.delete('/drawit/:id', auth(), (req, res) => {
   DrawitGame.deleteOne({ _id: req.params.id }, (err, game) => {
@@ -675,7 +675,7 @@ router.get(
  *          schema: 
  *            $ref: '#/components/schemas/AliasGame'
  *        "404": 
- *           description: no game with that id 
+ *          description: no game with that id 
  */
 router.get('/alias/:id', (req, res) => {
   AliasGame.findById(req.params.id, (err, game) => {
@@ -793,7 +793,7 @@ router.put('/alias/:id', auth(), (req, res) => {
  *        "200": 
  *          description: the game deleted successfully
  *        "404": 
- *           description: no game with that id 
+ *          description: no game with that id 
  */
 router.delete('/alias/:id', auth(), (req, res) => {
   AliasGame.deleteOne({ _id: req.params.id }, (err, game) => {

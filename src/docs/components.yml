@@ -270,7 +270,7 @@ components:
     QuizQuestion:
       type: object
       properties:
-        _id:
+        id:
           type: string
           example: 5f8589d99258137114baed53
         type:
@@ -290,16 +290,16 @@ components:
           items: 
             type: string
           example: ["option1", "option2", "option3", "option4"]
-       answer: 
-         type: array
+        answer: 
+          type: array
           items:
             type: numbers
-         examples: [1,2]
+          examples: [1,2]
 
     DrawItGame:
       type: object
       properties:
-        _id: 
+        id: 
           type: string
           example: 5f8589d99258137114baed53
         name:
@@ -329,7 +329,7 @@ components:
     AliasGame:
       type: object
       properties:
-        _id: 
+        id: 
           type: string
           example: 5f8589d99258137114baed53
         name:
