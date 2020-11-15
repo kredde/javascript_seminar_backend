@@ -83,14 +83,27 @@ const updateMeetingById = async (meetingId, updateBody) => {
   }
 
   const body = { ...updateBody };
-  // update groups if group-assignment changes
-  if (body.groupAssignment && meeting.groupAssignment !== body.groupAssignment) {
-    body.groups = await createGroups(body);
-  }
+
+  body.groups = body.groups.map((group) => {
+    // eslint-disable-next-line
+    group.participants = group.participants.map((participant) =>
+      typeof participant === 'object' ? participant._id || participant.id : participant
+    );
+
+    // eslint-disable-next-line
+    group.room = typeof group.room === 'object' ? group.room._id || group.room.id : room;
+    return group;
+  });
+
+  ['drawits', 'aliases', 'quizzes'].forEach((game) => {
+    body.taskList[game] = body.taskList[game].map((task) => (typeof task === 'object' ? task._id || task.id : task));
+  });
 
   Object.assign(meeting, body);
+
   await meeting.save();
-  return meeting;
+
+  return getMeetingById(meeting._id);
 };
 
 const deleteMeetingById = async (meetingId) => {
