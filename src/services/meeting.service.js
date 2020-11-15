@@ -112,6 +112,9 @@ const deleteMeetingById = async (meetingId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Meeting not found');
   }
 
+  const endMeetingsPromises = meeting.groups.map((group) => bbbService.end(group.room));
+  await Promise.all(endMeetingsPromises);
+
   await meeting.remove();
   return meeting;
 };
