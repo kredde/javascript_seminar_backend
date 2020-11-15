@@ -16,7 +16,7 @@ const forgotPassword = (data) => ({
     'To reset your password, click on the following link. If you did not request any password resets, then ignore this email.',
   cta: {
     text: 'Reset password',
-    url: `${config.frontendHost}?token=${data}`
+    url: `${config.frontendHost}/link-login?token=${data}&resetPasswordToken=${data}`
   },
   type: 'email'
 });
@@ -48,7 +48,7 @@ const createStudentNotification = (token, resetPasswordToken) => ({
   text: `Activate your new student account by clicking the following link`,
   cta: {
     text: `Click here to activate account`,
-    url: `${config.frontendHost}/callback?token=${token.access.token}&refresh=${token.refresh.token}&resetPasswordToken=${resetPasswordToken}`
+    url: `${config.frontendHost}/link-login?token=${token.access.token}&refresh=${token.refresh.token}&resetPasswordToken=${resetPasswordToken}`
   },
   type: 'all'
 });
