@@ -1,7 +1,7 @@
 const config = require('../config/config');
 
 const register = {
-  title: 'Welcome to Globy',
+  title: 'Welcome to Whaloo',
   text: "We're glad you're here! Get started by creating your first class.",
   cta: {
     text: 'Login',
