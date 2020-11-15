@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Class } = require('../models');
+const { Class, Project } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -122,14 +122,23 @@ function suc(level) {
  */
 
 const findSimilarClasses = async (currentClass, teacher, query) => {
+  const projects = await Project.find({ classes: { $elemMatch: { $in: [currentClass._id] } } });
+  const classes = projects
+    .filter((x) => x.state === 'ongoing')
+    .map((x) => {
+      if (currentClass._id.equals(x.classes[0])) {
+        return x.classes[1];
+      }
+      return x.classes[0];
+    });
   const classQuery = {
     teacher: { $ne: teacher },
     subject: currentClass.subject,
     language: currentClass.language,
-    level: currentClass.level
+    level: currentClass.level,
+    _id: { $nin: classes }
   };
 
-  // eslint-disable-next-line no-empty
   if (currentClass.languageLevel) {
     classQuery.languageLevel = {
       $in: [pre(currentClass.languageLevel), currentClass.languageLevel, suc(currentClass.languageLevel)]
